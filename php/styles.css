@@ -1,28 +1,52 @@
 html {
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
-    background-image: url(../Images/Page4.png);
-    background-size: cover;
-    background-repeat: no-repeat; 
-    background-position: center; 
-    height: 100vh; /* Makes the body full height of the viewport */
+    background-color: #e6f5ff;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 2em);
     color: aliceblue;
     position: fixed;
-    padding: 5px 20px ;
-    width: calc(100% - 2em);
+    padding: 5px 20px;
     margin: 0;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+    background-color: transparent;
+}
+
+header.scrolled {
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 body {
     margin: auto;
-    
+}
+
+.page3 {
+    background-image: url(../Images/Page8.png);
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+.hero-background {
+    background-image: url(../Images/Page4.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 nav {
@@ -32,45 +56,70 @@ nav {
     text-align: center;
 }
 
-nav a {
-    color:white;
-    text-decoration:none;
-}
 nav ul {
     list-style: none;
     font-size: 15px;
-    margin: 10px;
     display: flex;
     justify-content: flex-end;
 }
 
 nav ul li {
+    padding: 10px 12px;
     transition: transform 0.2S ease;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 10);
 }
 
 nav ul li:hover {
     transform: scale(1.2);
 }
 
-button {
-    height: 3em;
-    width: 10em;
-    font-size: 15px;
+button {}
+
+button:hover {}
+
+.button2 {
+    height: 45px;
+    width: 100%;
+    font-size: 20px;
     border-radius: 10px;
-    background-color: black;
-    color: white;
+    background: linear-gradient(45deg, #00d9ff, #00ffdd);
+    color: black;
+    font-weight: bold;
     border: 0px;
     margin: 5px 0;
+    padding: 0px 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.button2:hover {
+    background: linear-gradient(45deg, hsl(189, 100%, 90%), #9cfff2);
 }
 
 .buttons {
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 10px 30px;
     font-size: 20px;
     border-radius: 10px;
     font-weight: bold;
-    background: linear-gradient(45deg, #00d9ff, #00ffdd);
+    background-color: black;
     color: rgb(0, 0, 0);
+    color: white;
+}
+
+.buttons:hover {
+    background-color: #e6f5ff;
+    color: black;
+}
+
+.edit {
+    margin-right: 515px;
+    background-color: rgb(0, 0, 0);
+}
+
+.delete {
+    width: 100px;
+    background-color: red;
 }
 
 nav li {
@@ -78,7 +127,7 @@ nav li {
 }
 
 .logo {
-    padding:10px;
+    padding: 10px;
     height: 80px;
 }
 
@@ -101,37 +150,45 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width:100% ;
+    width: 100%;
 }
 
 .hero {
     padding: 10px;
-    width:750px ;
+    width: 750px;
     font-size: 20px;
     margin-right: 200px;
 }
 
 .hero h1 {
     color: rgb(221, 244, 255);
-    font-size: 3em;;
-    font-weight:bolder;
+    font-size: 3em;
+    ;
+    font-weight: bolder;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
     transform: translateX(-200%);
-    animation: slideIn 0.5s 1.5s forwards;
+    animation: slideIn 0.2s 1.5s forwards;
 }
 
 .hero h4 {
     transform: scale(0);
-    animation: scaleUp 0.5s 2s  forwards;
+    animation: scaleUp 0.2s 2s forwards;
 }
 
 @keyframes slideIn {
-    to {transform: translateX(0);}
+    to {
+        transform: translateX(0);
+    }
 }
 
 @keyframes scaleUp {
-    from { transform: scale(0);}
-    to { transform: scale(1);}
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
 }
 
 .content-register {
@@ -139,9 +196,19 @@ body {
     margin-inline: auto;
     background-color: rgb(255, 255, 255);
     border-radius: 5px;
-    padding:2em;
+    padding: 2em;
     text-align: center;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 2.5s forwards;
+}
+
+@keyframes fadeSlideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .content-register h1 {
@@ -160,5 +227,514 @@ body {
 }
 
 
+/*login page*/
+
+
+.content-login {
+    max-width: fit-content;
+    margin-inline: auto;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 2em;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 1s forwards;
+}
+
+@keyframes fadeSlideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-login h1 {
+    font-size: 30px;
+    color: rgb(0, 162, 255);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+
+}
+
+.content-login input {
+    height: 40px;
+    width: 350px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.content-login a {
+    color: rgb(0, 162, 255);
+}
+
+
+/*subject page*/
+
+.content-head {
+    padding-top: 250px;
+    height: 300px;
+    text-align: center;
+    color: white;
+    background-image: url(../Images/Page6.png);
+    background-size: 100%;
+    /* Stretch to cover entire area */
+    background-repeat: no-repeat;
+    /* Prevent repeating */
+}
+
+.content-head h1 {
+    color: #2585ac;
+    padding-top: 130px;
+    font-size: 50px;
+    font-weight: bolder;
+    text-shadow: 3px 3px 3px rgb(255, 255, 255);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 1s forwards;
+}
+
+.content-body {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    place-items: center;
+}
+
+.subjects {
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 1.5s forwards;
+}
+
+@keyframes fadeSlideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.add-subject {
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    margin: 30px;
+    width: 280px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
+}
+
+.add-subject button {
+    margin-top: 60px;
+    width: 70%;
+    height: 70%;
+    border-radius: 20px;
+    ;
+    font-size: 30px;
+    background-color: rgb(224, 224, 224);
+    color: rgb(105, 105, 105);
+    border: 0px;
+}
+
+.add-subject button:hover {
+    background-color: rgb(223, 223, 223);
+}
+
+.sub-subjects {
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 30px;
+    width: 280px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
+}
+
+.card-subject {
+    margin-bottom: 20px;
+}
+
+
+.sub-subjects input {
+    border: 0;
+    border-radius: 10px;
+    background-color: rgb(117, 117, 117);
+    color: white;
+    height: 45px;
+    padding: 0 10px;
+    margin: 1px;
+}
+
+/*Rule*/
+
+.rules {
+    max-width: fit-content;
+    margin-inline: auto;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 2em;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.2s 0.5s forwards;
+}
+
+/*Quiz Creation*/
+
+.content-body {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    place-items: center;
+}
+
+.content-quiz {
+    display: flex;
+}
+
+.crud-quiz {
+    text-align: center;
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 20px;
+    margin-bottom: 1em;
+    width: 96%;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 1.5s forwards;
+}
+
+@keyframes fadeSlideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.crud-quiz button {
+    background-color: black;
+    color: white;
+    border: 0;
+    border-radius: 10px;
+
+}
+
+.crud-quiz button:hover {
+    background-color: rgb(61, 61, 61);
+    color: white;
+    border: 0;
+    border-radius: 10px;
+}
+
+
+.chapters {
+    flex: 1;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 1.5s forwards;
+}
+
+
+.sub-chapter {
+    width: 300px;
+}
+
+.sub-chapter ul {
+    background: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 0;
+}
+
+.sub-chapter ul li {
+    list-style: none;
+    padding: 30px;
+    background-color: #e6f5ff;
+    box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
+    margin: 15px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+.quizzes {
+    flex: 2;
+    padding: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 0.5s 2s forwards;
+}
+
+.quizzes h2 {}
+
+.sub-quiz {
+    background: rgb(255, 255, 255);
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 10px;
+    padding-left: 2em;
+    margin-bottom: 35px;
+    margin-left: 2em;
+    height: 250px;
+    width: 850px;
+    overflow: hidden;
+}
+
+/* .sub-quiz h2 {
+    border-radius: 10px;;
+    margin: 0;
+    background-color:#a2b8da;
+    color: white;
+    height: 30%;
+} */
+
+.sub-quiz button {
+    background-color: black;
+    color: rgb(255, 255, 255);
+    border: 0;
+    margin-top: 2em;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.add-quiz {
+    background: rgb(255, 255, 255);
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    font-size: 20px;
+    padding: 10px;
+    padding-left: 2em;
+    margin-bottom: 35px;
+    margin-left: 2em;
+    height: 250px;
+    width: 850px;
+
+}
+
+.quiz-buttons {
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center; */
+    padding-top: 20px;
+}
+
+.add-quiz button {
+
+    color: rgb(255, 255, 255);
+    border: 0;
+    margin-top: 2em;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.add-quiz table {
+    margin: 0px;
+}
+
+.edit {
+    margin-right: 515px;
+    background-color: rgb(0, 0, 0);
+}
+
+.delete {
+    text-decoration: none;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    margin-right: 20px;
+    width: 100px;
+    background-color: red;
+}
+
+/*rule page*/
+
+.timer {
+    padding-top: 50px;
+    padding-bottom: 0px;
+    text-align: center;
+    font-size: 50px;
+    background-color: rgb(163, 163, 163);
+}
+
+.content-timer {
+    position: fixed;
+    right: 150px;
+    top: 150px;
+    padding: 50px;
+    background-color:#2585ac;
+    text-align: center;
+    color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+/*quiz page*/
+
+.questions {
+    padding-top: 250px;
+    display: grid;
+    place-items: center;
+}
+
+.sub-question {
+    background: rgb(255, 255, 255);
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2em;
+    padding: 2em;
+    border-radius: 20px;
+}
+
+.content-question {
+
+    text-align: center;
+    height: auto;
+    width: 55em;
+}
+
+.content-question button {
+    margin-top: 2em;
+    font-size: 25px;
+    background-color: black;
+    color: rgb(255, 255, 255);
+    border: 0;
+    border-radius: 10px;
+}
+
+.crud-rule {
+    width: 60%;
+    margin-bottom: 2em;
+    padding: 2em;
+    background-color: rgb(223, 223, 223);
+    border-radius: 20px;
+}
+
+.crud-rule table {
+    width: 90%;
+}
+
+.crud-rule input {
+    height: 30px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.crud-question {
+    width: 60%;
+    margin-bottom: 2em;
+    padding: 2em;
+    background-color: rgb(223, 223, 223);
+    border-radius: 20px;
+}
+
+.crud-question table {
+    width: 100%;
+}
+
+.crud-question input {
+    height: 30px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+
+.submit-question {
+    margin-top: 30px;
+    width: 200px;
+    height: 60px;
+}
+
+.crud-question textarea {
+    height: 20px;
+    width: 500px;
+    border-radius: 10px;
+}
+
+.crud-question ul {
+    margin: 0;
+    padding: 0;
+}
+
+#crud-option {
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#crud-option table {
+    width: 100%;
+}
+
+/*for option 2*/
+#crud-option tr {
+    padding: 20px;
+    ;
+}
+
+#crud-option ul li {
+    text-align: center;
+    list-style: none;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+
+}
+
+.new-question {
+    border-radius: 10px;
+}
+
+.choice ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.choice ul li {
+    flex: 1 300px;
+    list-style: none;
+    background-color: black;
+    color: white;
+    padding: 15px;
+    margin: 10px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.choice ul li:hover {
+    background-color: rgb(92, 92, 92);
+}
 
 

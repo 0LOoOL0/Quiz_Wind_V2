@@ -1,5 +1,6 @@
 <?php include 'header.php' ?>
 
+<body class="hero-background">
 <div class="wrapper">
     <div class="spaceup">
         <div class="main-sections">
@@ -28,7 +29,7 @@
                             <td><input type="email" name="email" placeholder="Email"></td>
                         </tr>
                         <tr>
-                            <td><button type="submit" name='submitted'>Sign Up</button></td>
+                            <td><button class="button2" type="submit" name='submitted'>Sign Up</button></td>
                         </tr>
                     </table>
                 </form>
@@ -38,3 +39,4 @@
     </div>
 </div>
 </div>
+</body>
