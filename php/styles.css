@@ -1,0 +1,99 @@
+html {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-image: url(../Images/Page4.png);
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center; 
+    height: 100vh; /* Makes the body full height of the viewport */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    
+    color: aliceblue;
+    position: fixed;
+    padding: 5px 20px ;
+    width: calc(100% - 2em);
+    margin: 0;
+}
+
+body {
+    margin: auto;
+    
+}
+
+nav {
+    flex-grow: 1;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+}
+nav ul {
+    list-style: none;
+    font-size: 15px;
+    margin: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+button {
+    height: 3em;
+    width: 10em;
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    border: 0px;
+    margin: 5px 0;
+}
+
+nav li {
+    padding: 10px;
+}
+
+.logo {
+    padding:10px;
+    height: 80px;
+}
+
+/*Main page*/
+.wrapper {
+    width: 1800px;
+    height: auto;
+    margin: 0px auto;
+}
+
+body {
+    margin: auto;
+}
+
+.spaceup {
+    padding-top: 200px;
+}
+
+.hero {
+    margin-top: 250px;
+    padding: 10px;
+    width:900px ;
+    font-size: 20px;
+}
+
+.hero h1 {
+    color: rgb(221, 244, 255);
+    font-size: 3em;;
+    font-weight:bolder;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+}
+
+
+
+
