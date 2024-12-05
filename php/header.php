@@ -20,6 +20,5 @@
         </nav>
         <form>
                 <a href="login.php" class="buttons">Sign In</a>
-                <a href="main.php" class="buttons">log out</a>
         </form>
     </header>

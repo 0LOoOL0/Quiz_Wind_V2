@@ -13,7 +13,6 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    
     color: aliceblue;
     position: fixed;
     padding: 5px 20px ;
@@ -45,6 +44,14 @@ nav ul {
     justify-content: flex-end;
 }
 
+nav ul li {
+    transition: transform 0.2S ease;
+}
+
+nav ul li:hover {
+    transform: scale(1.2);
+}
+
 button {
     height: 3em;
     width: 10em;
@@ -54,6 +61,16 @@ button {
     color: white;
     border: 0px;
     margin: 5px 0;
+}
+
+.buttons {
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00d9ff, #00ffdd);
+    color: rgb(0, 0, 0);
 }
 
 nav li {
@@ -80,11 +97,18 @@ body {
     padding-top: 200px;
 }
 
+.main-sections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100% ;
+}
+
 .hero {
-    margin-top: 250px;
     padding: 10px;
-    width:900px ;
+    width:750px ;
     font-size: 20px;
+    margin-right: 200px;
 }
 
 .hero h1 {
@@ -92,6 +116,47 @@ body {
     font-size: 3em;;
     font-weight:bolder;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+    transform: translateX(-200%);
+    animation: slideIn 0.5s 1.5s forwards;
+}
+
+.hero h4 {
+    transform: scale(0);
+    animation: scaleUp 0.5s 2s  forwards;
+}
+
+@keyframes slideIn {
+    to {transform: translateX(0);}
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0);}
+    to { transform: scale(1);}
+}
+
+.content-register {
+    max-width: fit-content;
+    margin-inline: auto;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding:2em;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.content-register h1 {
+    font-size: 30px;
+    color: rgb(0, 162, 255);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+
+}
+
+.content-register input {
+    height: 40px;
+    width: 350px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    font-size: 20px;
 }
 
 

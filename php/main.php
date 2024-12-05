@@ -6,8 +6,7 @@
         <section> 
         <div class="hero">
             <h1>Welcome</h1>
-            <h4>Discription about the website Discription about the website Discription about the website Discription about the website</h4>
-            <button type="button">Explore</button>
+            <h4>With Quiz wind you can create quizzes in the most easiest and fastest way possible, then anyone can participate in your quiz and become productive!</h4>
         </div>
         </section> 
         <section>
@@ -16,7 +15,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h1>Please create an account</h1>
+                                <h1>Create Account</h1>
                             </td>
                         </tr>
                         <tr>
