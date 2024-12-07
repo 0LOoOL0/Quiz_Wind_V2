@@ -3,44 +3,54 @@ include 'header.php';
 
 ?>
 
-<script type="text/javascript" src="java.js"></script>
+<script type="text/javascript" src="script.js"></script>
 
-<!-- <div class="popup-create">
+<div class="popup-create">
     <div class="popup-content">
-        <h3>Create new Subject</h3>
+        <h1>Create new Subject</h1>
         <form action="subject_page.php" method="post">
             <div class="form-content">
                 <p>Subject name</p>
                 <input type="text" name="subject_name">
                 <p>Description</p>
                 <input type="text" name="subject_text">
+                <p>Select Teacher</p>
+                <select name="" id="">
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                </select>
             </div>
-            <button type="submit" name='submitted' style="background-color: rgb(89, 218, 100);">Add</button>
-            <button type="button" onclick="closePopup()" style="background-color: rgb(231, 59, 59);">cancel</button>
+            <button type="submit" class="button1" name='submitted'>Add</button>
+            <button type="button" class="button4" onclick="closePopup()">cancel</button>
         </form>
     </div>
-</div> -->
+</div>
 
 <section class="content-head">
-        <h1>
-            Select subject of your choosing
-        </h1>
+    <h1>
+        Select subject of your choosing
+    </h1>
 </section>
 
 <div class="wrapper">
     <div class="container">
+
+        <div class="centering">
+            <div class="search-content">
+                <input type="search" id="search" placeholder="Search">
+                <button class="button3">Search</button>
+                <button class="button3">Rest All</button>
+                <div class="sorting">
+                    <button id='add' class="button1">Add Subejct</button>
+                </div>
+            </div>
+        </div>
+
+
+
         <section class="content-body">
             <div class="subjects">
-                <div class="add-subject">
-                    <td>
-                        <button id="add">Add Subject</button>
-                    </td>
-                </div>
-
-                <?php
-
-                ?>
-
                 <div class="sub-subjects">
                     <h2>
                         Subject
@@ -49,11 +59,8 @@ include 'header.php';
                         description description description description description description description description
                     </p>
                     <div class="card-subject">
-                        <table>
-                            <tr>
-                                <td><button class="button2"><a href="quizzes_page.php">View Subject</a></button></td>
-                            </tr>
-                        </table>
+                        <button class="button1"><a href="quizzes_page.php">View Subject</a></button>
+                        <button class="button3" style="margin-left: 10px;">Edit</button>
                     </div>
                 </div>
                 <div class="sub-subjects">

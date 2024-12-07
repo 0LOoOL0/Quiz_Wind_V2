@@ -11,18 +11,18 @@
 <body>
 
 <header id="header-scroll">
-        <img class="logo" src="../Images/logoQuiz.png" alt="quizwind">
+        <img class="logo" src="Images/logoQuiz.png" alt="quizwind">
         <nav>
             <ul>
                 <li><a href="main.php">Home</a></li>
-                <li><a href="admin_users_view.php">Users</a></li>
+                <li><a href="users_page.php">Users</a></li>
                 <li><a href="subject_page.php">Subjects</a></li>
-                <li><a href="participants.php">Participants</a></li>
-                <li><a href="user_attempt.php">My Attempts</a></li>
+                <li><a href="participant_page.php">Participants</a></li>
+                <li><a href="attempt_page.php">My Attempts</a></li>
             </ul>
         </nav>
         <form>
-            <a href="login.php" class="buttons">Login</a>
+            <a href="login.php" class="button1">Login</a>
         </form>
     </header>
 

@@ -3,9 +3,9 @@ include 'header.php';
 
 ?>
 
-<script type="text/javascript" src="java.js"></script>
+<script type="text/javascript" src="script.js"></script>
 
-<!-- <div class="popup-create">
+<div class="popup-create">
     <div class="popup-content">
         <h3>Create new Chapter</h3>
         <form action="quizzes_page.php" method="post">
@@ -13,11 +13,11 @@ include 'header.php';
                 <p>Chapter Name</p>
                 <input type="text" id="chapter_name" name="chapter_name" required>
             </div>
-            <button type="submit" name='submitted' style="background-color: rgb(89, 218, 100);">Add</button>
-            <button type="button" onclick="closePopup()" style="background-color: rgb(231, 59, 59);">Cancel</button>
+            <button type="submit" class="button1" name='submitted'>Add</button>
+            <button type="button" class="button4" onclick="closePopup()">Cancel</button>
         </form>
     </div>
-</div> -->
+</div>
 
 <section class="content-head">
     <h1><span>
@@ -25,13 +25,14 @@ include 'header.php';
         </span></h1>
 </section>
 
+
 <div class="wrapper">
     <div class="container">
         <section class="content-body">
             <div class="crud-quiz">
-                <button class="buttons">Return</button>
-                <button class="buttons" id="add">Add Chapter</button>
-                <button class="buttons"><a href="create_quiz.php">Add quiz</a></button>
+                <button class="button3">Return</button>
+                <button class="button3" id="add">Add Chapter</button>
+                <button class="button3"><a href="create_quiz.php">Add quiz</a></button>
             </div>
             <div class="content-quiz">
                 <div class="chapters">
@@ -49,26 +50,26 @@ include 'header.php';
                         <h2>Quiz</h2>
                         <p>Discription Discription Discription Discription</p>
                         <div class="quiz-buttons">
-                            <button class="buttons">Edit Quiz</button>
-                            <button class="delete">Delete</button>
+                            <button class="button3">Edit Quiz</button>
+                            <button class="button4">Delete</button>
                         </div>
                     </div>
                     <div class="sub-quiz">
                         <h2>Quiz</h2>
                         <h4>Discription Discription Discription Discription</h4>
                         <div class="quiz-buttons">
-                            <button class="buttons"><a href="rule_page.php">Start</a></button>
-                            <button class="buttons">Edit Quiz</button>
-                            <button class="delete" style="background-color: red;">Delete</button>
+                            <button class="button1"><a href="rule_page.php">Start</a></button>
+                            <button class="button3">Edit Quiz</button>
+                            <button class="button4">Delete</button>
                         </div>
                     </div>
                     <div class="sub-quiz">
                         <h2>Quiz</h2>
                         <h4>Discription Discription Discription Discription</h4>
                         <div class="quiz-buttons">
-                            <button class="buttons">Start</button>
-                            <button class="buttons">Edit Quiz</button>
-                            <button class="delete" style="background-color: red;">Delete</button>
+                            <button class="button1">Start</button>
+                            <button class="button3">Edit Quiz</button>
+                            <button class="button4">Delete</button>
                         </div>
                     </div>
                 </div>

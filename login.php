@@ -5,7 +5,7 @@ include 'header.php';
 
 <script type="text/javascript" src="java.js"></script>
 
-<body class="hero-background">
+<body class="page11">
 <div class="spaceup">
         <div class="container">
             <div class="content-login">
@@ -24,11 +24,11 @@ include 'header.php';
                         </tr>
                         <tr>
                             <td>
-                                <p>Don't have an account? <a href="main.php">Create one!</a></p>
+                                <p>Forgot password?<a href="login.php">Click Here!</a></p>
                             </td>
                         </tr>
                         <tr>
-                            <td><button class="button2" type="submit" name="submitted">Login</button></td>
+                            <td><button class="button1" type="submit" name="submitted">Login</button></td>
                         </tr>
                     </table>
                 </form>

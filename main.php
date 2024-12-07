@@ -1,6 +1,6 @@
 <?php include 'header.php' ?>
 
-<body class="hero-background">
+<body class="page11">
 <div class="wrapper">
     <div class="spaceup">
         <div class="main-sections">
