@@ -1,15 +1,15 @@
 <?php
 include 'header.php';
-
+include 'Includes/User_handler.php';
 ?>
 
-<script type="text/javascript" src="java.js"></script>
+<script type="text/javascript" src="script.js"></script>
 
 <body class="page11">
 <div class="spaceup">
         <div class="container">
             <div class="content-login">
-                <form action="login.php" method="post">
+                <form action="Includes/login_handler.php" method="post">
                     <table>
                         <tr>
                             <td>
@@ -17,10 +17,10 @@ include 'header.php';
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="text" name="username" placeholder="Username"></td>
+                            <td><input type="text" name="username" id='username' placeholder="Username" required></td>
                         </tr>
                         <tr>
-                            <td><input type="password" name="password" placeholder="Password"></td>
+                            <td><input type="password" name="password" id='password' placeholder="Password" required></td>
                         </tr>
                         <tr>
                             <td>
@@ -28,7 +28,7 @@ include 'header.php';
                             </td>
                         </tr>
                         <tr>
-                            <td><button class="button1" type="submit" name="submitted">Login</button></td>
+                            <td><button class="button1" type="submit" name="loginin">Login</button></td>
                         </tr>
                     </table>
                 </form>

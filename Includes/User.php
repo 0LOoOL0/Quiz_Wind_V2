@@ -82,12 +82,10 @@ class User{
     }
     
     public function registerUser() {
-        // Ensure all required fields are set
+
         if ($this->username && $this->password && $this->email) {
-            // Hash the password securely
-            $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
             
-            // Hardcoded role ID
+            $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
             $roleId = 3;
             
             // Prepare SQL statement to prevent SQL injection
@@ -98,7 +96,7 @@ class User{
                 ':username' => $this->username,
                 ':email' => $this->email,
                 ':password' => $hashPass,
-                ':role_id' => $roleId // Use the hardcoded role ID directly
+                ':role_id' => $roleId
             ]);
     
             // Return the last inserted ID
@@ -108,6 +106,7 @@ class User{
             throw new Exception("Username, password, and email must be set.");
         }
     }
+
     // this one is for admin creating account for users and assigning roles to them
     function createUser () {
         if ($this->username && $this->password && $this->email && $this->roleId) {
@@ -125,27 +124,6 @@ class User{
             throw new Exception("Username, password, email, and role ID must be set.");
         }
     }
-
-    public function login($username, $password) {
-        // Query to find the user by username
-        $sql = "SELECT user_id, username, password FROM users WHERE username = :username";
-        $stmt = $this->db->getConnection()->prepare($sql);
-        $stmt->execute([':username' => $username]);
-    
-        // Fetch the user record
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        // Check if user exists and verify password
-        if ($user && password_verify($password, $user['password'])) {
-            // Set session variables
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['username'] = $user['username'];
-            return true; // Login successful
-        }
-    
-        return false; // Login failed
-    }
-
 
     function getUserList() {
         try {

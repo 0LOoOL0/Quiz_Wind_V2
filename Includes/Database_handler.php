@@ -48,4 +48,24 @@ class Database {
     public function prepare($sql) {
         return $this->connection->prepare($sql);
     }
+
+    public function execute($stmt, $params = [])
+    {
+        try {
+            $stmt->execute($params);
+            return $stmt;
+        } catch (PDOException $e) {
+            return false; // Handle error gracefully
+        }
+    }
+
+    public function fetchAll($stmt)
+    {
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function fetchSingle($stmt)
+    {
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
