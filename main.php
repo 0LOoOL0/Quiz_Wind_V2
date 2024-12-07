@@ -1,4 +1,8 @@
-<?php include 'header.php' ?>
+<?php 
+include 'header.php'; 
+include 'Includes/User_handler.php';
+
+?>
 
 <body class="page11">
 <div class="wrapper">
@@ -12,27 +16,27 @@
         </section> 
         <section>
             <div class="content-register">
-                <form action="register.php" method="post">
-                    <table>
-                        <tr>
-                            <td>
-                                <h1>Create Account</h1>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="user_id" placeholder="Username"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="password" name="password" placeholder="Password"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="email" name="email" placeholder="Email"></td>
-                        </tr>
-                        <tr>
-                            <td><button class="button2" type="submit" name='submitted'>Sign Up</button></td>
-                        </tr>
-                    </table>
-                </form>
+            <form action="Includes/User_handler.php" method="post">
+    <table>
+        <tr>
+            <td>
+                <h1>Create Account</h1>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="text" name="username" placeholder="Username" required></td>
+        </tr>
+        <tr>
+            <td><input type="password" name="password" placeholder="Password" required></td>
+        </tr>
+        <tr>
+            <td><input type="email" name="email" placeholder="Email" required></td>
+        </tr>
+        <tr>
+            <td><button class="button2" type="submit" name="register">Sign Up</button></td>
+        </tr>
+    </table>
+</form>
             </div>
         </section> 
         </div>
