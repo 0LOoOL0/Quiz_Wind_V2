@@ -15,7 +15,7 @@ if (isset($_SESSION['message'])) {
 <div class="popup-create">
     <div class="popup-content">
         <h3>Create new User</h3>
-        <form action="User_handler.php" method="POST">
+        <form action="Includes/User_handler.php" method="POST">
             <div class="form-content">
                 <p>username</p>
                 <input type="text" name="username" required>

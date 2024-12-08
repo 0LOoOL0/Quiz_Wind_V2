@@ -3,7 +3,6 @@
 require_once 'User.php'; 
 
 // Admin creating new user
-
 if (isset($_POST['submitted'])) {
     try {
     $user = new User($db);
@@ -34,6 +33,7 @@ if (isset($_POST['submitted'])) {
     }
 }
 
+//user registering
 if (isset($_POST['register'])) {
     try {
         $user = new User($db);
@@ -57,6 +57,7 @@ if (isset($_POST['register'])) {
     }
 }
 
+//user deleting
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     $userId = intval($_POST['user_id']);
 
@@ -81,69 +82,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     }
 }
 
-if (isset($_POST['register'])) {
+// if (isset($_POST['register'])) {
     
-    try {
-    $user = new User($db);
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $user->setEmail($_POST['email']);
-
-    $newUserId = $user->registerUser();
-
-    if ($newUserId) {
-        header("Location: ../users_page.php");
-        exit();
-    } else {
-        echo "<p style='color: red;'>Failed creating subject.</p>";
-    }
-    } catch (Exception $ex) {
-        echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
-    }
-}
-
-// if (isset($_POST['loginin'])) {
-//     // Get username and password from the form
+//     try {
 //     $user = new User($db);
-//     $username = trim($_POST['username']);
-//     $password = trim($_POST['password']);
+//     $user->setUsername($_POST['username']);
+//     $user->setPassword($_POST['password']);
+//     $user->setEmail($_POST['email']);
 
-//     // Call the login method
-//     if ($user->login($username, $password)) {
-//         // Redirect to a protected page after successful login
-//         header("Location: subject_page.php"); // Change to your desired page
+//     $newUserId = $user->registerUser();
+
+//     if ($newUserId) {
+//         header("Location: ../users_page.php");
 //         exit();
 //     } else {
-//         // Handle login failure
-//         $error = "Invalid username or password.";
+//         echo "<p style='color: red;'>Failed creating subject.</p>";
+//     }
+//     } catch (Exception $ex) {
+//         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
 //     }
 // }
 
-
-// if (isset($_POST['login'])) {
-//     // Check if the username and password are set
-//     if (isset($_POST['username']) && isset($_POST['password'])) {
-//         // Sanitize user input
-//         $username = trim($_POST['username']);
-//         $password = trim($_POST['password']);
-
-//         // Set username and password using setters
-//         $user->setUsername($username);
-//         $user->setPassword($password);
-
-//         // Call the loginUser method
-//         if ($user->loginUser()) {
-//             // Redirect to a protected page after successful login
-//             header("Location: ../subject_page.php");
-//             exit();
-//         } else {
-//             // Handle login failure
-//             $error = "Invalid username or password.";
-//         }
-//     } else {
-//         // Handle the case where username or password is not set
-//         $error = "Please enter both username and password.";
-//     }
-// }
 
 ?>

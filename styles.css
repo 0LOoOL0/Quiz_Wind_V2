@@ -86,7 +86,7 @@ nav ul li:hover {
 
 .button1 {
     text-decoration: none;
-    padding: 10px 30px;
+    padding: 10px;
     font-size: 20px;
     border-radius: 10px;
     background: linear-gradient(45deg, #00d9ff, #00ffdd);
@@ -101,7 +101,7 @@ nav ul li:hover {
 }
 
 .button2 {
-    height: 45px;
+    height: 40px;
     width: 100%;
     font-size: 20px;
     border-radius: 10px;
@@ -120,7 +120,7 @@ nav ul li:hover {
 
 .button3 {
     text-decoration: none;
-    padding: 10px 30px;
+    padding: 10px 25px;
     font-size: 20px;
     border-radius: 10px;
     background: black;
@@ -133,7 +133,6 @@ nav ul li:hover {
     background-color: gray;
     cursor: pointer;
 }
-
 
 .button4 {
     text-decoration: none;
@@ -149,6 +148,24 @@ nav ul li:hover {
 .button4:hover {
     background: rgb(255, 63, 63);
     cursor: pointer;
+}
+
+.button5 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    transition: background-color 0.3s;
 }
 
 nav li {
@@ -316,6 +333,7 @@ body {
     background-repeat: no-repeat;
     /* Prevent repeating */
 }
+
 .content-head2 {
     padding-top: 250px;
     height: 300px;
@@ -346,6 +364,7 @@ body {
     font-weight: bolder;
     text-shadow: 3px 3px 3px rgb(255, 255, 255);
 }
+
 .content-body {
     max-width: fit-content;
     margin-left: auto;
@@ -373,6 +392,7 @@ body {
 
 
 .sub-subjects {
+    position: relative;
     background: rgb(255, 255, 255);
     border-radius: 10px;
     padding: 20px;
@@ -635,9 +655,10 @@ body {
     justify-content: center;
     margin: 0px;
 }
+
 .question-card-created label {
     padding: 20px;
-    background-color:black;
+    background-color: black;
     color: white;
     text-align: center;
     border-radius: 8px;
@@ -807,7 +828,8 @@ input[type="radio"]:checked+label {
     text-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: scale(0.8);
-    animation: fadeInZoom 0.4s 1.5s forwards;;
+    animation: fadeInZoom 0.4s 1.5s forwards;
+    ;
 }
 
 @keyframes fadeInZoom {
@@ -815,6 +837,7 @@ input[type="radio"]:checked+label {
         opacity: 0;
         transform: scale(0.8);
     }
+
     100% {
         opacity: 1;
         transform: scale(1.5);
@@ -828,7 +851,8 @@ input[type="radio"]:checked+label {
     color: #000000;
     opacity: 0;
     transform: scale(0.8);
-    animation: fadeInZoom 0.4s 2s forwards;;
+    animation: fadeInZoom 0.4s 2s forwards;
+    ;
 }
 
 .attempt-table {
@@ -840,7 +864,7 @@ input[type="radio"]:checked+label {
     background-color: white;
     box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    padding:2em;
+    padding: 2em;
     height: auto;
     opacity: 0;
     transform: translateY(-20px);
@@ -866,7 +890,7 @@ input[type="radio"]:checked+label {
 .attempt-table table td {
     font-size: 20px;
     color: rgb(0, 0, 0);
-    background-color:#e6f5ff;
+    background-color: #e6f5ff;
     padding: 10px 20px;
 }
 
@@ -880,7 +904,7 @@ input[type="radio"]:checked+label {
     background-color: white;
     box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    padding:2em;
+    padding: 2em;
     height: auto;
     opacity: 0;
     transform: translateY(-20px);
@@ -906,7 +930,7 @@ input[type="radio"]:checked+label {
 .users-table table td {
     font-size: 20px;
     color: rgb(0, 0, 0);
-    background-color:#e6f5ff;
+    background-color: #e6f5ff;
     padding: 10px 20px;
 }
 
@@ -1004,10 +1028,10 @@ input[type="radio"]:checked+label {
 .form-content input {
     border-radius: 10px;
     background: rgb(255, 255, 255);
-    height: 50px; 
+    height: 50px;
     font-size: 18px;
     padding: 10px;
-    width: 600px; 
+    width: 600px;
     box-sizing: border-box;
 }
 
@@ -1051,9 +1075,3 @@ input[type="radio"]:checked+label {
     z-index: 1000;
 
 }
-
-
-
-
-
-

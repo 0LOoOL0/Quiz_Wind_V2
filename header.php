@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -23,14 +25,16 @@ session_start();
                 <li><a href="subject_page.php">Subjects</a></li>
                 <li><a href="participant_page.php">Participants</a></li>
                 <li><a href="attempt_page.php">My Attempts</a></li>
-                <?php if (isset($_SESSION['username'])): ?>
-                    <li>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></li>
-                    <li><a class='button1' href="main.php">Logout</a></li>
-                <?php else: ?>
-                    <li><a class='button1' href="login.php">Login</a></li>
-                <?php endif; ?>
             </ul>
         </nav>
+        <?php if (isset($_SESSION['username'])): ?>
+                    Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    <form action="Include/logout_handler.php" method="post">
+                        <a class='button1' href="main.php">Logout</a>
+                    </form>
+                <?php else: ?>
+                    <a class='button1' href="login.php">Login</a>
+                <?php endif; ?>
         <!-- <form>
             <a href="login.php" class="button1">Login</a>
         </form> -->

@@ -24,7 +24,7 @@ include 'Includes/User_handler.php';
                         </tr>
                         <tr>
                             <td>
-                                <p>Forgot password?<a href="login.php">Click Here!</a></p>
+                                <p>Forgot password? <a href="login.php">Click Here!</a></p>
                             </td>
                         </tr>
                         <tr>

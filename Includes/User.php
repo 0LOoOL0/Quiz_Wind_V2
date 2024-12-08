@@ -2,7 +2,8 @@
 
 include 'Database_handler.php';
 
-class User{
+class User
+{
 
     private $db;
     private $userId;
@@ -80,17 +81,17 @@ class User{
 
         return $this;
     }
-    
-    public function registerUser() {
 
+    public function registerUser()
+    {
         if ($this->username && $this->password && $this->email) {
-            
+
             $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
             $roleId = 3;
-            
+
             // Prepare SQL statement to prevent SQL injection
             $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
-            
+
             // Execute the prepared statement
             $this->db->queryStatment($sql, [
                 ':username' => $this->username,
@@ -98,7 +99,7 @@ class User{
                 ':password' => $hashPass,
                 ':role_id' => $roleId
             ]);
-    
+
             // Return the last inserted ID
             return $this->db->getConnection()->lastInsertId();
         } else {
@@ -108,11 +109,12 @@ class User{
     }
 
     // this one is for admin creating account for users and assigning roles to them
-    function createUser () {
+    function createUser()
+    {
         if ($this->username && $this->password && $this->email && $this->roleId) {
             $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
-            
+
             $this->db->queryStatment($sql, [
                 ':username' => $this->username,
                 ':email' => $this->email,
@@ -125,9 +127,10 @@ class User{
         }
     }
 
-    function getUserList() {
+    function getUserList()
+    {
         try {
-            $sql ="Select * from users";
+            $sql = "Select * from users";
             $stmt = $this->db->queryStatment($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
@@ -135,7 +138,9 @@ class User{
         }
     }
 
-    function roleList() {
+
+    function roleList()
+    {
         try {
             $sql = "SELECT role_id, role_name FROM roles";
             $stmt = $this->db->queryStatment($sql);
@@ -145,14 +150,11 @@ class User{
         }
     }
 
-     // Function to delete a user
-     public function deleteUser() {
+    // Function to delete a user
+    public function deleteUser()
+    {
         $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $this->userId); // Assuming $this->user_id is set in the User object
         return $stmt->execute();
     }
-
 }
-
-
-?>

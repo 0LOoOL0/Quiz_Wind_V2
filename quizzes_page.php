@@ -1,5 +1,6 @@
 <?php
 include 'header.php';
+include 'Includes/Chapter_handler.php';
 
 ?>
 
@@ -8,10 +9,10 @@ include 'header.php';
 <div class="popup-create">
     <div class="popup-content">
         <h3>Create new Chapter</h3>
-        <form action="quizzes_page.php" method="post">
+        <form action="Includes/Chapter_handler.php" method="post">
             <div class="form-content">
                 <p>Chapter Name</p>
-                <input type="text" id="chapter_name" name="chapter_name" required>
+                <input type="text" id="chapter_title" name="chapter_title" required>
             </div>
             <button type="submit" class="button1" name='submitted'>Add</button>
             <button type="button" class="button4" onclick="closePopup()">Cancel</button>
@@ -42,6 +43,27 @@ include 'header.php';
                             <li>chapter</li>
                             <li>chapter</li>
                             <li>chapter</li>
+                        
+                        <?php
+
+                        $subjectId = isset($_GET['subject_id']);
+                            if ($subjectId <= 0) {
+                                echo "Invalid subject ID.";
+                                exit;
+                            }
+
+                        $chapter = new Chapter($db);
+                        $chapterList = $chapter->getChaptersBySubject($subjectId);
+
+                        if (!empty($chapterList)) {
+                            foreach ($chapterList as $chapter) {
+                                echo " <li>"  . htmlspecialchars($chapter['chapter_title']) . "</li>";
+                            }
+                        } else {
+                            echo " 0 Results";
+                        }
+
+                        ?>
                         </ul>
                     </div>
                 </div>
