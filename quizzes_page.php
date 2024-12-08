@@ -40,30 +40,43 @@ include 'Includes/Chapter_handler.php';
                     <div class="sub-chapter">
                         <ul>
                             <li>chapter</li>
-                            <li>chapter</li>
-                            <li>chapter</li>
-                            <li>chapter</li>
-                        
-                        <?php
+                            <?php
 
-                        $subjectId = isset($_GET['subject_id']);
+                            //testing
+
+                            //$subjectId = 1;
+
+                            $subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : 0;
+                            
                             if ($subjectId <= 0) {
                                 echo "Invalid subject ID.";
                                 exit;
                             }
 
-                        $chapter = new Chapter($db);
-                        $chapterList = $chapter->getChaptersBySubject($subjectId);
-
-                        if (!empty($chapterList)) {
-                            foreach ($chapterList as $chapter) {
-                                echo " <li>"  . htmlspecialchars($chapter['chapter_title']) . "</li>";
+                            $chapter = new Chapter($db);
+                            $chapterList = $chapter->getChaptersBySubject($subjectId);
+                            if (!empty($chapterList)) {
+                                foreach ($chapterList as $chapter) {
+                                    echo "<li>" . $chapter['subject_id'] . "'>" . htmlspecialchars($chapter['chapter_title']) . "</li>";
+                                }
+                            } else {
+                                echo "No chapters found for this subject.";
                             }
-                        } else {
-                            echo " 0 Results";
-                        }
 
-                        ?>
+                            //this is a test working when not assigned to subjects
+                            
+                            // $chapter = new Chapter($db);
+                            // $chapterList = $chapter->chapterList();
+
+                            // if (!empty($chapterList)) {
+                            //     foreach ($chapterList as $chapter) {
+                            //         echo "<li>". $chapter['chapter_title'] . "</li>";
+                            //     }
+                            // } else {
+                            //     echo " 0 Results";
+                            // }
+
+                            ?>
                         </ul>
                     </div>
                 </div>

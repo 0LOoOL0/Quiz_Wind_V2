@@ -19,6 +19,17 @@ include 'header.php';
                 </div>
 
                 <div class="crud-rule">
+                    <h1>Quiz</h1>
+                        <table>
+                            <tr>
+                                <td style='width:300px;'>Add Quiz Title</td>
+                                <td><input type="text" style='width:110%; height:50px; border-radius:10px; margin:10px;'></td>
+                            </tr>
+                            <tr>
+                                <td style='width:250px;'>Add Quiz Description (Optional)</td>
+                                <td><input type="text" style='width:110%; height:50px; border-radius:10px; margin:10px;'></td>
+                            </tr>
+                        </table>
                     <h1>Select Timer</h1>
                     <table>
                         <tr>

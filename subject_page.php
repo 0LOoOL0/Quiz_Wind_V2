@@ -70,6 +70,7 @@ if (isset($_SESSION['message'])) {
             <div class="subjects">
 
                 <?php
+                
                 $subject = new Subject($db);
                 $subjectList = $subject->getSubjectList();
 

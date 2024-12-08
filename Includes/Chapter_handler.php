@@ -25,9 +25,10 @@ require_once 'Chapter.php';
 $newChapter = new Chapter($db);
 
 if (isset($_POST['submitted'])) {
+    
     try {
     $chapter = new Chapter($db);
-    $chapter->setChapterTitle($_POST['chapter_name']);
+    $chapter->setChapterTitle($_POST['chapter_title']);
     $chapter->setSubjectId($_POST['subject_id']);
 
     $newChapterId = $chapter->createChapter();

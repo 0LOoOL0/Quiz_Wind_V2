@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+include 'Includes/Login_handler.php';
 
 ?>
 
@@ -28,10 +29,12 @@ session_start();
             </ul>
         </nav>
         <?php if (isset($_SESSION['username'])): ?>
-                    Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    <p class="userlog">Welcome! <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+                    
                     <form action="Include/logout_handler.php" method="post">
                         <a class='button1' href="main.php">Logout</a>
                     </form>
+
                 <?php else: ?>
                     <a class='button1' href="login.php">Login</a>
                 <?php endif; ?>

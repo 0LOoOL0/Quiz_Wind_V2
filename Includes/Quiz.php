@@ -2,7 +2,7 @@
 
 include 'Database_handler.php';
 
-class Subject
+class Quiz
 {
 
     private $db;

@@ -18,6 +18,14 @@ header {
     background-color: transparent;
 }
 
+.userlog {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 10);
+    font-size: 20px;
+    padding: 0 15px;
+    font-weight: bold;
+    color: #bae3ff;
+}
+
 header.scrolled {
     background-color: rgba(0, 0, 0, 0.6);
 }
@@ -699,9 +707,13 @@ input[type="radio"]:checked+label {
 
 .crud-rule table {
     width: 90%;
-    font-size: 25px;
+    font-size: 20px;
 }
 
+.crud-rule input {
+    height: 10px;
+    font-size: 20px ;
+}
 
 .crud-question {
     background-color: #e6f5ff;

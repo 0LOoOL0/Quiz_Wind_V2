@@ -93,7 +93,7 @@ class User
             $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
 
             // Execute the prepared statement
-            $this->db->queryStatment($sql, [
+            $this->db->queryStatement($sql, [
                 ':username' => $this->username,
                 ':email' => $this->email,
                 ':password' => $hashPass,
@@ -115,7 +115,7 @@ class User
             $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
 
-            $this->db->queryStatment($sql, [
+            $this->db->queryStatement($sql, [
                 ':username' => $this->username,
                 ':email' => $this->email,
                 ':password' => $hashPass,
@@ -131,7 +131,7 @@ class User
     {
         try {
             $sql = "Select * from users";
-            $stmt = $this->db->queryStatment($sql);
+            $stmt = $this->db->queryStatement($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
@@ -143,7 +143,7 @@ class User
     {
         try {
             $sql = "SELECT role_id, role_name FROM roles";
-            $stmt = $this->db->queryStatment($sql);
+            $stmt = $this->db->queryStatement($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();

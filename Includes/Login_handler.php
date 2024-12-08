@@ -3,9 +3,6 @@
 require_once 'User.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['loginin'])) {
-    
-    $db = new Database($host, $username, $password, $dbname);
-    $connection = $db->getConnection();
 
     // Gather form data
     $username = $_POST['username'];

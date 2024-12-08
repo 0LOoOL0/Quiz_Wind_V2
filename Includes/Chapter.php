@@ -7,6 +7,7 @@ class Chapter
 
     private $db;
     private $subjectId;
+    private $chapterId;
     private $chapterTitle;
     private $createdBy; // multiple teachers can change that
 
@@ -15,6 +16,7 @@ class Chapter
         $this->db = $db;
 
         $this->subjectId = null;
+        $this->chapterId = null;
         $this->chapterTitle = null;
         $this->createdBy = null;
     }
@@ -55,6 +57,18 @@ class Chapter
         return $this;
     }
 
+    public function getChapterId()
+    {
+        return $this->chapterId;
+    }
+
+    public function setChapterId($chapterId)
+    {
+        $this->chapterId = $chapterId;
+
+        return $this;
+    }
+
    
     // function createChapter()
     // {
@@ -77,7 +91,7 @@ class Chapter
     function createChapter() {
         if ($this->chapterTitle && $this->subjectId) {
             $sql = "INSERT INTO chapters (subject_id, chapter_title) VALUES (:subject_id, :chapter_title)";
-            $this->db->queryStatment($sql, [
+            $this->db->queryStatement($sql, [
                 ':subject_id' => $this->subjectId,
                 ':chapter_name' => $this->chapterTitle
             ]);
@@ -87,18 +101,40 @@ class Chapter
         }
     }
 
-
-// retreive chapters from database
     public function getChaptersBySubject($subjectId) {
         try {
             $sql = "SELECT * FROM chapters WHERE subject_id = ?";
-            $stmt = $this->db->queryStatment($sql, [$subjectId]);
-            
+            $stmt = $this->db->queryStatement($sql, [$subjectId]); // Pass the parameter here
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
-            echo "Something went wrong: " . $ex->getMessage(); 
+            echo "Something went wrong: " . $ex->getMessage();
+            return [];
         }
     }
+
+    //testing only worked
+    function chapterList()
+    {
+        try {
+            $sql = "Select * from chapters";
+            $stmt = $this->db->queryStatement($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . $ex->getMessage();
+        }
+    }
+
+
+// retreive chapters from database
+    // public function getChaptersBySubject($subjectId) {
+    //     try {
+    //         $sql = "SELECT * FROM chapters WHERE subject_id = ?";
+    //         $stmt = $this->db->queryStatement($sql, [$subjectId]);
+    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     } catch (Exception $ex) {
+    //         echo "Something went wrong: " . $ex->getMessage(); 
+    //     }
+    // }
 
 
     // function getSubjectList()
@@ -142,5 +178,4 @@ class Chapter
     //     return $stmt->execute();
     // }
 
- 
 }
