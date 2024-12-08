@@ -88,23 +88,38 @@ class Chapter
     //     }
     // }
 
-    function createChapter() {
-        if ($this->chapterTitle && $this->subjectId) {
-            $sql = "INSERT INTO chapters (subject_id, chapter_title) VALUES (:subject_id, :chapter_title)";
-            $this->db->queryStatement($sql, [
-                ':subject_id' => $this->subjectId,
-                ':chapter_name' => $this->chapterTitle
-            ]);
-            return $this->db->getConnection()->lastInsertId();
-        } else {
-            throw new Exception("Must set values for chapter name and subject ID.");
-        }
+    // function createChapter() {
+    //     if ($this->chapterTitle && $this->subjectId) {
+    //         $sql = "INSERT INTO chapters (subject_id, chapter_title) VALUES (:subject_id, :chapter_title)";
+    //         $this->db->queryStatement($sql, [
+    //             ':subject_id' => $this->subjectId,
+    //             ':chapter_name' => $this->chapterTitle
+    //         ]);
+    //         return $this->db->getConnection()->lastInsertId();
+    //     } else {
+    //         throw new Exception("Must set values for chapter name and subject ID.");
+    //     }
+    // }
+    public function createChapter()
+{
+    if ($this->chapterTitle && $this->subjectId) {
+        $sql = "INSERT INTO chapters (subject_id, chapter_title) VALUES (:subject_id, :chapter_title)";
+        $stmt = $this->db->getConnection()->prepare($sql); // Prepare the SQL statement
+        $stmt->execute([
+            ':subject_id' => $this->subjectId,
+            ':chapter_title' => $this->chapterTitle // Ensure this matches the SQL statement
+        ]);
+        return $this->db->getConnection()->lastInsertId(); // Return the last inserted ID
+    } else {
+        throw new Exception("Must set values for chapter title and subject ID.");
     }
+}
+
 
     public function getChaptersBySubject($subjectId) {
         try {
             $sql = "SELECT * FROM chapters WHERE subject_id = ?";
-            $stmt = $this->db->queryStatement($sql, [$subjectId]); // Pass the parameter here
+            $stmt = $this->db->queryStatement($sql, [$subjectId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
@@ -122,6 +137,14 @@ class Chapter
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
         }
+    }
+
+    //deleting chapter
+    public function deleteChapter()
+    {
+        $stmt = $this->db->prepare("DELETE FROM chapters WHERE chapter_id = :chapter_id");
+        $stmt->bindParam(':chapter_id', $this->chapterId);
+        return $stmt->execute();
     }
 
 

@@ -9,9 +9,10 @@ include 'Includes/Chapter_handler.php';
 <div class="popup-create">
     <div class="popup-content">
         <h3>Create new Chapter</h3>
-        <form action="Includes/Chapter_handler.php" method="post">
+        <form action="Includes/Chapter_handler.php?subject_id=<?= htmlspecialchars($subject_id) ?>" method="post">
             <div class="form-content">
                 <p>Chapter Name</p>
+                <input type="hidden" name="subject_id" value="<?= htmlspecialchars($subject_id) ?>">
                 <input type="text" id="chapter_title" name="chapter_title" required>
             </div>
             <button type="submit" class="button1" name='submitted'>Add</button>
@@ -21,9 +22,7 @@ include 'Includes/Chapter_handler.php';
 </div>
 
 <section class="content-head">
-    <h1><span>
-            Select Quiz of your choosing
-        </span></h1>
+    <h1><?= $subjectName ?></h1>
 </section>
 
 
@@ -39,15 +38,10 @@ include 'Includes/Chapter_handler.php';
                 <div class="chapters">
                     <div class="sub-chapter">
                         <ul>
-                            <li>chapter</li>
                             <?php
 
-                            //testing
-
-                            //$subjectId = 1;
-
                             $subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : 0;
-                            
+
                             if ($subjectId <= 0) {
                                 echo "Invalid subject ID.";
                                 exit;
@@ -55,26 +49,16 @@ include 'Includes/Chapter_handler.php';
 
                             $chapter = new Chapter($db);
                             $chapterList = $chapter->getChaptersBySubject($subjectId);
+
                             if (!empty($chapterList)) {
                                 foreach ($chapterList as $chapter) {
-                                    echo "<li>" . $chapter['subject_id'] . "'>" . htmlspecialchars($chapter['chapter_title']) . "</li>";
+                                    // Display chapter title
+                                    echo "<li>" . htmlspecialchars($chapter['chapter_title']) . "</li>";
                                 }
+                                echo "</ul>";
                             } else {
                                 echo "No chapters found for this subject.";
                             }
-
-                            //this is a test working when not assigned to subjects
-                            
-                            // $chapter = new Chapter($db);
-                            // $chapterList = $chapter->chapterList();
-
-                            // if (!empty($chapterList)) {
-                            //     foreach ($chapterList as $chapter) {
-                            //         echo "<li>". $chapter['chapter_title'] . "</li>";
-                            //     }
-                            // } else {
-                            //     echo " 0 Results";
-                            // }
 
                             ?>
                         </ul>

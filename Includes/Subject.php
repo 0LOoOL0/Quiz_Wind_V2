@@ -99,6 +99,13 @@ class Subject
         }
     }
 
+    public function getSubjectById($subject_id) {
+        $sql = "SELECT * FROM subjects WHERE subject_id = :subject_id LIMIT 1"; // Adjust table name as necessary
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute([':subject_id' => $subject_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the subject details
+    }
+
     // display all users with teacher role on table
     public function teacherList()
     {
