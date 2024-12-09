@@ -2,6 +2,7 @@
 
 session_start();
 include 'Includes/Login_handler.php';
+include 'Includes/Logout_handler.php';
 
 ?>
 
@@ -29,18 +30,14 @@ include 'Includes/Login_handler.php';
             </ul>
         </nav>
         <?php if (isset($_SESSION['username'])): ?>
-                    <p class="userlog">Welcome! <?php echo htmlspecialchars($_SESSION['username']); ?></p>
-                    
-                    <form action="Include/logout_handler.php" method="post">
-                        <a class='button1' href="main.php">Logout</a>
-                    </form>
+            <p class="userlog">Welcome! <?php echo htmlspecialchars($_SESSION['username']); ?></p>
 
-                <?php else: ?>
-                    <a class='button1' href="login.php">Login</a>
-                <?php endif; ?>
-        <!-- <form>
-            <a href="login.php" class="button1">Login</a>
-        </form> -->
+            <form action="Includes/Logout_handler.php" method="post">
+                <button class="button1" name="logout" value="logout">Logout</button>
+            </form>
+        <?php else: ?>
+            <button class='button1'><a href="login.php" style="text-decoration: none; color: inherit;">Login</a></button>
+        <?php endif; ?>
     </header>
 
     <script>

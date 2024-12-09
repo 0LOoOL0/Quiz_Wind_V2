@@ -132,7 +132,7 @@ class Subject
     public function deleteSubject()
     {
         $stmt = $this->db->prepare("DELETE FROM subjects WHERE subject_id = :subject_id");
-        $stmt->bindParam(':subject_id', $this->subjectId); // Assuming $this->user_id is set in the User object
+        $stmt->bindParam(':subject_id', $this->subjectId);
         return $stmt->execute();
     }
 }

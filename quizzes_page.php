@@ -1,7 +1,8 @@
 <?php
 include 'header.php';
 include 'Includes/Chapter_handler.php';
-
+include 'Includes/Quizzes_handler.php';
+include 'Includes/auth.php';
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -64,33 +65,35 @@ include 'Includes/Chapter_handler.php';
                         </ul>
                     </div>
                 </div>
+
                 <div class="quizzes">
-                    <div class="add-quiz">
-                        <h2>Quiz</h2>
-                        <p>Discription Discription Discription Discription</p>
-                        <div class="quiz-buttons">
-                            <button class="button3">Edit Quiz</button>
-                            <button class="button4">Delete</button>
-                        </div>
-                    </div>
-                    <div class="sub-quiz">
-                        <h2>Quiz</h2>
-                        <h4>Discription Discription Discription Discription</h4>
-                        <div class="quiz-buttons">
-                            <button class="button1"><a href="rule_page.php">Start</a></button>
-                            <button class="button3">Edit Quiz</button>
-                            <button class="button4">Delete</button>
-                        </div>
-                    </div>
-                    <div class="sub-quiz">
-                        <h2>Quiz</h2>
-                        <h4>Discription Discription Discription Discription</h4>
-                        <div class="quiz-buttons">
-                            <button class="button1">Start</button>
-                            <button class="button3">Edit Quiz</button>
-                            <button class="button4">Delete</button>
-                        </div>
-                    </div>
+                    <?php
+                    $quiz = new Quiz($db);
+                    $quizList = $quiz->quizList();
+
+                    if (!empty($quizList)) {
+                        foreach ($quizList as $quiz) {
+                            echo "<div class='sub-quiz'>
+                                    <h2>". htmlspecialchars($quiz['quiz_title']) ."</h2>
+                                    <h4>" .htmlspecialchars($quiz['quiz_text'])."</h4>
+                                    <div class='quiz-buttons'>
+
+                                        <button class='button1'><a href='rule_page.php'>Start</a></button>
+                                        <button class='button3'>Edit Quiz</button>
+                                        <form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>
+                                        <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
+                                        <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this quiz?\");'>Delete</button>
+                                        </form>
+
+                                    </div>
+                                </div>";
+                        }
+                        echo "</div>";
+                    } else {
+                        echo " 0 Results";
+                    }
+                    ?>
+
                 </div>
             </div>
         </section>

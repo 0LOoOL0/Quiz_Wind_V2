@@ -2,6 +2,7 @@
 include 'header.php';
 include 'Includes/Chapter_handler.php';
 include 'Includes/Subject_handler.php';
+include 'auth.php';
 
 ?>
 

@@ -2,6 +2,7 @@
 
 include 'header.php';
 include 'Includes/User_handler.php';
+include 'Includes/auth.php';
 
 if (isset($_SESSION['message'])) {
     echo "<p style='color: green;'>" . htmlspecialchars($_SESSION['message']) . "</p>";
@@ -66,7 +67,6 @@ if (isset($_SESSION['message'])) {
             <div class="users-table">
                 <table>
                     <tr>
-                        <th>User ID</th>
                         <th>Username</th>
                         <th>Email</th>
                         <th>Joined date</th>
@@ -83,7 +83,8 @@ if (isset($_SESSION['message'])) {
                         echo "<table>";
                         foreach ($userList as $user) {
                             echo "<tr>
-                                <td>" . htmlspecialchars($user["user_id"]) . "</td>
+                                <!--<td>" . htmlspecialchars($user["user_id"]) . "</td>-->
+                                <td></td>
                                 <td>" . htmlspecialchars($user["username"]) . "</td>
                                 <td>" . htmlspecialchars($user["email"]) . "</td>
                                 <td>" . htmlspecialchars($user["created_at"]) . "</td>

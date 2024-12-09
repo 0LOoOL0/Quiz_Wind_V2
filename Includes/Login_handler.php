@@ -32,5 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['loginin'])) {
     } else {
         echo "Invalid username or password.";
     }
+
 }
+
+// with class but not working 
+// if (isset($_POST['loginin'])) {
+
+//     $user = new User($db);
+//     $error = $user->login($_POST['username'], $_POST['password']);
+
+// }
+
 ?>

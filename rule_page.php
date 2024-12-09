@@ -1,5 +1,6 @@
 <?php
 include 'header.php';
+include 'Includes/auth.php';
 ?>
 
 <body class="page10">

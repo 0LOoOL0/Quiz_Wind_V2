@@ -157,4 +157,26 @@ class User
         $stmt->bindParam(':user_id', $this->userId); // Assuming $this->user_id is set in the User object
         return $stmt->execute();
     }
+
+    public function login($username, $password)
+    {
+        $sql = "SELECT password FROM users WHERE username = :username";
+        $stmt = $this->db->queryStatement($sql, [':username' => $username]);
+
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Debugging: Check fetched password hash
+            // echo "Fetched password hash: " . $row['password']; // Uncomment for debugging
+
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['username'] = $username;
+                header("Location: ../subject_page.php");
+                exit();
+            } else {
+                return 'Invalid username or password.';
+            }
+        } else {
+            return 'Invalid username or password.';
+        }
+    }
 }

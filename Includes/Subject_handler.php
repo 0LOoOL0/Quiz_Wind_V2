@@ -2,6 +2,7 @@
 
 require_once 'Subject.php'; 
 
+//create new subject
 if (isset($_POST['submitted'])) {
     try {
     $subject = new Subject($db);

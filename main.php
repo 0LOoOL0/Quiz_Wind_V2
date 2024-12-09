@@ -2,6 +2,10 @@
 include 'header.php';
 include 'Includes/User_handler.php';
 
+//redirect user if signed in
+if (isset($_SESSION['username'])) {
+    header("Location: user_logout.php");
+    exit();}
 ?>
 
 <body class="page11">

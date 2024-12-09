@@ -1,6 +1,7 @@
 <?php
 include 'header.php';
 include 'Includes/Subject_handler.php';
+include 'Includes/auth.php';
 
 if (isset($_SESSION['message'])) {
     echo "<p style='color: green;'>" . htmlspecialchars($_SESSION['message']) . "</p>";
@@ -70,28 +71,27 @@ if (isset($_SESSION['message'])) {
             <div class="subjects">
 
                 <?php
-                
+
                 $subject = new Subject($db);
                 $subjectList = $subject->getSubjectList();
 
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
-                        echo "<tr>
-                            <div class='sub-subjects'>
-                            <h1>
-                                " . htmlspecialchars($subject['subject_name']) . "
-                            </h1>
-                            <h3>
-                                " . htmlspecialchars($subject['subject_text']) . "
-                            </h3>
-                            <div class='card-subject'>
-                                <button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>
-                                <button class='button3' style='margin-left: 10px;'>Edit</button>
-                                
-                                <form action='Includes/Subject_handler.php' method='post' style='display:inline;'>
-                                    <input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
-                                    <button type='submit' class='button5' onclick='return confirm(\"Are you sure you want to delete this user?\");'>X</button>
-                                </form>
+                        echo "<div class='sub-subjects'>
+                                <h1>
+                                    " . htmlspecialchars($subject['subject_name']) . "
+                                </h1>
+                                <h3>
+                                    " . htmlspecialchars($subject['subject_text']) . "
+                                </h3>
+                                <div class='card-subject'>
+                                    <button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>
+                                    <button class='button3' style='margin-left: 10px;'>Edit</button>
+                                    
+                                    <form action='Includes/Subject_handler.php' method='post' style='display:inline;'>
+                                        <input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
+                                        <button type='submit' class='button5' onclick='return confirm(\"Are you sure you want to delete this user?\");'>X</button>
+                                    </form>
                                 
                             </div>
                             </div>";
