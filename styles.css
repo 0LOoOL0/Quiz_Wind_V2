@@ -632,6 +632,7 @@ body {
     margin-bottom: 2em;
     border-radius: 20px;
     padding: 40px;
+    margin-top: 2em;;
 }
 
 .question-card-options {
@@ -700,10 +701,10 @@ input[type="radio"]:checked+label {
 
 .crud-rule {
     width: 60%;
-    margin-bottom: 3em;
+    margin-bottom: 10px;
     padding: 40px;
     border-radius: 20px;
-    background-color: white;
+    background-color: #ffffff;
     box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -713,7 +714,6 @@ input[type="radio"]:checked+label {
 }
 
 .crud-rule input {
-    height: 10px;
     font-size: 20px ;
 }
 
@@ -1039,7 +1039,48 @@ input[type="radio"]:checked+label {
     font-size: 20px;
 }
 
-.form-content input {
+/*for creating quiz*/
+.popup-create2 {
+    text-align: center;
+    width: 1150px;
+    height: 500px;
+    background-color: #bae3ff;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0;
+    border-radius: 10px;
+}
+
+.popup-content2 {
+    background-color: white;
+    box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.popup-content2 table {
+    width: 100%;
+    font-size: 20px;
+}
+
+.popup-content2 input {
+    height: 40px;
+    margin: 10px;
+    border-radius: 5px;
+    width: 95%;
+    font-size: 20px;
+}
+
+
+.popup-content2 select {
+    height: 45px;
+    width: auto;
+    margin: 5px 0px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.form-content2 input {
     border-radius: 10px;
     background: rgb(255, 255, 255);
     height: 50px;
@@ -1049,7 +1090,7 @@ input[type="radio"]:checked+label {
     box-sizing: border-box;
 }
 
-.form-content {
+.form-content2 {
     margin: 20px;
     display: flex;
     flex-direction: column;
