@@ -99,29 +99,42 @@ class Quiz
 
         return $this;
     }
-
-   
-    function createSubject()
+    
+    //for select chapter for the quiz
+    function chapterList()
     {
-        if ($this->quizTitle && $this->quizText) {
-
-            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by , timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
-            $createdByValue = $this->createdBy ? $this->createdBy : null;
-
-            $this->db->queryStatement($sql, [
-                ':quiz_title' => $this->quizId,
-                ':quiz_text' => $this->quizText,
-                ':chapter_id' => $this->chapterId,
-                ':created_by' => $createdByValue,
-                ':timer' => $this->timer
-            ]);
-
-            return $this->db->getConnection()->lastInsertId(); // Correct method call
-        } else {
-            throw new Exception("Must set values for quiz");
+        try {
+            $sql = "SELECT chapter_id, chapter_title, subject_id FROM chapters WHERE subject_id = 1";
+            $stmt = $this->db->queryStatement($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . $ex->getMessage();
         }
     }
+   
+    public function createQuiz()
+{
+    if ($this->quizTitle && $this->quizText) {
+        $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
+        $createdByValue = $this->createdBy ? $this->createdBy : null;
 
+        // Use prepared statement correctly
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':quiz_title' => $this->quizTitle, // Correct variable
+            ':quiz_text' => $this->quizText,
+            ':chapter_id' => $this->chapterId,
+            ':created_by' => $createdByValue,
+            ':timer' => $this->timer
+        ]);
+
+        return $this->db->getConnection()->lastInsertId(); // Correct method call
+    } else {
+        throw new Exception("Must set values for quiz");
+    }
+}
+
+    //for quizzes_page
     function quizList()
     {
         try {

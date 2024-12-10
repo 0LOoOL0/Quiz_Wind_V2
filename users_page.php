@@ -24,8 +24,8 @@ if (isset($_SESSION['message'])) {
                 <input type="password" name="password" required>
                 <p>email</p>
                 <input type="email" name="email" required>
+                
                 <label for="Roles">Choose a Role:</label>
-
                 <select name="role" id="Roles" placeholder="Select Role" required>
                     <option value="">Select Role....</option>
 

@@ -718,6 +718,10 @@ input[type="radio"]:checked+label {
 } */
 
 /*New Improved*/
+.crud-rule-wide {
+    width: 100%;
+}
+
 .crud-rule {
     width: 60%;
     margin: auto;

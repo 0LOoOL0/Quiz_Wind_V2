@@ -1,7 +1,6 @@
 <?php
-    include 'Includes/Database_handler.php';
 
-
+include 'Database_handler.php';
 class Option {
 
     private $db;
@@ -67,11 +66,9 @@ class Option {
         return $this;
     }
 
-    public function createQuestion()
-    {
-        if ($this->optionText && $this->questionId && $this->isCorrect) {
-
-            $sql = "INSERT INTO options (option_text, question_id, is_correct) VALUES (option_text: option_text,  question_id :question_id, quiz_id : quiz_id, is_correct :is_correct)";
+    public function createOption() {
+        if ($this->optionText && $this->questionId && $this->isCorrect !== null) {
+            $sql = "INSERT INTO options (option_text, question_id, is_correct) VALUES (:option_text, :question_id, :is_correct)";
 
             $this->db->queryStatement($sql, [
                 ':option_text' => $this->optionText,
@@ -79,9 +76,9 @@ class Option {
                 ':is_correct' => $this->isCorrect
             ]);
 
-            return $this->db->getConnection()->lastInsertId(); // Correct method call
+            return $this->db->getConnection()->lastInsertId();
         } else {
-            throw new Exception("Must set values for quiz");
+            throw new Exception("Must set values for option");
         }
     }
 

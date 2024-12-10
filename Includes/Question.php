@@ -1,7 +1,6 @@
 <?php
 
 include 'Database_handler.php';
-
 class Question
 {
 
@@ -73,9 +72,9 @@ class Question
 
     function createQuestion()
     {
-        if ($this->questionId && $this->questionText && $this->quizId && $this->score) {
+        if ($this->questionText && $this->quizId && $this->score) {
 
-            $sql = "INSERT INTO questions (question_text, quiz_id, score) VALUES (question_text: question_text, quiz_id : quiz_id, score: score)";
+            $sql = "INSERT INTO questions (question_text, quiz_id, score) VALUES (:question_text, :quiz_id, :score)";
 
             $this->db->queryStatement($sql, [
                 ':question_text' => $this->questionText,
@@ -85,8 +84,9 @@ class Question
 
             return $this->db->getConnection()->lastInsertId(); // Correct method call
         } else {
-            throw new Exception("Must set values for quiz");
+            throw new Exception("Must set values for question");
         }
+
     }
 
     function questionList()

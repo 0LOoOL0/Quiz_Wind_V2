@@ -1,5 +1,9 @@
 <?php
+
 include 'header.php';
+include 'Includes/Quiz_handler.php';
+//include 'Includes/Chapter_handler.php';
+
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -13,68 +17,64 @@ include 'header.php';
 <div class="wrapper">
     <div class="container">
         <div class="questions">
-            <form action="Includes/Quiz_handler.php" method="POST">
-                <div class="centering">
-                    <button id='add-question' class="button2">Save Quiz</button>
-                    <!-- <button id='save-quiz' class="button1">Save All</button> -->
-                </div>
-            </form>
-
-            <div class="crud-rule">
+            <div class="crud-rule-wide">
                 <form action="Includes/Quiz_handler.php" method="POST">
-                    <h1>Quiz Detail</h1>
+                    <div class="crud-rule">
+                        <h1>Quiz Detail</h1>
+                        <table>
+                            <tr>
+                                <td>Add Title</td>
+                                <td><input type="text" name="quiz_title" required></td>
+                            </tr>
+                            <tr>
+                                <td>Add Description (Optional):</td>
+                                <td><input type="text" name="quiz_text"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="timerInput">Timer:</label></td>
+                                <td><input type="text" id="timerInput" name="timer" pattern="\d{2}:\d{2}:\d{2}" placeholder="00:00:00" required></td>
+                            </tr>
+                            <tr>
+                                <td><label for="chapter">Chapter:</label></td>
+                                <td>
+                                    <select name="chapter" id="Chapters" required>
+                                        <option value="">Choose chapter...</option>
+                                        <?php
+                                        $chapter = new Quiz($db);
+                                        $chapterList = $chapter->chapterList();
+                                        foreach ($chapterList as $chapter) {
+                                            echo "<option value='" . $chapter['chapter_id'] . "'>" . $chapter['chapter_title'] . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="question_count">Number of Questions:</label></td>
+                                <td>
+                                    <input type="number" id="question_count" name="question_count" required min="1" max="50" style="height: 40px; width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; -moz-appearance: textfield;">
+                                    <style>
+                                        input[type=number]::-webkit-inner-spin-button,
+                                        input[type=number]::-webkit-outer-spin-button {
+                                            -webkit-appearance: none;
+                                            margin: 0;
+                                        }
+                                    </style>
+                                </td>
+                            </tr>
+                        </table>
+                        <button id='add-quiz' class="button2" type="submit" name="add-quiz">Save Quiz</button>
+                    </div>
 
-                    <table>
-                        <tr>
-                            <td>Add Title</td>
-                            <td><input type="text" required></td>
-                        </tr>
-                        <tr>
-                            <td>Add Description (Optional):</td>
-                            <td><input type="text"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="Timer">Timer:</label></td>
-                            <td><input type="text" id="timerInput" name="timerInput" pattern="\d{2}:\d{2}:\d{2}" placeholder="00:00:00" required></td>
-                        </tr>
-                        <tr>
-                            <td><label for="chapter">Chapter:</label></td>
-                            <td>
-                                <select name="chooseChapter" id="Chapters" required>
-                                    <option value="">Choose chapter...</option>
-                                    <!-- Add more options here -->
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="question_count">Number of Questions:</label></td>
-                            <td>
-                                <input type="number" id="question_count" name="question_count" required min="1" max="50" style="height: 40px; width: 100%; font-size: 16px; padding: 10px; box-sizing: border-box; -moz-appearance: textfield;">
-                                <!-- Hide the spinner controls for Firefox -->
-                                <style>
-                                    /* Hide the number input spinner */
-                                    input[type=number]::-webkit-inner-spin-button,
-                                    input[type=number]::-webkit-outer-spin-button {
-                                        -webkit-appearance: none;
-                                        margin: 0;
-                                    }
-                                </style>
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- <button type="submit">Create Quiz</button> -->
+                    <div id="questions_container"></div>
                 </form>
             </div>
-
-            <div id="questions_container"></div>
-
-
 
             <script>
                 document.getElementById('question_count').addEventListener('change', function() {
                     const count = this.value;
                     const container = document.getElementById('questions_container');
-                    container.innerHTML = ''; // Clear previous questions
+                    container.innerHTML = '';
                     this.disabled = true;
 
                     for (let i = 0; i < count; i++) {
@@ -83,7 +83,7 @@ include 'header.php';
                     <h2>Question ${i + 1}</h2>
                     <table>
                         <tr>
-                            <td><input type="text" name="questions[${i}][text]" placeholder="Question Text" required></td>
+                            <td><input type="text" name="questions[${i}][question_text]" placeholder="Question Text" required></td>
                             <td><input type="number" name="questions[${i}][score]" placeholder="Score" value="1.00" step="0.01" required></td>
                         </tr>
                     </table>
@@ -91,7 +91,7 @@ include 'header.php';
                     <table>
                         ${[0, 1, 2, 3].map(optionIndex => `
                             <tr>
-                                <td><input type="text" name="questions[${i}][options][${optionIndex}][text]" placeholder="Option ${optionIndex + 1}" required></td>
+                                <td><input type="text" name="questions[${i}][options][${optionIndex}][option_text]" placeholder="Option ${optionIndex + 1}" required></td>
                                 <td><input type="checkbox" name="questions[${i}][options][${optionIndex}][is_correct]" value="1"></td>
                                 <td>Correct</td>
                             </tr>

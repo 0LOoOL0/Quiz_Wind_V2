@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Quizzes.php';
+require_once 'Quiz.php';
 require_once 'Question.php';
 require_once 'Option.php'; 
 
@@ -13,35 +13,58 @@ $newQuiz = new Quiz($db);
 //     die("Invalid subject ID.");
 // }
 
-$subject = new Subject($db);
-$subjectDetails = $subject->getSubjectById($subject_id);
+// $subject = new Subject($db);
+// $subjectDetails = $subject->getSubjectById($subject_id);
 
-if (!$subjectDetails) {
-    die("Subject not found.");
-}
+// if (!$subjectDetails) {
+//     die("Subject not found.");
+// }
 
-$subjectName = htmlspecialchars($subjectDetails['subject_name']);
+//$subjectName = htmlspecialchars($subjectDetails['subject_name']);
 
+//handler for creating new quiz
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
-    
     try {
-    $chapter = new Chapter($db);
-    $chapter->setChapterTitle($_POST['chapter_title']);
-    $chapter->setSubjectId($_POST['subject_id']);
+        $quiz = new Quiz($db);
+        $quiz->setQuizTitle($_POST['quiz_title']);
+        $quiz->setQuizText($_POST['quiz_text']);
+        $quiz->setChapterId($_POST['chapter_id']);
+        $quiz->setTimer($_POST['timer']);
 
-    $newChapterId = $chapter->createChapter();
+        $newQuizId = $quiz->createQuiz();
 
-    if ($newChapterId) {
-        header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
-        exit();
-    } else {
-        echo "<p style='color: red;'>Failed creating subject.</p>";
-    }
+        if ($newQuizId) {
+            foreach ($_POST['questions'] as $questionData) {
+                $question = new Question($db);
+                $question->setQuestionText($questionData['question_text']);
+                $question->setScore($questionData['score']);
+                $question->setQuizId($newQuizId);
+
+                $newQuestionId = $question->createQuestion();
+
+                foreach ($questionData['options'] as $optionData) {
+                    $option = new Option($db);
+                    $option->setOptionText($optionData['option_text']);
+                    $option->setIsCorrect(isset($optionData['is_correct']) ? 1 : 0);
+                    $option->setQuestionId($newQuestionId);
+                    $option->createOption();
+                }
+            }
+
+            header("Location: ../quizzes_page.php");
+            exit();
+        } else {
+            echo "<p style='color: red;'>Failed creating quiz.</p>";
+        }
     } catch (Exception $ex) {
         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
     }
 }
+
+//list all chapters
+
+
 
 // deleting chapter
 

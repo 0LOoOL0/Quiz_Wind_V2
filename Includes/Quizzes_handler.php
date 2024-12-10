@@ -1,5 +1,5 @@
 <?php
-require_once 'Quizzes.php';
+require_once 'Quiz.php';
 
 $newQuiz = new Quiz($db);
 
