@@ -91,7 +91,7 @@ include 'header.php';
             </div>
 
             <script>
-                let questionCount = 1;
+                let questionCount = 2; // Start numbering from 2
 
                 document.getElementById('add-question').addEventListener('click', function() {
                     const container = document.getElementById('question-container');
@@ -99,48 +99,76 @@ include 'header.php';
                     const newPopup = document.createElement('div');
                     newPopup.className = 'popup-create2';
                     newPopup.innerHTML = `
-                <form action="Includes/Question_handler.php" method="post">
-                    <div class="popup-content2" style='margin-top:100px'>
-                        <h1><label for="question">Create Question</label></h1>
-                        <table>
-                            <tr>
-                                <td style='width:40px;'><label for="questionText">Question:</label></td>
-                                <td><input type="text" name="questionText[]" required></td>
-                            </tr>
-                        </table>
-                        <div class="crud-option">
-                            <table>
-                        <?php for ($i = 0; $i < 4; $i++): ?>
-
-                                <tr>
-                                    <td style='width:20px;'><label>Option:</label></td>
-                                    <td>
-                                        <input type="text" name="optionTexts[]" required />
-                                    </td>
-                                </tr>
-                                 <?php endfor; ?>
-                                <tr>
-                                    <td style='width:20px;'><label>Correct answer:</label></td>
-                                    <td>
-                                        <select style='width:80%; border-radius:5px; margin-left: 10px; margin-top:20px;' name="isCorrect[]">
-                                            <option value="">Select correct Answer....</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <span class="button4" onclick="this.parentElement.parentElement.parentElement.remove()">Remove</span>
-                    </div>
-                </form>
-            `;
+        <form action="Includes/Question_handler.php" method="post">
+            <div class="popup-content2" style='margin-top:100px'>
+                <h1><label for="question">Create Question ${questionCount}</label></h1>
+                <table>
+                    <tr>
+                        <td style='width:40px;'><label for="questionText">Question:</label></td>
+                        <td><input type="text" name="questionText[]" required></td>
+                    </tr>
+                </table>
+                <div class="crud-option">
+                    <table>
+                        ${Array.from({ length: 4 }, (_, i) => ` <
+                        tr >
+                        <
+                        td style = 'width:20px;' > < label > Option $ {
+                            i + 1
+                        }: < /label></td >
+                        <
+                        td >
+                        <
+                        input type = "text"
+                    name = "optionTexts[]"
+                    required / >
+                        <
+                        /td> < /
+                        tr >
+                        `).join('')}
+                        <tr>
+                            <td style='width:20px;'><label>Correct answer:</label></td>
+                            <td>
+                                <select style='width:80%; border-radius:5px; margin-left: 10px; margin-top:20px;' name="isCorrect[]">
+                                    <option value="">Select correct Answer....</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <span class="button4" onclick="removeQuestion(this)">Remove</span>
+            </div>
+        </form>
+    `;
 
                     container.appendChild(newPopup);
                     questionCount++;
                 });
+
+                // Function to remove a question and reorganize numbers
+                function removeQuestion(button) {
+                    const popup = button.closest('.popup-create2');
+                    if (popup) {
+                        popup.remove(); // Remove the popup from the DOM
+                        reorganizeNumbers(); // Reorganize question numbers
+                    }
+                }
+
+                // Function to reorganize question numbers
+                function reorganizeNumbers() {
+                    const popups = document.querySelectorAll('.popup-create2');
+                    popups.forEach((popup, index) => {
+                        const questionNumber = index + 2; // Start numbering from 2
+                        const label = popup.querySelector('h1 label');
+                        if (label) {
+                            label.textContent = `Create Question ${questionNumber}`; // Update the label
+                        }
+                    });
+                }
             </script>
 
 

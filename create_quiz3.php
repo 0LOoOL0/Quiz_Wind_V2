@@ -13,25 +13,22 @@ include 'header.php';
 <div class="wrapper">
     <div class="container">
         <div class="questions">
-            <form action="Includes/Quiz_handler.php" method="POST">
-                <div class="centering">
-                    <button id='add-question' class="button2">Save Quiz</button>
-                    <!-- <button id='save-quiz' class="button1">Save All</button> -->
-                </div>
-            </form>
+            <div class="centering">
+                <button id='add-question' class="button3">Create New Question</button>
+                <button id='save-quiz' class="button1">Save All</button>
+            </div>
 
             <div class="crud-rule">
-                <form action="Includes/Quiz_handler.php" method="POST">
-                    <h1>Quiz Detail</h1>
-
+                <h1>Quiz Detail</h1>
+                <form id="quizForm" action="Includes/Quiz_handler.php" method="POST">
                     <table>
                         <tr>
                             <td>Add Title</td>
-                            <td><input type="text" required></td>
+                            <td><input type="text" name="title" required></td>
                         </tr>
                         <tr>
-                            <td>Add Description (Optional):</td>
-                            <td><input type="text"></td>
+                            <td>Add Description:</td>
+                            <td><input type="text" name="description"></td>
                         </tr>
                         <tr>
                             <td><label for="Timer">Timer:</label></td>
@@ -62,21 +59,18 @@ include 'header.php';
                             </td>
                         </tr>
                     </table>
-                    <!-- <button type="submit">Create Quiz</button> -->
+                    <div id="questions_container"></div>
+                    <button type="submit">Create Quiz</button>
                 </form>
             </div>
-
-            <div id="questions_container"></div>
-
-
 
             <script>
                 document.getElementById('question_count').addEventListener('change', function() {
                     const count = this.value;
                     const container = document.getElementById('questions_container');
                     container.innerHTML = ''; // Clear previous questions
-                    this.disabled = true;
 
+                    // Generate questions based on the input count
                     for (let i = 0; i < count; i++) {
                         container.innerHTML += `
                 <div class="popup-content3" style='margin-top:50px'>
@@ -84,7 +78,7 @@ include 'header.php';
                     <table>
                         <tr>
                             <td><input type="text" name="questions[${i}][text]" placeholder="Question Text" required></td>
-                            <td><input type="number" name="questions[${i}][score]" placeholder="Score" value="1.00" step="0.01" required></td>
+                            <td style="widht:20px;"><input type="number" name="questions[${i}][score]" placeholder="Score" value="1.00" step="0.01" required></td>
                         </tr>
                     </table>
                     <h4>Options:</h4>
@@ -93,13 +87,16 @@ include 'header.php';
                             <tr>
                                 <td><input type="text" name="questions[${i}][options][${optionIndex}][text]" placeholder="Option ${optionIndex + 1}" required></td>
                                 <td><input type="checkbox" name="questions[${i}][options][${optionIndex}][is_correct]" value="1"></td>
-                                <td>Correct</td>
+                                <td>correct</td>
                             </tr>
                         `).join('')}
                     </table>
                 </div>
             `;
                     }
+
+                    // Disable the input field to lock the number of questions
+                    this.disabled = true;
                 });
             </script>
 

@@ -699,7 +699,7 @@ input[type="radio"]:checked+label {
     width: 55em;
 }
 
-.crud-rule {
+/* .crud-rule {
     width: 60%;
     margin-bottom: 10px;
     padding: 40px;
@@ -715,7 +715,86 @@ input[type="radio"]:checked+label {
 
 .crud-rule input {
     font-size: 20px ;
+} */
+
+/*New Improved*/
+.crud-rule {
+    width: 60%;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.crud-rule h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.crud-rule table {
+    width: 100%;
+    margin-bottom: 15px;
+    border-collapse: collapse;
+}
+
+.crud-rule td {
+    padding: 10px;
+    vertical-align: top;
+}
+
+/* First column styling */
+.crud-rule td:first-child {
+    width: 200px; /* Set width for the first column */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Input, select, and textarea styling */
+.crud-rule input[type="text"],
+.crud-rule input[type="number"],
+.crud-rule input[type="time"],
+.crud-rule select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+.crud-rule input:focus,
+.crud-rule select:focus {
+    border-color: #00d9ff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+#questions_container {
+    width:100%;
+}
+
+.popup-content3 {
+    width: 60%;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.popup-content3 table {
+    width: 100%;
+    font-size: 20px;
+}
+
+.popup-content3 input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
 
 .crud-question {
     background-color: #e6f5ff;
@@ -735,7 +814,7 @@ input[type="radio"]:checked+label {
     height: 40px;
     margin: 10px;
     border-radius: 5px;
-    width: 95%;
+    width: 90%;
     font-size: 20px;
 }
 
