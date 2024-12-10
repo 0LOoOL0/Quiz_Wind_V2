@@ -35,22 +35,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
         $newQuizId = $quiz->createQuiz();
 
         if ($newQuizId) {
+            $totalObtainedScore = 0; // Initialize obtained score
+            
             foreach ($_POST['questions'] as $questionData) {
                 $question = new Question($db);
                 $question->setQuestionText($questionData['question_text']);
                 $question->setScore($questionData['score']);
                 $question->setQuizId($newQuizId);
+                $question->createQuestion();
 
-                $newQuestionId = $question->createQuestion();
-
-                foreach ($questionData['options'] as $optionData) {
-                    $option = new Option($db);
-                    $option->setOptionText($optionData['option_text']);
-                    $option->setIsCorrect(isset($optionData['is_correct']) ? 1 : 0);
-                    $option->setQuestionId($newQuestionId);
-                    $option->createOption();
-                }
+                $totalObtainedScore += $questionData['score']; // Sum obtained score
             }
+
+            // Calculate total possible score for the quiz
+            $totalPossibleScore = $quiz->calculateTotalPossibleScore($newQuizId);
+
+            // Calculate percentage
+            $percentage = $quiz->calculatePercentage($totalObtainedScore, $totalPossibleScore);
+
+            // Update quiz with total score and percentage (add a column for percentage if needed)
+            $quiz->updateScore($newQuizId, $totalObtainedScore); // Assuming you want to store obtained score
+            $quiz->updateTotalScore($newQuizId, $percentage); // You might need to create this method
 
             header("Location: ../quizzes_page.php");
             exit();

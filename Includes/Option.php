@@ -82,6 +82,17 @@ class Option {
         }
     }
 
+    function listOption()
+    {
+        try {
+            $sql = "Select * from options WHERE question_id = :question_id";
+            $stmt = $this->db->queryStatement($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . $ex->getMessage();
+        }
+    }
+
 }
 
 ?>

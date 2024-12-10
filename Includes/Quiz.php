@@ -104,7 +104,7 @@ class Quiz
     function chapterList()
     {
         try {
-            $sql = "SELECT chapter_id, chapter_title, subject_id FROM chapters WHERE subject_id = 1";
+            $sql = "SELECT chapter_id, chapter_title, subject_id FROM chapters WHERE subject_id = :subject_id";
             $stmt = $this->db->queryStatement($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
@@ -168,6 +168,47 @@ class Quiz
         }
     }
 
+    public function calculateScore($quizId) {
+        $sql = "SELECT SUM(score) as total_score FROM questions WHERE quiz_id = :quiz_id";
+        $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total_score'] ? (float)$result['total_score'] : 0;
+    }
+
+    public function updateScore($quizId, $totalScore) {
+        $sql = "UPDATE quizzes SET total_score = :total_score WHERE quiz_id = :quiz_id";
+        $this->db->queryStatement($sql, [
+            ':total_score' => $totalScore,
+            ':quiz_id' => $quizId
+    ]);
+    }
+
+
+    public function calculateTotalPossibleScore($quizId) {
+        $sql = "SELECT SUM(score) as total_possible_score FROM questions WHERE quiz_id = :quiz_id";
+        $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total_possible_score'] ? (float)$result['total_possible_score'] : 0;
+    }
+
+    
+    public function calculatePercentage($totalObtained, $totalPossible) {
+        if ($totalPossible > 0) {
+            return ($totalObtained / $totalPossible) * 100;
+        }
+        return 0; // Avoid division by zero
+    }
+
+    public function updateTotalScore($quizId, $totalScore) {
+        $sql = "UPDATE quizzes SET total_score = :total_score WHERE quiz_id = :quiz_id";
+        $this->db->queryStatement($sql, [
+            ':total_score' => $totalScore,
+            ':quiz_id' => $quizId
+        ]);
+    }
+
     // Function to delete a quiz
     public function deleteQuiz()
     {
@@ -175,4 +216,5 @@ class Quiz
         $stmt->bindParam(':quiz_id', $this->quizId);
         return $stmt->execute();
     }
+    
 }

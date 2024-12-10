@@ -89,16 +89,52 @@ class Question
 
     }
 
-    function questionList()
-    {
-        try {
-            $sql = "Select * from questions";
-            $stmt = $this->db->queryStatement($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            echo "Something went wrong: " . $ex->getMessage();
+    // function listQuestion()
+    // {
+    //     try {
+    //         $sql = "Select * from questions";
+    //         $stmt = $this->db->queryStatement($sql);
+    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     } catch (Exception $ex) {
+    //         echo "Something went wrong: " . $ex->getMessage();
+    //     }
+    // }
+
+    public function listQuestion() {
+        // SQL query to fetch questions and their associated options
+        $sql = "SELECT q.question_id AS question_id, q.question_text, o.option_id AS option_id, o.option_text
+                FROM questions q
+                LEFT JOIN options o ON q.question_id = o.question_id";
+        
+        // Execute the query
+        $stmt = $this->db->queryStatement($sql);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Organize the results into a structured array
+        $questionList = [];
+        foreach ($results as $row) {
+            // Initialize question if it doesn't exist
+            if (!isset($questionList[$row['question_id']])) {
+                $questionList[$row['question_id']] = [
+                    'id' => $row['question_id'],
+                    'question_text' => $row['question_text'],
+                    'optionList' => [] // Initialize options array
+                ];
+            }
+            
+            // Add option only if it exists
+            if ($row['option_id'] !== null) {
+                $questionList[$row['question_id']]['optionList'][] = [
+                    'id' => $row['option_id'],
+                    'option_text' => $row['option_text']
+                ];
+            }
         }
+    
+        // Return reindexed array of questions
+        return array_values($questionList);
     }
+    
 
     // display all chapters
     public function optionList()
