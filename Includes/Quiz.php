@@ -126,56 +126,56 @@ class Quiz
         }
     }
 
-    public function createQuiz()
-    {
-        if ($this->quizTitle && $this->quizText) {
-            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
-            $createdByValue = $this->createdBy ? $this->createdBy : null;
+    // public function createQuiz()
+    // {
+    //     if ($this->quizTitle && $this->quizText) {
+    //         $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
+    //         $createdByValue = $this->createdBy ? $this->createdBy : null;
 
-            // Use prepared statement correctly
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([
-                ':quiz_title' => $this->quizTitle, // Correct variable
-                ':quiz_text' => $this->quizText,
-                ':chapter_id' => $this->chapterId,
-                ':created_by' => $createdByValue,
-                ':timer' => $this->timer
-            ]);
-
-            return $this->db->getConnection()->lastInsertId(); // Correct method call
-        } else {
-            throw new Exception("Must set values for quiz");
-        }
-    }
-
-    // public function createQuiz($subjectId) {
-    //     // Ensure required properties are set
-    //     if (empty($this->quizTitle) || empty($this->chapterId) || empty($subjectId)) {
-    //         throw new Exception("Quiz title, chapter ID, and subject ID must be set.");
-    //     }
-    
-    //     try {
-    //         $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id) 
-    //                 VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id)";
-    //         $createdByValue = $this->createdBy ?: null; // Null if not set
-    
-    //         // Prepare and execute the statement
+    //         // Use prepared statement correctly
     //         $stmt = $this->db->prepare($sql);
     //         $stmt->execute([
-    //             ':quiz_title' => $this->quizTitle,
+    //             ':quiz_title' => $this->quizTitle, // Correct variable
     //             ':quiz_text' => $this->quizText,
     //             ':chapter_id' => $this->chapterId,
     //             ':created_by' => $createdByValue,
-    //             ':timer' => $this->timer,
-    //             ':subject_id' => $subjectId // Use the passed subjectId
+    //             ':timer' => $this->timer
     //         ]);
-    
-    //         // Return the ID of the newly created quiz
-    //         return $this->db->getConnection()->lastInsertId();
-    //     } catch (PDOException $e) {
-    //         throw new Exception("Database error: " . $e->getMessage());
+
+    //         return $this->db->getConnection()->lastInsertId(); // Correct method call
+    //     } else {
+    //         throw new Exception("Must set values for quiz");
     //     }
     // }
+
+    public function createQuiz($subjectId) {
+        // Ensure required properties are set
+        if (empty($this->quizTitle) || empty($this->chapterId) || empty($subjectId)) {
+            throw new Exception("Quiz title, chapter ID, and subject ID must be set.");
+        }
+    
+        try {
+            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id) 
+                    VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id)";
+            $createdByValue = $this->createdBy ?: null; // Null if not set
+    
+            // Prepare and execute the statement
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':quiz_title' => $this->quizTitle,
+                ':quiz_text' => $this->quizText,
+                ':chapter_id' => $this->chapterId,
+                ':created_by' => $createdByValue,
+                ':timer' => $this->timer,
+                ':subject_id' => $subjectId // Use the passed subjectId
+            ]);
+    
+            // Return the ID of the newly created quiz
+            return $this->db->getConnection()->lastInsertId();
+        } catch (PDOException $e) {
+            throw new Exception("Database error: " . $e->getMessage());
+        }
+    }
 
     //for quizzes_page
     function quizList($subjectId)

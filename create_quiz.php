@@ -3,7 +3,7 @@ include 'header.php';
 include 'Includes/Quiz_handler.php';
 include 'Includes/Chapter_handler.php';
 include 'Includes/Quizzes_handler.php';
-
+$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 ?>
 
 <script type="text/javascript" src="script.js"></script>

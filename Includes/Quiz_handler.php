@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
         $quiz->setSubjectId($_POST['subject_id']);
 
         // Create quiz and check for success
-        $newQuizId = $quiz->createQuiz();
+        $newQuizId = $quiz->createQuiz($_POST['subject_id']);
 
         if ($newQuizId) {
             // Initialize obtained score

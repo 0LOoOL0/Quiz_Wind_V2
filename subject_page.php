@@ -86,7 +86,7 @@ if (isset($_SESSION['message'])) {
                                 </h3>
                                 <div class='card-subject'>
                                     <button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>
-                                    <button class='button3' style='margin-left: 10px;'>Edit</button>
+                                    <!--<button class='button3' style='margin-left: 10px;'>Edit</button>-->
                                     
                                     <form action='Includes/Subject_handler.php' method='post' style='display:inline;'>
                                         <input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
