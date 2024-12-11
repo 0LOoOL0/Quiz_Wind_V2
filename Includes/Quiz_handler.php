@@ -3,99 +3,105 @@
 require_once 'Quiz.php';
 require_once 'Question.php';
 require_once 'Option.php'; 
-
-
-$newQuiz = new Quiz($db);
+require_once 'Chapter.php'; 
 
 // $subject_id = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 
 // if ($subject_id === null) {
-//     die("Invalid subject ID.");
+//     die("Invalid subject ID creating quiz handler." );
 // }
 
-// $subject = new Subject($db);
-// $subjectDetails = $subject->getSubjectById($subject_id);
-
-// if (!$subjectDetails) {
-//     die("Subject not found.");
-// }
-
-//$subjectName = htmlspecialchars($subjectDetails['subject_name']);
-
-//handler for creating new quiz
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
     try {
+        // Initialize quiz object
         $quiz = new Quiz($db);
         $quiz->setQuizTitle($_POST['quiz_title']);
-        $quiz->setQuizText($_POST['quiz_text']);
+        $quiz->setQuizText($_POST['quiz_text']); 
         $quiz->setChapterId($_POST['chapter_id']);
         $quiz->setTimer($_POST['timer']);
+        $quiz->setSubjectId($_POST['subject_id']);
 
+        // Create quiz and check for success
         $newQuizId = $quiz->createQuiz();
 
         if ($newQuizId) {
-            $totalObtainedScore = 0; // Initialize obtained score
+            // Initialize obtained score
+            $totalObtainedScore = 0; 
             
-            foreach ($_POST['questions'] as $questionData) {
-                $question = new Question($db);
-                $question->setQuestionText($questionData['question_text']);
-                $question->setScore($questionData['score']);
-                $question->setQuizId($newQuizId);
-                $question->createQuestion();
+            // Check if questions are provided
+            if (isset($_POST['questions']) && is_array($_POST['questions'])) {
+                foreach ($_POST['questions'] as $questionData) {
+                    if (!empty($questionData['question_text']) && isset($questionData['score'])) {
+                        $question = new Question($db);
+                        $question->setQuestionText($questionData['question_text']);
+                        $question->setScore($questionData['score']);
+                        $question->setQuizId($newQuizId);
+                        $questionId = $question->createQuestion();
 
-                $totalObtainedScore += $questionData['score']; // Sum obtained score
+                        // Check if question was created successfully
+                        if ($questionId) {
+                            $totalObtainedScore += $questionData['score'];
+                            
+                            // Handle options if provided
+                            if (isset($questionData['options']) && is_array($questionData['options'])) {
+                                foreach ($questionData['options'] as $optionData) {
+                                    if (!empty($optionData['option_text'])) {
+                                        $option = new Option($db);
+                                        $option->setOptionText($optionData['option_text']);
+                                        $option->setQuestionId($questionId); // Link option to question
+
+                                        // Check if the option is correct
+                                        $option->setIsCorrect(isset($optionData['is_correct']) ? (bool)$optionData['is_correct'] : false);
+                                        
+                                        $option->createOption(); // Save the option
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            // Calculate total possible score for the quiz
-            $totalPossibleScore = $quiz->calculateTotalPossibleScore($newQuizId);
-
-            // Calculate percentage
-            $percentage = $quiz->calculatePercentage($totalObtainedScore, $totalPossibleScore);
-
-            // Update quiz with total score and percentage (add a column for percentage if needed)
-            $quiz->updateScore($newQuizId, $totalObtainedScore); // Assuming you want to store obtained score
-            $quiz->updateTotalScore($newQuizId, $percentage); // You might need to create this method
-
-            header("Location: ../quizzes_page.php");
+            // Redirect to quizzes page
+            header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
             exit();
         } else {
-            echo "<p style='color: red;'>Failed creating quiz.</p>";
+            echo "<p style='color: red;'>Failed to create quiz.</p>";
         }
     } catch (Exception $ex) {
         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
     }
 }
-
 //list all chapters
 
 
 
 // deleting chapter
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chapter_id'])) {
-    $chapterId = intval($_POST['chapter_id']);
+// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chapter_id'])) {
+//     $chapterId = intval($_POST['chapter_id']);
 
-    try {
-        $chapter = new Chapter($db);
-        $chapter->setChapterId($chapterId);
-        $chapter = $chapter->deleteChapter();
+//     try {
+//         $chapter = new Chapter($db);
+//         $chapter->setChapterId($chapterId);
+//         $chapter = $chapter->deleteChapter();
 
-        if ($result) {
-            // $_SESSION['message'] = 'User deleted successfully';
-            header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
-            exit();
-        } else {
-            echo "Failed to delete chapter.";
-        }
-    } catch (Exception $ex) {
-        echo "Error: " . htmlspecialchars($ex->getMessage());
-    }
+//         if ($result) {
+//             // $_SESSION['message'] = 'User deleted successfully';
+//             header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
+//             exit();
+//         } else {
+//             echo "Failed to delete chapter.";
+//         }
+//     } catch (Exception $ex) {
+//         echo "Error: " . htmlspecialchars($ex->getMessage());
+//     }
 
-    if (isset($_GET['message'])) {
-        echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
-    }
-}
+//     if (isset($_GET['message'])) {
+//         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
+//     }
+// }
 
 
 ?>

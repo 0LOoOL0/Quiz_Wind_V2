@@ -100,6 +100,47 @@ class Question
     //     }
     // }
 
+   
+    // public function listQuestion($quizId) {
+    //     $sql = "SELECT q.question_id AS question_id, 
+    //                    q.question_text, 
+    //                    o.option_id AS option_id, 
+    //                    o.option_text,
+    //                    quiz.timer AS timer
+    //             FROM questions q
+    //             LEFT JOIN options o ON q.question_id = o.question_id
+    //             JOIN quizzes quiz ON q.quiz_id = quiz.quiz_id
+    //             WHERE q.quiz_id = :quiz_id"; 
+
+    //     $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+    //     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    //     $questionList = [];
+    //     $timer = null;
+    //     foreach ($results as $row) {
+    //         if ($timer === null) {
+    //             $timer = $row['timer'];
+    //         }
+    //         if (!isset($questionList[$row['question_id']])) {
+    //             $questionList[$row['question_id']] = [
+    //                 'id' => $row['question_id'],
+    //                 'question_text' => $row['question_text'],
+    //                 'optionList' => []
+    //             ];
+    //         }
+    //         if ($row['option_id'] !== null) {
+    //             $questionList[$row['question_id']]['optionList'][] = [
+    //                 'id' => $row['option_id'],
+    //                 'option_text' => $row['option_text']
+    //             ];
+    //         }
+    //     }
+
+    //     return [
+    //         'questions' => array_values($questionList),
+    //         'timer' => $timer
+    //     ];
+    // }
     public function listQuestion() {
         // SQL query to fetch questions and their associated options
         $sql = "SELECT q.question_id AS question_id, q.question_text, o.option_id AS option_id, o.option_text
@@ -134,33 +175,19 @@ class Question
         // Return reindexed array of questions
         return array_values($questionList);
     }
-    
 
-    // display all chapters
-    public function optionList()
-    {
+    public function optionList($questionId) {
         try {
-            $sql = "SELECT option_text, is_correct FROM options WHERE question_id = 1";
-            $stmt = $this->db->queryStatement($sql);
-
-            if ($stmt) {
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                if (empty($result)) {
-                    echo "No teachers found.";
-                }
-                return $result;
-            } else {
-                echo "Query failed.";
-            }
+            $sql = "SELECT option_text, is_correct FROM options WHERE question_id = :question_id";
+            $stmt = $this->db->queryStatement($sql, [':question_id' => $questionId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
         }
     }
 
-    // Function to delete a quiz
-    public function deleteQuestion()
-    {
-        $stmt = $this->db->prepare("DELETE FROM question WHERE question_id = :question_id");
+    public function deleteQuestion() {
+        $stmt = $this->db->prepare("DELETE FROM questions WHERE question_id = :question_id");
         $stmt->bindParam(':question_id', $this->questionId);
         return $stmt->execute();
     }

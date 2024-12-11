@@ -26,6 +26,9 @@ include 'Includes/auth.php';
     <h1><?= $subjectName ?></h1>
 </section>
 
+<?php
+$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+?>
 
 <div class="wrapper">
     <div class="container">
@@ -33,7 +36,9 @@ include 'Includes/auth.php';
             <div class="crud-quiz">
                 <button class="button3">Return</button>
                 <button class="button3" id="add">Add Chapter</button>
-                <button class="button3"><a href="create_quiz.php">Add quiz</a></button>
+                <button class="button3">
+                    <a href="create_quiz.php?subject_id=<?php echo htmlspecialchars($subjectId); ?>">Add Quiz</a>
+                </button>
             </div>
             <div class="content-quiz">
                 <div class="chapters">
@@ -68,18 +73,21 @@ include 'Includes/auth.php';
 
                 <div class="quizzes">
                     <?php
+
+
                     $quiz = new Quiz($db);
-                    $quizList = $quiz->quizList();
+                    $quizList = $quiz->quizList($subjectId);
 
                     if (!empty($quizList)) {
                         foreach ($quizList as $quiz) {
                             echo "<div class='sub-quiz'>
-                                    <h2>". htmlspecialchars($quiz['quiz_title']) ."</h2>
-                                    <h4>" .htmlspecialchars($quiz['quiz_text'])."</h4>
+                                    <h2>" . htmlspecialchars($quiz['quiz_title']) . "</h2>
+                                    <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
                                     <div class='quiz-buttons'>
 
                                         <button class='button1'><a href='rule_page.php'>Start</a></button>
                                         <button class='button3'>Edit Quiz</button>
+                                        
                                         <form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
                                         <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this quiz?\");'>Delete</button>

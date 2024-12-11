@@ -1,36 +1,17 @@
 <?php
-
 require_once 'Chapter.php';
 require_once 'Subject.php'; 
 
-// if (isset($_POST['submitted'])) {
-//     try {
-//     $subject = new Subject($db);
-//     $subject->setSubjectName($_POST['subject_name']);
-//     $subject->setSubjectText($_POST['subject_text']);
-//     $subject->setAssignTo($_POST['assigned_to']);
-
-//     $newSubjectId = $subject->createSubject();
-
-//     if ($newSubjectId) {
-//         header("Location: ../subject_page.php");
-//         exit();
-//     } else {
-//         echo "<p style='color: red;'>Failed creating subject.</p>";
-//     }
-//     } catch (Exception $ex) {
-//         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
-//     }
-// }
-
 $newChapter = new Chapter($db);
 
+// Get the subject_id from the URL
 $subject_id = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 
 if ($subject_id === null) {
-    die("Invalid subject ID.");
+    die("Invalid subject ID chapter handler.");
 }
 
+// Fetch subject details
 $subject = new Subject($db);
 $subjectDetails = $subject->getSubjectById($subject_id);
 
@@ -40,22 +21,22 @@ if (!$subjectDetails) {
 
 $subjectName = htmlspecialchars($subjectDetails['subject_name']);
 
-
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submitted'])) {
-    
     try {
-    $chapter = new Chapter($db);
-    $chapter->setChapterTitle($_POST['chapter_title']);
-    $chapter->setSubjectId($_POST['subject_id']);
+        $chapter = new Chapter($db);
+        $chapter->setChapterTitle($_POST['chapter_title']);
+        $chapter->setSubjectId($subject_id); // Use the subject_id from the URL
 
-    $newChapterId = $chapter->createChapter();
+        // Create the chapter
+        $newChapterId = $chapter->createChapter();
 
-    if ($newChapterId) {
-        header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
-        exit();
-    } else {
-        echo "<p style='color: red;'>Failed creating subject.</p>";
-    }
+        if ($newChapterId) {
+            header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
+            exit();
+        } else {
+            echo "<p style='color: red;'>Failed to create chapter.</p>";
+        }
     } catch (Exception $ex) {
         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
     }

@@ -1,8 +1,8 @@
 <?php
-
 include 'header.php';
 include 'Includes/Quiz_handler.php';
-//include 'Includes/Chapter_handler.php';
+include 'Includes/Chapter_handler.php';
+include 'Includes/Quizzes_handler.php';
 
 ?>
 
@@ -18,16 +18,18 @@ include 'Includes/Quiz_handler.php';
     <div class="container">
         <div class="questions">
             <div class="crud-rule-wide">
+
                 <form action="Includes/Quiz_handler.php" method="POST">
+                    <input type="hidden" name="subject_id" value="<?php echo htmlspecialchars($subjectId); ?>">
                     <div class="crud-rule">
                         <h1>Quiz Detail</h1>
                         <table>
                             <tr>
-                                <td>Add Title</td>
+                                <td>Add Title:</td>
                                 <td><input type="text" name="quiz_title" required></td>
                             </tr>
                             <tr>
-                                <td>Add Description (Optional):</td>
+                                <td>Add Description:</td>
                                 <td><input type="text" name="quiz_text"></td>
                             </tr>
                             <tr>
@@ -37,15 +39,22 @@ include 'Includes/Quiz_handler.php';
                             <tr>
                                 <td><label for="chapter">Chapter:</label></td>
                                 <td>
-                                    <select name="chapter" id="Chapters" required>
+                                    <select name="chapter_id" id="Chapters" required>
                                         <option value="">Choose chapter...</option>
                                         <?php
-                                        $chapter = new Quiz($db);
-                                        $chapterList = $chapter->chapterList();
-                                        foreach ($chapterList as $chapter) {
-                                            echo "<option value='" . $chapter['chapter_id'] . "'>" . $chapter['chapter_title'] . "</option>";
+                                        $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+                                        $chapter = new Quiz($db);  // Changed variable name to avoid confusion
+                                        
+                                        $chapterList = [];
+                                        if ($subjectId !== null) {
+                                            $chapterList = $chapter->chapterList($subjectId);
                                         }
                                         ?>
+                                        <?php foreach ($chapterList as $chapter): ?>
+                                            <option value="<?php echo htmlspecialchars($chapter['chapter_id']); ?>">
+                                                <?php echo htmlspecialchars($chapter['chapter_title']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </td>
                             </tr>

@@ -12,7 +12,8 @@ class Quiz
     private $chapterId;
     private $timer;
     private $createdBy;
-    
+    private $subjectId;
+
     //for select
     private $chapterName;
 
@@ -27,6 +28,7 @@ class Quiz
         $this->chapterId = null;
         $this->timer = null;
         $this->createdBy = null;
+        $this->subjectId = null;
     }
     public function getQuizId()
     {
@@ -99,47 +101,88 @@ class Quiz
 
         return $this;
     }
-    
+
+    public function getSubjectId()
+    {
+        return $this->subjectId;
+    }
+
+    public function setSubjectId($subjectId)
+    {
+        $this->subjectId = $subjectId;
+
+        return $this;
+    }
+
     //for select chapter for the quiz
-    function chapterList()
+    function chapterList($subjectId)
     {
         try {
-            $sql = "SELECT chapter_id, chapter_title, subject_id FROM chapters WHERE subject_id = :subject_id";
-            $stmt = $this->db->queryStatement($sql);
+            $sql = "SELECT chapter_id, chapter_title FROM chapters WHERE subject_id = :subject_id";
+            $stmt = $this->db->queryStatement($sql, ['subject_id' => $subjectId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
         }
     }
-   
+
     public function createQuiz()
-{
-    if ($this->quizTitle && $this->quizText) {
-        $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
-        $createdByValue = $this->createdBy ? $this->createdBy : null;
+    {
+        if ($this->quizTitle && $this->quizText) {
+            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
+            $createdByValue = $this->createdBy ? $this->createdBy : null;
 
-        // Use prepared statement correctly
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            ':quiz_title' => $this->quizTitle, // Correct variable
-            ':quiz_text' => $this->quizText,
-            ':chapter_id' => $this->chapterId,
-            ':created_by' => $createdByValue,
-            ':timer' => $this->timer
-        ]);
+            // Use prepared statement correctly
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':quiz_title' => $this->quizTitle, // Correct variable
+                ':quiz_text' => $this->quizText,
+                ':chapter_id' => $this->chapterId,
+                ':created_by' => $createdByValue,
+                ':timer' => $this->timer
+            ]);
 
-        return $this->db->getConnection()->lastInsertId(); // Correct method call
-    } else {
-        throw new Exception("Must set values for quiz");
+            return $this->db->getConnection()->lastInsertId(); // Correct method call
+        } else {
+            throw new Exception("Must set values for quiz");
+        }
     }
-}
+
+    // public function createQuiz($subjectId) {
+    //     // Ensure required properties are set
+    //     if (empty($this->quizTitle) || empty($this->chapterId) || empty($subjectId)) {
+    //         throw new Exception("Quiz title, chapter ID, and subject ID must be set.");
+    //     }
+    
+    //     try {
+    //         $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id) 
+    //                 VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id)";
+    //         $createdByValue = $this->createdBy ?: null; // Null if not set
+    
+    //         // Prepare and execute the statement
+    //         $stmt = $this->db->prepare($sql);
+    //         $stmt->execute([
+    //             ':quiz_title' => $this->quizTitle,
+    //             ':quiz_text' => $this->quizText,
+    //             ':chapter_id' => $this->chapterId,
+    //             ':created_by' => $createdByValue,
+    //             ':timer' => $this->timer,
+    //             ':subject_id' => $subjectId // Use the passed subjectId
+    //         ]);
+    
+    //         // Return the ID of the newly created quiz
+    //         return $this->db->getConnection()->lastInsertId();
+    //     } catch (PDOException $e) {
+    //         throw new Exception("Database error: " . $e->getMessage());
+    //     }
+    // }
 
     //for quizzes_page
-    function quizList()
+    function quizList($subjectId)
     {
         try {
-            $sql = "Select * from quizzes";
-            $stmt = $this->db->queryStatement($sql);
+            $sql = "SELECT quiz_id, quiz_title, quiz_text FROM quizzes WHERE subject_id = :subject_id";
+            $stmt = $this->db->queryStatement($sql,[':subject_id' => $subjectId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
@@ -150,7 +193,7 @@ class Quiz
     public function teacherList()
     {
         try {
-            $sql = "SELECT chapter_id, chapter_title FROM chapters WHERE chapter_id = 1";
+            $sql = "SELECT chapter_id, chapter_title FROM chapters WHERE chapter_id = :chapter_id";
             $stmt = $this->db->queryStatement($sql);
 
             // Check if the statement executed correctly
@@ -168,40 +211,45 @@ class Quiz
         }
     }
 
-    public function calculateScore($quizId) {
+    public function calculateScore($quizId)
+    {
         $sql = "SELECT SUM(score) as total_score FROM questions WHERE quiz_id = :quiz_id";
         $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         return $result['total_score'] ? (float)$result['total_score'] : 0;
     }
 
-    public function updateScore($quizId, $totalScore) {
+    public function updateScore($quizId, $totalScore)
+    {
         $sql = "UPDATE quizzes SET total_score = :total_score WHERE quiz_id = :quiz_id";
         $this->db->queryStatement($sql, [
             ':total_score' => $totalScore,
             ':quiz_id' => $quizId
-    ]);
+        ]);
     }
 
 
-    public function calculateTotalPossibleScore($quizId) {
+    public function calculateTotalPossibleScore($quizId)
+    {
         $sql = "SELECT SUM(score) as total_possible_score FROM questions WHERE quiz_id = :quiz_id";
         $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         return $result['total_possible_score'] ? (float)$result['total_possible_score'] : 0;
     }
 
-    
-    public function calculatePercentage($totalObtained, $totalPossible) {
+
+    public function calculatePercentage($totalObtained, $totalPossible)
+    {
         if ($totalPossible > 0) {
             return ($totalObtained / $totalPossible) * 100;
         }
         return 0; // Avoid division by zero
     }
 
-    public function updateTotalScore($quizId, $totalScore) {
+    public function updateTotalScore($quizId, $totalScore)
+    {
         $sql = "UPDATE quizzes SET total_score = :total_score WHERE quiz_id = :quiz_id";
         $this->db->queryStatement($sql, [
             ':total_score' => $totalScore,
@@ -216,5 +264,4 @@ class Quiz
         $stmt->bindParam(':quiz_id', $this->quizId);
         return $stmt->execute();
     }
-    
 }
