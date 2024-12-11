@@ -264,4 +264,5 @@ class Quiz
         $stmt->bindParam(':quiz_id', $this->quizId);
         return $stmt->execute();
     }
+    
 }

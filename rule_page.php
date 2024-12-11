@@ -1,6 +1,12 @@
 <?php
 include 'header.php';
 include 'Includes/auth.php';
+
+$quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
+
+if ($quizId === null || $quizId <= 0) {
+    die("Invalid quiz ID.");
+}
 ?>
 
 <body class="page10">

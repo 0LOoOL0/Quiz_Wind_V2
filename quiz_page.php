@@ -75,7 +75,8 @@ include 'Includes/Quiz_handler.php';
 
                         <?php
                         $question = new Question($db);
-                        $questionList = $question->listQuestion($db);
+                        $questionList = $question->listQuestion();
+                        
                         ?>
 
                         <form id="quiz-form">

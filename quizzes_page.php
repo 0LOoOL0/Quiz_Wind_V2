@@ -85,7 +85,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                     <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
                                     <div class='quiz-buttons'>
 
-                                        <button class='button1'><a href='rule_page.php'>Start</a></button>
+                                        <button class='button1'><a href='quiz_page.php?quiz_id=21'>Start</a></button>
                                         <button class='button3'>Edit Quiz</button>
                                         
                                         <form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>
