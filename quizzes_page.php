@@ -3,6 +3,13 @@ include 'header.php';
 include 'Includes/Chapter_handler.php';
 include 'Includes/Quizzes_handler.php';
 include 'Includes/auth.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Assume the user selects a subject from a form
+    $_SESSION['selected_quiz'] = $_POST['subject'];
+    header("Location: quiz_page.php"); // Redirect to the quiz page
+    exit();
+}
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -85,7 +92,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                     <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
                                     <div class='quiz-buttons'>
 
-                                        <button class='button1'><a href='quiz_page.php?quiz_id=21'>Start</a></button>
+                                        <button class='button1'><a href='quiz_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a></button>
                                         <button class='button3'>Edit Quiz</button>
                                         
                                         <form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>

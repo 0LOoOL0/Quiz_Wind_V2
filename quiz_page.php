@@ -4,12 +4,12 @@ include 'Includes/auth.php';
 include 'Includes/Quiz_handler.php';
 
 
-
 ?>
 
 <body class="page11">
     <div class="content-timer">
-        <h1 id="quiz-timer"><?php echo htmlspecialchars($timer); ?></h1>
+        <!-- <h1 id="quiz-timer"><?php echo htmlspecialchars($timer); ?></h1> -->
+        <h1 id="quiz-timer">10:00</h1>
     </div>
 
     <script>
