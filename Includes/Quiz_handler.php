@@ -5,7 +5,7 @@ require_once 'Question.php';
 require_once 'Option.php'; 
 require_once 'Chapter.php'; 
 
-// $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 
 // if ($subjectId === null) {
 //     die("Invalid subject ID creating quiz handler." );
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
             }
 
             // Redirect to quizzes page
-            header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subjectId));
+            header("Location: ../quizzes_page.php?subject_id=" . urlencode($subjectId));
             exit();
         } else {
             echo "<p style='color: red;'>Failed to create quiz.</p>";

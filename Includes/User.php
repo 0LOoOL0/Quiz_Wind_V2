@@ -108,6 +108,22 @@ class User
         }
     }
 
+    function isUsernameTaken($username)
+    {
+        $sql = "SELECT COUNT(*) FROM users WHERE username = :username";
+        $result = $this->db->queryStatement($sql, [':username' => $username]);
+        return $result > 0;
+    }
+
+    function isEmailTaken($email)
+    {
+        $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
+        $result = $this->db->queryStatement($sql, [':email' => $email]);
+        return $result > 0;
+    }
+
+
+
     // this one is for admin creating account for users and assigning roles to them
     function createUser()
     {
@@ -158,25 +174,27 @@ class User
         return $stmt->execute();
     }
 
-    public function login($username, $password)
-    {
-        $sql = "SELECT password FROM users WHERE username = :username";
+    public function login($username, $password) {
+        // Prepare SQL statement
+        $sql = "SELECT * FROM users WHERE username = :username";
         $stmt = $this->db->queryStatement($sql, [':username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($stmt->rowCount() > 0) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Debugging: Check fetched password hash
-            // echo "Fetched password hash: " . $row['password']; // Uncomment for debugging
+        // Validate the user
+        if ($user && password_verify($password, $user['password'])) {
+            // Start a session
+            session_start();
 
-            if (password_verify($password, $row['password'])) {
-                $_SESSION['username'] = $username;
-                header("Location: ../subject_page.php");
-                exit();
-            } else {
-                return 'Invalid username or password.';
-            }
+            // Store user information in session
+            //this stores values and can be acceed to multiple pages
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_id'] = $user['user_id']; // Store user ID if needed
+
+            // Redirect to subject_page.php
+            header("Location: ../subject_page.php");
+            exit();
         } else {
-            return 'Invalid username or password.';
+            return "Invalid username or password.";
         }
     }
 }

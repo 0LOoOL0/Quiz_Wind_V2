@@ -3,6 +3,7 @@ include 'header.php';
 include 'Includes/Quiz_handler.php';
 include 'Includes/Chapter_handler.php';
 include 'Includes/Quizzes_handler.php';
+
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 ?>
 
@@ -20,7 +21,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
             <div class="crud-rule-wide">
 
                 <form action="Includes/Quiz_handler.php" method="POST">
-                    <input type="hidden" name="subject_id" value="<?php echo htmlspecialchars($subjectId); ?>">
+                    <input type="text" name="subject_id" value="<?php echo htmlspecialchars($subjectId); ?>">
                     <div class="crud-rule">
                         <h1>Quiz Detail</h1>
                         <table>
@@ -42,7 +43,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                     <select name="chapter_id" id="Chapters" required>
                                         <option value="">Choose chapter...</option>
                                         <?php
-                                        $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+                                        //$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                         $chapter = new Quiz($db);  // Changed variable name to avoid confusion
                                         
                                         $chapterList = [];

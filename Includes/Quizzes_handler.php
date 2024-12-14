@@ -5,6 +5,7 @@ $newQuiz = new Quiz($db);
 
 //for redirect
 $subject_id = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+
 if ($subject_id === null) {
     die("Invalid subject ID create quiz.");
 }

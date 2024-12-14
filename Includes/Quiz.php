@@ -126,28 +126,6 @@ class Quiz
         }
     }
 
-    // public function createQuiz()
-    // {
-    //     if ($this->quizTitle && $this->quizText) {
-    //         $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer) VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer)";
-    //         $createdByValue = $this->createdBy ? $this->createdBy : null;
-
-    //         // Use prepared statement correctly
-    //         $stmt = $this->db->prepare($sql);
-    //         $stmt->execute([
-    //             ':quiz_title' => $this->quizTitle, // Correct variable
-    //             ':quiz_text' => $this->quizText,
-    //             ':chapter_id' => $this->chapterId,
-    //             ':created_by' => $createdByValue,
-    //             ':timer' => $this->timer
-    //         ]);
-
-    //         return $this->db->getConnection()->lastInsertId(); // Correct method call
-    //     } else {
-    //         throw new Exception("Must set values for quiz");
-    //     }
-    // }
-
     public function createQuiz($subjectId) {
         // Ensure required properties are set
         if (empty($this->quizTitle) || empty($this->chapterId) || empty($subjectId)) {

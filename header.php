@@ -3,7 +3,7 @@
 session_start();
 include 'Includes/Login_handler.php';
 include 'Includes/Logout_handler.php';
-
+include 'Includes/User_handler.php';
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +29,7 @@ include 'Includes/Logout_handler.php';
                 <li><a href="attempt_page.php">My Attempts</a></li>
             </ul>
         </nav>
+        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user_id); ?>">
         <?php if (isset($_SESSION['username'])): ?>
             <p class="userlog">Welcome! <?php echo htmlspecialchars($_SESSION['username']); ?></p>
 

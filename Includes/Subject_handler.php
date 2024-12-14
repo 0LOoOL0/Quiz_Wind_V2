@@ -2,6 +2,14 @@
 
 require_once 'Subject.php'; 
 
+//testing for user
+// if (isset($_SESSION['user_id'])) {
+//     echo "User ID: " . htmlspecialchars($_SESSION['user_id']);
+//     echo " Username: " . htmlspecialchars($_SESSION['username']);
+// } else {
+//     echo "Session variable not set.";
+// }
+
 //create new subject
 if (isset($_POST['submitted'])) {
     try {

@@ -25,6 +25,19 @@ class Database
         return $this->connection;
     }
 
+    public function beginTransaction() {
+        return $this->connection->beginTransaction();
+    }
+    
+    public function commit() {
+        return $this->connection->commit();
+    }
+    
+    public function rollBack() {
+        return $this->connection->rollBack();
+    }
+
+
     // testing connection, only for my use
 
     public function isConnected()

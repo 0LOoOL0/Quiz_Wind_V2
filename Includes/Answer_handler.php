@@ -1,15 +1,41 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_SESSION['user_id']; // Example user identifier
-    $answers = $_POST['options']; // Assuming your form uses the name "options"
+//include 'Database.php'; // Include your database connection
+require_once 'Answer.php'; // Include your QuizManager class
 
-    foreach ($answers as $questionId => $optionId) {
-        // Save each answer to the database
-        $db->saveAnswer($userId, $questionId, $optionId);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve user ID and quiz ID from the POST data
+    $userId = htmlspecialchars($_POST['user_id']);
+    $quizId = htmlspecialchars($_POST['quiz_id']);
+    
+    // Prepare an array to store answers
+    $answers = [];
+
+    // Loop through each question's answers
+    foreach ($_POST['answers'] as $questionId => $answerData) {
+        $selectedOptionId = htmlspecialchars($answerData['selected_option_id']);
+        
+        // Assuming a default score of 1.00
+        $score = 1.00; // Replace with actual score retrieval logic if needed
+
+        // Add to answers array
+        $answers[] = [
+            'question_id' => $questionId,
+            'selected_option_id' => $selectedOptionId,
+            'score' => $score
+        ];
     }
 
-    echo json_encode(['status' => 'success']);
-}
+    // Create an instance of QuizManager and pass the database connection
+    $answer = new Answer($db);
 
+    // Save the answers using the saveAnswers method
+    if ($answer->saveAnswers($userId, $quizId, $answers)) {
+        echo "Answers saved successfully!";
+    } else {
+        echo "Failed to save answers.";
+    }
+} else {
+    echo "Invalid request method.";
+}
 ?>

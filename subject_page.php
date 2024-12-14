@@ -8,6 +8,12 @@ if (isset($_SESSION['message'])) {
     unset($_SESSION['message']); // Clear the message after displaying it
 }
 
+// if (isset($_SESSION['user_id'])) {
+//     echo "User ID: " . htmlspecialchars($_SESSION['user_id']);
+//     echo " Username: " . htmlspecialchars($_SESSION['username']);
+// } else {
+//     echo "Session variable not set.";
+// }
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -98,25 +104,9 @@ if (isset($_SESSION['message'])) {
                     }
                     echo "</table>";
                 } else {
-                    echo " 0 Results";
+                    echo "Theres are no subjects avilable, Create new one!";
                 }
                 ?>
-
-                <div class="sub-subjects">
-                    <h2>
-                        Subject
-                    </h2>
-                    <p>
-                        description description description description description description description description
-                    </p>
-                    <div class="card-subject">
-                        <table>
-                            <tr>
-                                <td><button class="button2">View Subject</button></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
             </div>
         </section>
     </div>

@@ -1163,6 +1163,22 @@ input[type="radio"]:checked+label {
     font-size: 20px;
 }
 
+.form-content input {
+    border-radius: 10px;
+    background: rgb(255, 255, 255);
+    height: 50px;
+    font-size: 18px;
+    padding: 10px;
+    width: 600px;
+    box-sizing: border-box;
+}
+
+.form-content {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
 .form-content2 input {
     border-radius: 10px;
     background: rgb(255, 255, 255);

@@ -1,30 +1,30 @@
 <?php
 
 
-require_once 'User.php'; 
+require_once 'User.php';
 
 // Admin creating new user
 if (isset($_POST['submitted'])) {
     try {
-    $user = new User($db);
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $user->setEmail($_POST['email']);
+        $user = new User($db);
+        $user->setUsername($_POST['username']);
+        $user->setPassword($_POST['password']);
+        $user->setEmail($_POST['email']);
 
-    if (isset($_POST['role'])) {
-        $user->setRoleId($_POST['role']);
-    } else {
-        throw new Exception("Role ID must be set.");
-    }
+        if (isset($_POST['role'])) {
+            $user->setRoleId($_POST['role']);
+        } else {
+            throw new Exception("Role ID must be set.");
+        }
 
-    $newUserId = $user->createUser();
+        $newUserId = $user->createUser();
 
-    if ($newUserId) {
+        if ($newUserId) {
             header("Location: ../users_page.php");
             exit();
-    } else {
-        echo "<p style='color: red;'>Failed creating user.</p>";
-    }
+        } else {
+            echo "<p style='color: red;'>Failed creating user.</p>";
+        }
     } catch (Exception $ex) {
         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
     }
@@ -34,23 +34,29 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-//user registering
+//user registering ... need fix
 if (isset($_POST['register'])) {
+    
     try {
         $user = new User($db);
-
         $user->setUsername($_POST['username']);
         $user->setPassword($_POST['password']);
         $user->setEmail($_POST['email']);
-        
-        $newUserId = $user->registerUser();
 
-        if ($newUserId) {
-            header("Location: ../users_page.php");
-            exit();
+
+        if ($user->isUsernameTaken($user->getUsername()) || $user->isEmailTaken($user->getEmail())) {
+            header("Location: ../main.php?error=" . urlencode("Username or email is already taken."));
         } else {
-            header("Location: ../main.php");
-            exit();
+            
+            $newUserId = $user->registerUser();
+
+            if ($newUserId) {
+                header("Location: ../users_page.php");
+                exit();
+            } else {
+                header("Location: ../main.php");
+                exit();
+            }
         }
     } catch (Exception $ex) {
         header("Location: main.php?error=" . urlencode($ex->getMessage()));
@@ -83,8 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     }
 }
 
+
+
 // if (isset($_POST['register'])) {
-    
+
 //     try {
 //     $user = new User($db);
 //     $user->setUsername($_POST['username']);
@@ -103,6 +111,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
 //         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
 //     }
 // }
-
-
-?>
