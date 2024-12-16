@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("update").addEventListener("click", function () {
+        document.querySelector(".popup-create").style.display = "flex";
+    });
+});
+
 //pop up update content
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".update").forEach(function(button) {
@@ -24,6 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function closePopup() {
     const popup = document.querySelector(".popup-create");
+    setTimeout(() => {
+        popup.style.display = "none"; // Hide the popup after animation
+    }, 300); // Match the duration of the fade-out effect
+}
+function closePopup() {
+    const popup = document.querySelector(".popup-update");
     setTimeout(() => {
         popup.style.display = "none"; // Hide the popup after animation
     }, 300); // Match the duration of the fade-out effect

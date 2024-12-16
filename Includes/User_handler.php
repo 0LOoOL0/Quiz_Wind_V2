@@ -88,26 +88,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
     }
 }
-
-
-
-// if (isset($_POST['register'])) {
-
-//     try {
-//     $user = new User($db);
-//     $user->setUsername($_POST['username']);
-//     $user->setPassword($_POST['password']);
-//     $user->setEmail($_POST['email']);
-
-//     $newUserId = $user->registerUser();
-
-//     if ($newUserId) {
-//         header("Location: ../users_page.php");
-//         exit();
-//     } else {
-//         echo "<p style='color: red;'>Failed creating subject.</p>";
-//     }
-//     } catch (Exception $ex) {
-//         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
-//     }
-// }

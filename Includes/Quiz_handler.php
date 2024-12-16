@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
             }
 
             // Redirect to quizzes page
-            header("Location: ../quizzes_page.php?subject_id=" . urlencode($subjectId));
+            header("Location: ../quizzes_page.php?quiz_id=" . urlencode($quizId));
             exit();
         } else {
             echo "<p style='color: red;'>Failed to create quiz.</p>";

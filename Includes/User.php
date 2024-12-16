@@ -174,6 +174,20 @@ class User
         return $stmt->execute();
     }
 
+    public function getUserById($userId) {
+        // Prepare the SQL statement
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :user_id");
+        
+        // Bind the user ID parameter
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        
+        // Execute the statement
+        $stmt->execute();
+        
+        // Fetch the user data as an associative array
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function login($username, $password) {
         // Prepare SQL statement
         $sql = "SELECT * FROM users WHERE username = :username";

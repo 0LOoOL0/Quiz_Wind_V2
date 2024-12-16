@@ -2,6 +2,9 @@
 
 //include 'Database.php'; // Include your database connection
 require_once 'Answer.php'; // Include your QuizManager class
+//require_once 'Attempt.php';
+
+$quizAttemptManager = new Answer($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve user ID and quiz ID from the POST data
@@ -25,17 +28,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'score' => $score
         ];
     }
+    
+    $totalScore = $quizAttemptManager->calculateTotalScore($answers);
+
+    // Determine the attempt number
+    $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
+
+    // Save the new attempt
+    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $totalScore);
+
 
     // Create an instance of QuizManager and pass the database connection
     $answer = new Answer($db);
 
     // Save the answers using the saveAnswers method
     if ($answer->saveAnswers($userId, $quizId, $answers)) {
-        echo "Answers saved successfully!";
+        
+        header("Location: ../result_page.php?quiz_id=" . urlencode($quizId));
+        exit();
     } else {
         echo "Failed to save answers.";
     }
 } else {
-    echo "Invalid request method.";
+    //echo "Invalid request method.";
 }
 ?>
