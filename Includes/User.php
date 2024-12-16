@@ -146,7 +146,10 @@ class User
     function getUserList()
     {
         try {
-            $sql = "Select * from users";
+            $sql = "SELECT u.*, r.role_name 
+            FROM users u
+            JOIN roles r ON u.role_id = r.role_id
+            ORDER BY u.created_at ASC";
             $stmt = $this->db->queryStatement($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
@@ -174,41 +177,74 @@ class User
         return $stmt->execute();
     }
 
-    public function getUserById($userId) {
+    public function editUser($userId, $username, $password = null)
+    {
+        // Start building the SQL query
+        $sql = "UPDATE users SET username = :username";
+
+        // Add password conditionally if provided
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $sql .= ", password = :password"; // Include password in the update
+        }
+
+        $sql .= " WHERE user_id = :user_id"; // Add the WHERE clause
+
+        // Prepare and execute the statement using queryStatement
+        $params = [
+            ':username' => $username,
+            ':user_id' => $userId
+        ];
+
+        if (!empty($password)) {
+            $params[':password'] = $hashedPassword;
+        }
+
+        // Execute the query
+        return $this->db->queryStatement($sql, $params);
+    }
+
+    public function getUserById($userId)
+    {
         // Prepare the SQL statement
         $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :user_id");
-        
+
         // Bind the user ID parameter
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        
+
         // Execute the statement
         $stmt->execute();
-        
+
         // Fetch the user data as an associative array
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function login($username, $password) {
-        // Prepare SQL statement
-        $sql = "SELECT * FROM users WHERE username = :username";
-        $stmt = $this->db->queryStatement($sql, [':username' => $username]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    public function login($username, $password)
+{
+    // Prepare SQL statement
+    $sql = "SELECT u.user_id, u.username, u.password, u.role_id, r.role_name 
+    FROM users u
+    JOIN roles r ON u.role_id = r.role_id
+    WHERE u.username = :username";
+    $stmt = $this->db->queryStatement($sql, [':username' => $username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Validate the user
-        if ($user && password_verify($password, $user['password'])) {
-            // Start a session
-            session_start();
+    // Validate the user
+    if ($user && password_verify($password, $user['password'])) {
+        // Start a session
+        session_start();
 
-            // Store user information in session
-            //this stores values and can be acceed to multiple pages
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['user_id'] = $user['user_id']; // Store user ID if needed
+        // Store user information in session
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['user_id'] = $user['user_id']; // Store user ID if needed
+        $_SESSION['role_name'] = $user['role_name'];
+        $_SESSION['role_id'] = $user['role_id']; // Store the role ID
 
-            // Redirect to subject_page.php
-            header("Location: ../subject_page.php");
-            exit();
-        } else {
-            return "Invalid username or password.";
-        }
+        // Redirect to subject_page.php
+        header("Location: ../subject_page.php");
+        exit();
+    } else {
+        return "Invalid username or password.";
     }
+}
 }

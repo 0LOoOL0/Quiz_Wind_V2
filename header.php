@@ -4,6 +4,7 @@ session_start();
 include 'Includes/Login_handler.php';
 include 'Includes/Logout_handler.php';
 include 'Includes/User_handler.php';
+
 ?>
 
 <!DOCTYPE html>

@@ -54,26 +54,6 @@ function closePopup() {
     document.querySelector(".popup-delete").style.display = "none";
 }
 
-//function for adding more options into the questions
-//no more needed because its advance level
-// function addOption() {
-//     const optionsContainer = document.getElementById("crud-option");
-//     const newOptionDiv = document.createElement("div");
-//     newOptionDiv.className = "option";
-//     newOptionDiv.innerHTML = `
-//     <table>
-//         <tr>
-//             <td style='width:20px'><label for="option1">Option:</label></td>
-//             <td><input type="text" style='width:620px;' name="optionText[]" /></td>
-//             <td style='width:50;'><label for="isCorrect1">Correct Answer?</label></td>
-//             <td><input type="checkbox" name="isCorrect[]" value="1"></td>
-//             <td><button style='width:100px; margin-left: 20px;'>Remove</button></td>
-//         </tr>
-//     </table>
-// `;
-//     optionsContainer.appendChild(newOptionDiv);
-// }
-
 //for 
 function questionOption() {
     

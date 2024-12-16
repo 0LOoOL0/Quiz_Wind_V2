@@ -157,6 +157,7 @@ $userId = $_SESSION['user_id'] ?? null;
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Joined Date</th>
+                                <th>User Type</th>
                                 <th>Action</th>
                             </tr>";
 
@@ -166,6 +167,7 @@ $userId = $_SESSION['user_id'] ?? null;
                                     <td>" . htmlspecialchars($user["username"]) . "</td>
                                     <td>" . htmlspecialchars($user["email"]) . "</td>
                                     <td>" . htmlspecialchars($user["created_at"]) . "</td>
+                                    <td>" . htmlspecialchars($user["role_name"]) . "</td>
                                     <td>
                                         <button id ='update' class='button3'>Edit</button>
                                         <form action='Includes/User_handler.php' method='post' style='display:inline;'>
