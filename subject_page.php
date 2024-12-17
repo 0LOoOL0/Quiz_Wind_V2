@@ -4,7 +4,7 @@ include 'Includes/Subject_handler.php';
 include 'Includes/auth.php';
 
 $userId = $_SESSION['user_id'] ?? null;
-$userName = $_SESSION['user_id'] ?? null;
+$userName = $_SESSION['username'] ?? null;
 $roleId = $_SESSION['role_id'] ?? null;
 $roleName = $_SESSION['role_name'] ?? null;
 

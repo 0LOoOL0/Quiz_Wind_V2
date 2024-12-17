@@ -5,6 +5,7 @@ include 'Includes/Chapter_handler.php';
 include 'Includes/Quizzes_handler.php';
 
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+$userId = $_SESSION['user_id'] ?? null;
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -21,7 +22,8 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
             <div class="crud-rule-wide">
 
                 <form action="Includes/Quiz_handler.php" method="POST">
-                    <input type="text" name="subject_id" value="<?php echo htmlspecialchars($subjectId); ?>">
+                    <input type="hidden" name="subject_id" value="<?php echo htmlspecialchars($subjectId); ?>">
+                    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($userId); ?>">
                     <div class="crud-rule">
                         <h1>Quiz Detail</h1>
                         <table>

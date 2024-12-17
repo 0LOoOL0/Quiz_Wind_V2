@@ -13,6 +13,7 @@ class Quiz
     private $timer;
     private $createdBy;
     private $subjectId;
+    private $userId;
 
     //for select
     private $chapterName;
@@ -29,6 +30,20 @@ class Quiz
         $this->timer = null;
         $this->createdBy = null;
         $this->subjectId = null;
+        $this->userId = null;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
     public function getQuizId()
     {
@@ -133,8 +148,8 @@ class Quiz
         }
     
         try {
-            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id) 
-                    VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id)";
+            $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id, user_id) 
+                    VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id, :user_id)";
             $createdByValue = $this->createdBy ?: null; // Null if not set
     
             // Prepare and execute the statement
@@ -145,7 +160,8 @@ class Quiz
                 ':chapter_id' => $this->chapterId,
                 ':created_by' => $createdByValue,
                 ':timer' => $this->timer,
-                ':subject_id' => $subjectId // Use the passed subjectId
+                ':subject_id' => $subjectId, // Use the passed subjectId
+                ':user_id' => $this->userId // Use the passed subjectId
             ]);
     
             // Return the ID of the newly created quiz
@@ -259,5 +275,7 @@ class Quiz
     
         return $quizzes;
     }
+    
+
     
 }

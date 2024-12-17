@@ -294,7 +294,6 @@ class Answer
                 ':attempt_number' => $attemptNumber,
                 ':total_score' => $totalScore
             ]);
-
         } catch (Exception $ex) {
             echo "Error saving attempt: " . $ex->getMessage();
         }
@@ -367,14 +366,15 @@ class Answer
         }
     }
 
-    public function convertScore($attemptId) {
+    public function convertScore($attemptId)
+    {
         // SQL query to select total scores from attempts table
         $sql = "SELECT total_score FROM attempts where attempt_id = :attempt_id";
         $stmt = $this->db->queryStatement($sql, [':attempt_id' => $attemptId]);
-    
+
         // Fetch all scores
         $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
         // Check if any scores were retrieved
         if (!empty($scores)) {
             foreach ($scores as $score) {
@@ -386,38 +386,60 @@ class Answer
         }
     }
 
-    public function getAttemptDetails() {
-    // Set the specific attempt ID
-    $attemptId = 25;
+    public function getAttemptDetails()
+    {
+        // Set the specific attempt ID
+        $attemptId = 25;
 
-    // Get total score for the specific attempt
-    $sqlScore = "SELECT total_score FROM attempts WHERE attempt_id = :attempt_id";
-    $stmtScore = $this->db->queryStatement($sqlScore, [':attempt_id' => $attemptId]);
-    
-    // Fetch the score
-    $score = $stmtScore->fetch(PDO::FETCH_ASSOC);
-    
-    if ($score) {
-        echo "Total Score: " . $score['total_score'] . "\n";
-    } else {
-        echo "No score found for attempt ID: $attemptId.\n";
+        // Get total score for the specific attempt
+        $sqlScore = "SELECT total_score FROM attempts WHERE attempt_id = :attempt_id";
+        $stmtScore = $this->db->queryStatement($sqlScore, [':attempt_id' => $attemptId]);
+
+        // Fetch the score
+        $score = $stmtScore->fetch(PDO::FETCH_ASSOC);
+
+        if ($score) {
+            echo "Total Score: " . $score['total_score'] . "\n";
+        } else {
+            echo "No score found for attempt ID: $attemptId.\n";
+        }
+
+        // Get the number of questions for the quiz
+        $quizId = 47; // Replace with the actual quiz ID you want to check
+        $sqlQuestions = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
+        $stmtQuestions = $this->db->queryStatement($sqlQuestions, [':quiz_id' => $quizId]);
+
+        // Fetch the number of questions
+        $questionCount = $stmtQuestions->fetch(PDO::FETCH_ASSOC);
+
+        if ($questionCount) {
+            echo "Number of Questions in Quiz ID $quizId: " . $questionCount['question_count'] . "\n";
+        } else {
+            echo "No questions found for Quiz ID: $quizId.\n";
+        }
     }
 
-    // Get the number of questions for the quiz
-    $quizId = 47; // Replace with the actual quiz ID you want to check
-    $sqlQuestions = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
-    $stmtQuestions = $this->db->queryStatement($sqlQuestions, [':quiz_id' => $quizId]);
+    function getParticipant()
+    {
+        $sql = "SELECT a.*, u.username, q.quiz_title
+                FROM users u
+                JOIN attempts a ON u.user_id = a.user_id
+                JOIN quizzes q ON a.quiz_id = q.quiz_id
+                WHERE a.user_id = 24
+                AND a.attempt_id = (
+                    SELECT MAX(a2.attempt_id)
+                    FROM attempts a2
+                    WHERE a2.quiz_id = a.quiz_id AND a2.user_id = a.user_id
+                )
+                GROUP BY q.quiz_title, u.username;";
 
-    // Fetch the number of questions
-    $questionCount = $stmtQuestions->fetch(PDO::FETCH_ASSOC);
-    
-    if ($questionCount) {
-        echo "Number of Questions in Quiz ID $quizId: " . $questionCount['question_count'] . "\n";
-    } else {
-        echo "No questions found for Quiz ID: $quizId.\n";
+
+        $stmt = $this->db->queryStatement($sql);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-}
+
 
 
     // public function saveAnswer() {
