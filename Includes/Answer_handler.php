@@ -31,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $totalScore = $quizAttemptManager->calculateTotalScore($answers);
 
-    // Determine the attempt number
+    // // Determine the attempt number
     $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
 
     // Save the new attempt
-    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $totalScore);
+    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $totalScore, $totalQuestions);
 
 
     // Create an instance of QuizManager and pass the database connection

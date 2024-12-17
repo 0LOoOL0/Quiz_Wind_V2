@@ -103,7 +103,7 @@ class Subject
     //     }
     // }
 
-    function createSubject()
+    function createSubject() 
 {
     if ($this->subjectName && $this->subjectText) {
         // Step 1: Insert the new subject
@@ -132,6 +132,19 @@ class Subject
     } else {
         throw new Exception("Must set values for subject name and description.");
     }
+}
+
+function getAssignedSubjects($userId)
+{
+    $sql = "SELECT s.subject_id, s.subject_name, s.subject_text
+            FROM subjects s
+            JOIN subject_assignments sa ON s.subject_id = sa.subject_id
+            WHERE sa.user_id = :user_id";
+    
+    $stmt = $this->db->getConnection()->prepare($sql);
+    $stmt->execute([':user_id' => $userId]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an associative array
 }
 
     function getSubjectList()

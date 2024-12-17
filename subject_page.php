@@ -63,8 +63,21 @@ function userHasPermission($roleName, $action)
 
     return isset($permissions[$roleName]) && in_array($action, $permissions[$roleName]);
 }
+
 $teacher = new Subject($db);
 $teacherList = $teacher->teacherList();
+
+$subject = new Subject($db);
+$subjectList = $subject->getSubjectList();
+
+
+if ($roleName === 'Teacher') {
+    // Get only the subjects assigned to the teacher
+    $subjectList = $subject->getAssignedSubjects($userId); // Function to retrieve assigned subjects
+} else {
+    // Get all subjects for normal users
+    $subjectList = $subject->getSubjectList();
+}
 ?>
 
 <script type="text/javascript" src="script.js"></script>
@@ -84,7 +97,7 @@ $teacherList = $teacher->teacherList();
                 <?php foreach ($teacherList as $teacher): ?>
                     <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
                 <?php endforeach; ?>
-                
+
             </div>
             <button type="submit" class="button1" name='submitted'>Add</button>
             <button type="button" class="button4" onclick="closePopup()">cancel</button>
@@ -119,33 +132,29 @@ $teacherList = $teacher->teacherList();
 
                 <?php
 
-
-                $subject = new Subject($db);
-                $subjectList = $subject->getSubjectList();
-
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
-                <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>
-                <h3>" . htmlspecialchars($subject['subject_text']) . "</h3>
-                <div class='card-subject'>";
-
+                                <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>
+                                <h3>" . htmlspecialchars($subject['subject_text']) . "</h3>
+                                <div class='card-subject'>";
+                
                         // Button to view the subject
                         echo "<button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
-
+                
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
                             echo "<button class='button3' style='margin-left: 10px;'><a href='edit_subject.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>Edit</a></button>";
                         }
-
+                
                         // Form to delete the subject (only if user has permission)
                         if (userHasPermission($roleName, 'delete')) {
                             echo "<form action='Includes/Subject_handler.php' method='post' style='display:inline;'>
-                    <input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
-                    <button type='submit' class='button5' onclick='return confirm(\"Are you sure you want to delete this subject?\");'>X</button>
-                  </form>";
+                                    <input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
+                                    <button type='submit' class='button5' onclick='return confirm(\"Are you sure you want to delete this subject?\");'>X</button>
+                                  </form>";
                         }
-
+                
                         echo "</div></div>";
                     }
                 } else {

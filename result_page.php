@@ -7,6 +7,7 @@ $userId = $_SESSION['user_id'] ?? null;
 $quizId = $_GET['quiz_id'] ?? null;
 
 $attempt = new Answer($db);
+$score = $attempt->allAttemptList($userId, $quizId);
 ?>
 
 <body class="page11">
@@ -21,6 +22,11 @@ $attempt = new Answer($db);
 
                         <?php
                         
+                        $attemptId = 1;
+                        $test = new Answer($db);
+                        $testScore = $test->convertScore($attemptId);
+
+
                         echo "<h1>Final Result</h1>";
 
                         $percentage = 50;

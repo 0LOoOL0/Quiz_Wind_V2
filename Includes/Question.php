@@ -182,6 +182,13 @@ class Question
         return array_values($questionList);
     }
 
+    function quizTimer($quizId) {
+        $sql = "SELECT timer, quiz_title FROM quizzes WHERE quiz_id = :quiz_id";
+        $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
     public function optionList($questionId) {
         try {
             $sql = "SELECT option_text, is_correct FROM options WHERE question_id = :question_id";

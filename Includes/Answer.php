@@ -253,17 +253,36 @@ class Answer
     }
 
     // Function to save a new attempt
+    // public function saveAttempt($userId, $quizId, $attemptNumber, $totalScore)
+    // {
+    //     $maxScore = 100; // Assuming the max score of the quiz is 100
+    //     // Calculate the percentage score
+    //     $percentageScore = ($maxScore > 0) ? ($totalScore / $maxScore) * 100 : 0;
+
+    //     // Ensure the percentage score doesn't exceed the DECIMAL(5,2) limits
+    //     if ($percentageScore > 100) {
+    //         $percentageScore = 100; // Cap it at 100 if it exceeds
+    //     }
+
+    //     // Prepare the SQL statement for insertion
+    //     $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
+    //             VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
+
+    //     try {
+    //         $this->db->queryStatement($sql, [
+    //             ':user_id' => $userId,
+    //             ':quiz_id' => $quizId,
+    //             ':attempt_number' => $attemptNumber,
+    //             ':total_score' => number_format($percentageScore, 2, '.', '') // Format to 2 decimal places
+    //         ]);
+    //         echo "Attempt saved successfully."; // Confirmation message
+    //     } catch (Exception $ex) {
+    //         echo "Error saving attempt: " . $ex->getMessage();
+    //     }
+    // }
+
     public function saveAttempt($userId, $quizId, $attemptNumber, $totalScore)
     {
-        $maxScore = 100; // Assuming the max score of the quiz is 100
-        // Calculate the percentage score
-        $percentageScore = ($maxScore > 0) ? ($totalScore / $maxScore) * 100 : 0;
-
-        // Ensure the percentage score doesn't exceed the DECIMAL(5,2) limits
-        if ($percentageScore > 100) {
-            $percentageScore = 100; // Cap it at 100 if it exceeds
-        }
-
         // Prepare the SQL statement for insertion
         $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
                 VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
@@ -273,9 +292,9 @@ class Answer
                 ':user_id' => $userId,
                 ':quiz_id' => $quizId,
                 ':attempt_number' => $attemptNumber,
-                ':total_score' => number_format($percentageScore, 2, '.', '') // Format to 2 decimal places
+                ':total_score' => $totalScore
             ]);
-            echo "Attempt saved successfully."; // Confirmation message
+
         } catch (Exception $ex) {
             echo "Error saving attempt: " . $ex->getMessage();
         }
@@ -309,6 +328,7 @@ class Answer
         return $totalScore;
     }
 
+    //total score window
     function displayAttemptFeedback($attemptList)
     {
         if (!empty($attemptList)) {
@@ -346,6 +366,58 @@ class Answer
             echo "Something went wrong: " . $ex->getMessage();
         }
     }
+
+    public function convertScore($attemptId) {
+        // SQL query to select total scores from attempts table
+        $sql = "SELECT total_score FROM attempts where attempt_id = :attempt_id";
+        $stmt = $this->db->queryStatement($sql, [':attempt_id' => $attemptId]);
+    
+        // Fetch all scores
+        $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Check if any scores were retrieved
+        if (!empty($scores)) {
+            foreach ($scores as $score) {
+                // Echo each total score
+                echo "Total Score: " . $score['total_score'] . "\n";
+            }
+        } else {
+            echo "No scores found.\n";
+        }
+    }
+
+    public function getAttemptDetails() {
+    // Set the specific attempt ID
+    $attemptId = 25;
+
+    // Get total score for the specific attempt
+    $sqlScore = "SELECT total_score FROM attempts WHERE attempt_id = :attempt_id";
+    $stmtScore = $this->db->queryStatement($sqlScore, [':attempt_id' => $attemptId]);
+    
+    // Fetch the score
+    $score = $stmtScore->fetch(PDO::FETCH_ASSOC);
+    
+    if ($score) {
+        echo "Total Score: " . $score['total_score'] . "\n";
+    } else {
+        echo "No score found for attempt ID: $attemptId.\n";
+    }
+
+    // Get the number of questions for the quiz
+    $quizId = 47; // Replace with the actual quiz ID you want to check
+    $sqlQuestions = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
+    $stmtQuestions = $this->db->queryStatement($sqlQuestions, [':quiz_id' => $quizId]);
+
+    // Fetch the number of questions
+    $questionCount = $stmtQuestions->fetch(PDO::FETCH_ASSOC);
+    
+    if ($questionCount) {
+        echo "Number of Questions in Quiz ID $quizId: " . $questionCount['question_count'] . "\n";
+    } else {
+        echo "No questions found for Quiz ID: $quizId.\n";
+    }
+
+}
 
 
     // public function saveAnswer() {
