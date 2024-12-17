@@ -10,6 +10,7 @@ class Subject
     private $subjectName;
     private $subjectText;
     private $assignTo;
+    private $createdBy;
 
     public function __construct(Database $db)
     {
@@ -19,6 +20,7 @@ class Subject
         $this->subjectName = null;
         $this->subjectText = null;
         $this->assignTo = null;
+        $this->createdBy = null;
     }
 
     public function getSubjectId()
@@ -29,6 +31,18 @@ class Subject
     public function setSubjectId($subjectId)
     {
         $this->subjectId = $subjectId;
+
+        return $this;
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
@@ -69,24 +83,56 @@ class Subject
         return $this;
     }
 
+    //outdated:
+    // function createSubject()
+    // {
+    //     if ($this->subjectName && $this->subjectText) {
+
+    //         $sql = "INSERT INTO subjects (subject_name, subject_text, assigned_to) VALUES (:subject_name, :subject_text, :assigned_to)";
+    //         $assignedToValue = $this->assignTo ? $this->assignTo : null;
+
+    //         $this->db->queryStatement($sql, [
+    //             ':subject_name' => $this->subjectName,
+    //             ':subject_text' => $this->subjectText,
+    //             ':assigned_to' => $assignedToValue
+    //         ]);
+
+    //         return $this->db->getConnection()->lastInsertId(); // Correct method call
+    //     } else {
+    //         throw new Exception("Must set values for subject name and description.");
+    //     }
+    // }
+
     function createSubject()
-    {
-        if ($this->subjectName && $this->subjectText) {
+{
+    if ($this->subjectName && $this->subjectText) {
+        // Step 1: Insert the new subject
+        $sql = "INSERT INTO subjects (subject_name, subject_text, created_by) VALUES (:subject_name, :subject_text, :created_by)";
+        
+        $this->db->queryStatement($sql, [
+            ':subject_name' => $this->subjectName,
+            ':subject_text' => $this->subjectText,
+            ':created_by' => $this->createdBy // Assuming you have a createdBy property
+        ]);
 
-            $sql = "INSERT INTO subjects (subject_name, subject_text, assigned_to) VALUES (:subject_name, :subject_text, :assigned_to)";
-            $assignedToValue = $this->assignTo ? $this->assignTo : null;
+        $subjectId = $this->db->getConnection()->lastInsertId(); // Get the newly created subject ID
 
-            $this->db->queryStatement($sql, [
-                ':subject_name' => $this->subjectName,
-                ':subject_text' => $this->subjectText,
-                ':assigned_to' => $assignedToValue
-            ]);
-
-            return $this->db->getConnection()->lastInsertId(); // Correct method call
-        } else {
-            throw new Exception("Must set values for subject name and description.");
+        // Step 2: Assign teachers if any are provided
+        if (!empty($this->assignTo) && is_array($this->assignTo)) {
+            $stmt = $this->db->getConnection()->prepare("INSERT INTO subject_assignments (subject_id, user_id) VALUES (:subject_id, :user_id)");
+            foreach ($this->assignTo as $userId) {
+                $stmt->execute([
+                    ':subject_id' => $subjectId,
+                    ':user_id' => $userId
+                ]);
+            }
         }
+
+        return $subjectId; // Return the new subject ID
+    } else {
+        throw new Exception("Must set values for subject name and description.");
     }
+}
 
     function getSubjectList()
     {

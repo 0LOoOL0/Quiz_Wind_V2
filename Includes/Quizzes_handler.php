@@ -43,3 +43,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['quiz_id'])) {
         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
     }
 }
+
+

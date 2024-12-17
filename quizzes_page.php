@@ -82,7 +82,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                             if (!empty($chapterList)) {
                                 foreach ($chapterList as $chapter) {
                                     // Display chapter title
-                                    echo "<li>" . htmlspecialchars($chapter['chapter_title']) . "</li>";
+                                    echo "<li><button class='buttonQuiz' onclick='showQuiz'>" . htmlspecialchars($chapter['chapter_title']) . "</li>";
                                 }
                                 echo "</ul>";
                             } else {

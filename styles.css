@@ -460,10 +460,12 @@ body {
 }
 
 .crud-quiz {
-    text-align: center;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
     border-radius: 20px;
     font-size: 20px;
-    padding: 20px;
+    padding: 0px;
     margin-bottom: 1em;
     width: 96%;
     opacity: 0;
