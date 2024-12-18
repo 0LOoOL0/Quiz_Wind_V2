@@ -404,7 +404,7 @@ body {
     background: rgb(255, 255, 255);
     border-radius: 10px;
     padding: 20px;
-    text-align: center;
+    /* text-align: center; */
     margin: 30px;
     width: 280px;
     height: 400px;
@@ -413,6 +413,17 @@ body {
     justify-content: space-between;
     align-items: center;
     box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.randomize {
+    background-color: #00d9ff;
+    height: 150px;
+    width: 100%;
+    padding: 20px;
+}
+.subject-itmes {
+    padding:20px ;
 }
 
 .card-subject {
@@ -1229,5 +1240,5 @@ input[type="radio"]:checked+label {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-
 }
+

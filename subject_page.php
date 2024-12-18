@@ -8,48 +8,10 @@ $userName = $_SESSION['username'] ?? null;
 $roleId = $_SESSION['role_id'] ?? null;
 $roleName = $_SESSION['role_name'] ?? null;
 
-echo "User ID: " . htmlspecialchars($_SESSION['user_id']) . "<br>";
-echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
-echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
-echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
-//     echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
-
-// if (isset($_SESSION['message'])) {
-//     echo "<p style='color: green;'>" . htmlspecialchars($_SESSION['message']) . "</p>";
-//     unset($_SESSION['message']); // Clear the message after displaying it
-// }
-
-// if (isset($_SESSION['user_id'])) {
-//     echo "User ID: " . htmlspecialchars($_SESSION['user_id']) . "<br>";
-//     echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
-
-//     // Check for role_id
-//     if (isset($_SESSION['role_id'])) {
-//         echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
-//     } else {
-//         echo "Role ID is not set.<br>";
-//     }
-
-//     // Check for role_name
-//     if (isset($_SESSION['role_name'])) {
-//         echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
-//     } else {
-//         echo "Role name is not set.<br>";
-//     }
-// } else {
-//     echo "Session variable not set.";
-// }
-
-// function userHasPermission($roleName, $action) {
-//     // Define permissions
-//     $permissions = [
-//         'admin' => ['delete'],
-//         'teacher' => ['delete'],
-//         // Add other roles and their permissions as needed
-//     ];
-
-//     return isset($permissions[$roleName]) && in_array($action, $permissions[$roleName]);
-// }
+// echo "User ID: " . htmlspecialchars($_SESSION['user_id']) . "<br>";
+// echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
+// echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
+// echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
 
 function userHasPermission($roleName, $action)
 {
@@ -135,18 +97,18 @@ if ($roleName === 'Teacher') {
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
-                                <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>
+                                <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>     
                                 <h3>" . htmlspecialchars($subject['subject_text']) . "</h3>
                                 <div class='card-subject'>";
-                
+
                         // Button to view the subject
                         echo "<button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
-                
+
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
                             echo "<button class='button3' style='margin-left: 10px;'><a href='edit_subject.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>Edit</a></button>";
                         }
-                
+
                         // Form to delete the subject (only if user has permission)
                         if (userHasPermission($roleName, 'delete')) {
                             echo "<form action='Includes/Subject_handler.php' method='post' style='display:inline;'>
@@ -154,13 +116,26 @@ if ($roleName === 'Teacher') {
                                     <button type='submit' class='button5' onclick='return confirm(\"Are you sure you want to delete this subject?\");'>X</button>
                                   </form>";
                         }
-                
-                        echo "</div></div>";
+
+                        echo "</div>
+                        </div>";
                     }
                 } else {
                     echo "There are no subjects available, create a new one!";
                 }
                 ?>
+                <div class="sub-subjects">
+                    <div class='randomize'>
+                        <h2>title</h2>
+                    </div>
+                    <div class="subject-items">
+                        <h3>description description description</h3>
+                        <div class="card-subject">
+                            <button class="button1">view</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </div>
