@@ -2,6 +2,7 @@
 include 'header.php';
 include 'Includes/auth.php';
 include 'Includes/Answer_handler.php';
+include 'Includes/Quiz_handler.php';
 
 $userId = $_SESSION['user_id'] ?? null;
 $quizId = $_GET['quiz_id'] ?? null;
@@ -72,6 +73,19 @@ $score = $attempt->allAttemptList($userId, $quizId);
                     </div>
                     
                     <div class="attempt-table">
+                        <div class="cal">
+                            <?php
+                            $questions = new Quiz($db);
+                            $totalQuestions = $questions->countQuestionsByQuizId($quizId);
+                            $correctQuestions = $questions->countCorrectOptionsByQuizId($quizId);
+                            $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
+
+
+                            echo "<h2>Number of total questions: " . htmlspecialchars($totalQuestions) . "</h2>";
+                            echo "<h2>Number of correct questions: " . htmlspecialchars($correctQuestions) . "</h2>";
+                            echo "<h2>precentage: " . round($percentageCorrect, 2) . " %</h2>";
+                            ?>
+                        </div>
                         <div class="attempt-count">
                             <?php
                             $attemptCount = new Attempt($db);

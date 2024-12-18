@@ -6,6 +6,7 @@ require_once 'Option.php';
 require_once 'Chapter.php'; 
 
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+$quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 $userId = $_SESSION['user_id'] ?? null;
 // if ($subjectId === null) {
 //     die("Invalid subject ID creating quiz handler." );
