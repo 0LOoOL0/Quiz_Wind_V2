@@ -3,13 +3,22 @@
 include 'header.php';
 
 include 'Includes/User_handler.php';
+
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+unset($_SESSION['error']); // Clear the error message after display
 ?>
 
 <script type="text/javascript" src="script.js"></script>
 
-<body class="page11">
+<body class="page1">
 <div class="spaceup">
+
         <div class="container">
+        <?php if ($error): ?>
+            <div class="error-message" style="color: red;">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
             <div class="content-login">
                 <form action="Includes/login_handler.php" method="post">
                     <table>
@@ -30,7 +39,7 @@ include 'Includes/User_handler.php';
                             </td>
                         </tr>
                         <tr>
-                            <td><button class="button1" type="submit" name="loginin">Login</button></td>
+                            <td><button class="button2" type="submit" name="loginin" style='margin-top:50px;'>Login</button></td>
                         </tr>
                     </table>
                 </form>

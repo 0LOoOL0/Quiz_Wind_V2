@@ -276,6 +276,19 @@ class Quiz
         return $quizzes;
     }
     
+    function getQuizById($userId) 
+    {
+        try {
+            $sql = "SELECT q.quiz_id, q.quiz_title, q.quiz_text, s.subject_name 
+        FROM quizzes q 
+        JOIN subjects s ON q.subject_id = s.subject_id 
+        WHERE q.user_id = :user_id";
+            $stmt = $this->db->queryStatement($sql,[':user_id' => $userId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . $ex->getMessage();
+        }
+    }
 
     
 }

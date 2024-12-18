@@ -2,6 +2,7 @@
 
 //include 'Database.php'; // Include your database connection
 require_once 'Answer.php'; // Include your QuizManager class
+require_once 'Attempt.php'; // Include your QuizManager class
 //require_once 'Attempt.php';
 
 $quizAttemptManager = new Answer($db);

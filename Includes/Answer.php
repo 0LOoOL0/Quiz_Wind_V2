@@ -439,8 +439,20 @@ class Answer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function getParticipantById($quizId)
+    {
+        $sql = "SELECT q.*, a.total_score, u.username 
+            FROM quizzes q 
+            JOIN attempts a ON a.quiz_id = q.quiz_id 
+            JOIN users u ON a.user_id = u.user_id 
+            WHERE q.quiz_id = :quiz_id";
 
+        $stmt = $this->db->queryStatement($sql, [
+            ':quiz_id' => $quizId
+        ]);
 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     // public function saveAnswer() {
     //     $stmt = $this->db->prepare("INSERT INTO answers (question_id, selected_option_id, score, user_id) VALUES (:question_id, :selected_option_id, :score, :user_id)");

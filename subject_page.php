@@ -99,20 +99,24 @@ if ($roleName === 'Teacher') {
 <div class="wrapper">
     <div class="container">
 
-        <div class="centering">
+        <!-- <div class="centering">
             <div class="search-content">
                 <input type="search" id="search" placeholder="Search">
                 <button class="button3">Search</button>
                 <button class="button3">Rest All</button>
                 <div class="sorting">
-                    <button id='add' class="button1">Add Subejct</button>
+                    <button id='add' class="button2">Add Subejct</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-
+        
 
         <section class="content-body">
+        <div class="sorting">
+                <button id='add' class="button1">Add Subejct</button>
+            </div>
+
             <div class="subjects">
 
                 <?php
@@ -125,7 +129,7 @@ if ($roleName === 'Teacher') {
                                 <div class='card-subject'>";
 
                         // Button to view the subject
-                        echo "<button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
+                        echo "<button class='button2'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {

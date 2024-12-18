@@ -46,6 +46,7 @@ $userId = $_SESSION['user_id'] ?? null;
 
 <script type="text/javascript" src="script.js"></script>
 
+<!--admin create user-->
 <div class="popup-create">
     <div class="popup-content">
         <h3>Create new User</h3>
@@ -79,23 +80,13 @@ $userId = $_SESSION['user_id'] ?? null;
     </div>
 </div>
 
-<div class="popup-update">
+<div class="popup-update" style="display: none;">
     <div class="popup-content">
-        <h3>Edit User</h3>
+        <h3>Update User</h3>
         <form action="Includes/User_handler.php" method="POST">
             <div class="form-content">
-                <?php
-                    $userId = $_SESSION['user_id']; // Ensure you validate and sanitize this input
-                    $user = new User($db);
-                    $userData = $user->getUserById($userId);
-                    
-                    if (!$userData) {
-                        echo "User not found.";
-                        exit; // Exit if the user is not found
-                    }
-                ?>
                 <p>Username</p>
-                <input type="text" name="edit_username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
+                <input type="text" name="username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
                 
                 <p>Password</p>
                 <input type="password" name="password" placeholder="Leave blank to keep current password">
@@ -106,14 +97,12 @@ $userId = $_SESSION['user_id'] ?? null;
                 <label for="Roles">Choose a Role:</label>
                 <select name="role" id="Roles" required>
                     <option value="">Select Role....</option>
-
                     <?php
                     $role = new User($db);
                     $roleList = $role->roleList();
                     foreach ($roleList as $role) {
-                        // Check if the role is the current user's role
-                        $selected = ($role['role_id'] == $userData['role_id']) ? "selected" : "";
-                        echo "<option value='" . $role['role_id'] . "' $selected>" . $role['role_name'] . "</option>";
+                        $selected = ($role['role_id'] == $userData['role_id']) ? 'selected' : '';
+                        echo "<option value='" . htmlspecialchars($role['role_id']) . "' $selected>" . htmlspecialchars($role['role_name']) . "</option>";
                     }
                     ?>
                 </select>
@@ -124,6 +113,26 @@ $userId = $_SESSION['user_id'] ?? null;
         </form>
     </div>
 </div>
+
+<script>
+function showUpdatePopup() {
+    // Show the update popup
+    document.querySelector('.popup-update').style.display = 'block';
+}
+
+function closePopup() {
+    // Hide the update popup
+    document.querySelector('.popup-update').style.display = 'none';
+}
+
+// Optional: Hide the popup when clicking outside of it
+window.onclick = function(event) {
+    const popup = document.querySelector('.popup-update');
+    if (event.target === popup) {
+        closePopup();
+    }
+};
+</script>
 
 
 <section class="content-head">
@@ -169,7 +178,7 @@ $userId = $_SESSION['user_id'] ?? null;
                                     <td>" . htmlspecialchars($user["created_at"]) . "</td>
                                     <td>" . htmlspecialchars($user["role_name"]) . "</td>
                                     <td>
-                                        <button id ='update' class='button3'>Edit</button>
+                                    <button class='edit-button' onclick='showUpdatePopup(" . htmlspecialchars($user["user_id"]) . ")'>Edit</button>
                                         <form action='Includes/User_handler.php' method='post' style='display:inline;'>
                                             <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
                                             <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</button>

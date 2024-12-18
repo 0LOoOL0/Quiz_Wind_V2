@@ -89,28 +89,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
-    $userId = intval($_POST['user_id']);
-    $username = $_POST['edit_username'] ?? ''; // Ensure to retrieve the username
-    $password = $_POST['password'] ?? null; // Password can be null if not provided
+// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
+//     $userId = intval($_POST['user_id']);
+//     $username = $_POST['edit_username'] ?? ''; // Ensure to retrieve the username
+//     $password = $_POST['password'] ?? null; // Password can be null if not provided
     
-    try {
-        $user = new User($db);
-        $user->setUserId($userId);
-        $result = $user->editUser($useId, $username, $password);
+//     try {
+//         $user = new User($db);
+//         $user->setUserId($userId);
+//         $result = $user->editUser($useId, $username, $password);
 
-        if ($result) {
-            // $_SESSION['message'] = 'User deleted successfully';
-            header("Location: ../users_page.php");
-            exit();
-        } else {
-            echo "Failed to delete user.";
-        }
-    } catch (Exception $ex) {
-        echo "Error: " . htmlspecialchars($ex->getMessage());
-    }
+//         if ($result) {
+//             // $_SESSION['message'] = 'User deleted successfully';
+//             header("Location: ../users_page.php");
+//             exit();
+//         } else {
+//             echo "Failed to delete user.";
+//         }
+//     } catch (Exception $ex) {
+//         echo "Error: " . htmlspecialchars($ex->getMessage());
+//     }
 
-    if (isset($_GET['message'])) {
-        echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
-    }
-}
+//     if (isset($_GET['message'])) {
+//         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
+//     }
+// }

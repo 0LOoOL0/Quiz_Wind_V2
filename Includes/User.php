@@ -177,32 +177,32 @@ class User
         return $stmt->execute();
     }
 
-    public function editUser($userId, $username, $password = null)
-    {
-        // Start building the SQL query
-        $sql = "UPDATE users SET username = :username";
+    // public function editUser($userId, $username, $password = null)
+    // {
+    //     // Start building the SQL query
+    //     $sql = "UPDATE users SET username = :username";
 
-        // Add password conditionally if provided
-        if (!empty($password)) {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $sql .= ", password = :password"; // Include password in the update
-        }
+    //     // Add password conditionally if provided
+    //     if (!empty($password)) {
+    //         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    //         $sql .= ", password = :password"; // Include password in the update
+    //     }
 
-        $sql .= " WHERE user_id = :user_id"; // Add the WHERE clause
+    //     $sql .= " WHERE user_id = :user_id"; // Add the WHERE clause
 
-        // Prepare and execute the statement using queryStatement
-        $params = [
-            ':username' => $username,
-            ':user_id' => $userId
-        ];
+    //     // Prepare and execute the statement using queryStatement
+    //     $params = [
+    //         ':username' => $username,
+    //         ':user_id' => $userId
+    //     ];
 
-        if (!empty($password)) {
-            $params[':password'] = $hashedPassword;
-        }
+    //     if (!empty($password)) {
+    //         $params[':password'] = $hashedPassword;
+    //     }
 
-        // Execute the query
-        return $this->db->queryStatement($sql, $params);
-    }
+    //     // Execute the query
+    //     return $this->db->queryStatement($sql, $params);
+    // }
 
     public function getUserById($userId)
     {
@@ -220,31 +220,41 @@ class User
     }
 
     public function login($username, $password)
-{
-    // Prepare SQL statement
-    $sql = "SELECT u.user_id, u.username, u.password, u.role_id, r.role_name 
-    FROM users u
-    JOIN roles r ON u.role_id = r.role_id
-    WHERE u.username = :username";
-    $stmt = $this->db->queryStatement($sql, [':username' => $username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    {
+        // Prepare SQL statement
+        $sql = "SELECT u.user_id, u.username, u.password, u.role_id, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        WHERE u.username = :username";
+        $stmt = $this->db->queryStatement($sql, [':username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Validate the user
-    if ($user && password_verify($password, $user['password'])) {
-        // Start a session
-        session_start();
+        // Validate the user
+        if ($user && password_verify($password, $user['password'])) {
+            // Start a session
+            session_start();
 
-        // Store user information in session
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['user_id'] = $user['user_id']; // Store user ID if needed
-        $_SESSION['role_name'] = $user['role_name'];
-        $_SESSION['role_id'] = $user['role_id']; // Store the role ID
+            // Store user information in session
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_id'] = $user['user_id']; // Store user ID if needed
+            $_SESSION['role_name'] = $user['role_name'];
+            $_SESSION['role_id'] = $user['role_id']; // Store the role ID
 
-        // Redirect to subject_page.php
-        header("Location: ../subject_page.php");
-        exit();
-    } else {
-        return "Invalid username or password.";
+            // Redirect to subject_page.php
+            header("Location: ../subject_page.php");
+            exit();
+        } else {
+            session_start();
+            $_SESSION['error'] = "Invalid username or password.";
+            // Redirect back to login page
+            header("Location: ../login.php");
+            exit();
+        }
     }
-}
+
+    function getUsersData($userId) {
+        $sql = "SELECT username, email FROM users WHERE user_id = :user_id";
+        $stmt = $this->db->queryStatement($sql, [[':user_id' => $userId]]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

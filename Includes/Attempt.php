@@ -134,5 +134,19 @@ class Attempt {
 
         return $totalScore;
     }
+
+    public function countAttempts($userId, $quizId) {
+        $sql = "SELECT COUNT(*) AS attempt_count 
+                FROM attempts 
+                WHERE user_id = :user_id AND quiz_id = :quiz_id";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['attempt_count'];
+    }
+
 }
 ?>

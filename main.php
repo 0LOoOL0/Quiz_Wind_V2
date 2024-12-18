@@ -9,7 +9,7 @@ if (isset($_SESSION['username'])) {
 ?>
 
 
-<body class="page11">
+<body class="page">
     <div class="wrapper">
         <div class="spaceup">
             <div class="main-sections">
@@ -37,13 +37,17 @@ if (isset($_SESSION['username'])) {
                                 <tr>
                                     <td><input type="email" name="email" placeholder="Email" required></td>
                                 </tr>
-                                
+                                <tr>
+                                    <td><p>&nbsp;Do you have an account? <a href="login.php">Login here!</a></p></td>
+                                </tr>
+                                <tr>
+                                    <td><br><br>
+                                </td>
+                                </tr>
                                 <tr>
                                     <td><button class="button2" type="submit" name="register">Sign Up</button></td>
                                 </tr>
-                                <tr>
-                                    <p>do you have an account? <a href="login.php">Login here!</a></p>
-                                </tr>
+
                             </table>
                         </form>
                     </div>

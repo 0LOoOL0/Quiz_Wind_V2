@@ -1,131 +1,98 @@
 <?php
 include 'header.php';
 include 'Includes/auth.php';
-include 'Includes/Participant_handler.php';
+include 'Includes/Quiz_handler.php';
+
+$userId = $_SESSION['user_id'] ?? null;
+$userName = $_SESSION['user_id'] ?? null;
+$roleId = $_SESSION['role_id'] ?? null;
+$roleName = $_SESSION['role_name'] ?? null;
+
+// echo "User ID: " . htmlspecialchars($_SESSION['user_id']) . "<br>";
+// echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
+// echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
+// echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
+
+
 ?>
 
+
 <section class="content-head">
-    <h1>Participants</h1>
+    <h1>Quizzes</h1>
 </section>
+
+<?php
+?>
 
 <div class="wrapper">
     <div class="container">
-        <div class="participants">
-            <div class="search-content">
-                <input type="search" id="search" placeholder="Search">
-                <button class="button3">Search</button>
-                <button class="button3" id="add">Reset All</button>
-                <div class="sorting">
-                    <button class="button3">Highest</button>
-                    <button class="button3">Lowest</button>
-                    <button class="button3">Average</button>
+        <section class="content-body">
+
+            <div class="content-quiz">
+                <div class="participants">
+
+                    <?php
+
+                    $quiz = new Quiz($db);
+                    $quizList = $quiz->getQuizById($userId);
+
+                    if (!empty($quizList)) {
+                        foreach ($quizList as $quiz) {
+                            echo " <div class='sub-part'>
+                        <div class='randomize'>
+                            <h3>" . htmlspecialchars($quiz['subject_name']) . "</h>
+                            <h1>" . htmlspecialchars($quiz['quiz_title']) . "</h1>
+                        </div>
+                        <div class='card-content'>
+                            <p>" . htmlspecialchars($quiz['quiz_text']) . "</p>
+                            <div class='quiz-buttons'>
+                            <input type='hidden' name='quiz_id'" . htmlspecialchars($quiz['quiz_id']) . "'/>
+                                <button class='button2'><a href='participants_results.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "'>View Participants</a></button>
+                            </div>
+                        </div>
+                    </div>";
+                        }
+                    }
+                    ?>
+
+                    <div class='sub-part'>
+                        <div class='randomize'>
+                            <h1>Quiz title</h1>
+                        </div>
+                        <div class='card-content'>
+                            <p>quiz discreption quiz discreption quiz discreption quiz discreption quiz discreption</p>
+                            <div class='quiz-buttons'>
+                                <button class='button2'><a href='participants_results.php' class='button2'>View Participants</a></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='sub-part'>
+                        <div class="randomize">
+                            <h1>Quiz title</h1>
+                        </div>
+                        <div class="card-content">
+                            <p>quiz discreption quiz discreption quiz discreption quiz discreption quiz discreption</p>
+                            <div class='quiz-buttons'>
+                                <button class='button2'><a href="participants_results.php" class='button2'>View Participants</a></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='sub-part'>
+                        <div class="randomize">
+                            <h1>Quiz title</h1>
+                        </div>
+                        <div class="card-content">
+                            <p>quiz discreption quiz discreption quiz discreption quiz discreption quiz discreption</p>
+                            <div class='quiz-buttons'>
+                                <button class='button2'><a href="participants_results.php" class='button2'>View Participants</a></button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-                        <!-- Chart Container -->
-                        <div class="chart-container">
-                <canvas id="scoreChart"></canvas>
-            </div>
-
-            <div class="users-table">
-                <table>
-                    <?php 
-                        $participant = new Answer($db);
-                        $participantList = $participant->getParticipant();
-
-                        if (!empty($participantList)) {
-                            echo "<tr>
-                                    <th>Username</th>
-                                    <th>Quiz Title</th>
-                                    <th>Total Score</th>
-                                    <th>Date Taken</th>
-                                </tr>";
-                            
-                            // Prepare data for the pie chart
-                            $scores = [];
-                            foreach ($participantList as $p) {
-                                echo "<tr>
-                                        <td>" . htmlspecialchars($p["username"]) . "</td>
-                                        <td>" . htmlspecialchars($p["quiz_title"]) . "</td>
-                                        <td>" . htmlspecialchars($p["total_score"]) . "</td>
-                                        <td>" . htmlspecialchars($p["created_at"]) . "</td>
-                                    </tr>";
-                                // Collect total scores for the pie chart
-                                $scores[$p["quiz_title"]] = ($scores[$p["quiz_title"]] ?? 0) + $p["total_score"];
-                            }
-                        } else {
-                            echo "<p>No results found.</p>";
-                        }
-                    ?>
-                </table>
-            </div>
-
-
-        </div>
+        </section>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Prepare data for the pie chart
-    const scores = <?php echo json_encode(array_values($scores)); ?>;
-    const quizTitles = <?php echo json_encode(array_keys($scores)); ?>;
-
-    // Create the pie chart
-    const ctx = document.getElementById('scoreChart').getContext('2d');
-    const scoreChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: quizTitles,
-            datasets: [{
-                label: 'Total Scores',
-                data: scores,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Total Scores by Quiz Title'
-                }
-            },
-            layout: {
-                padding: {
-                    left: 20,
-                    right: 20,
-                    top: 20,
-                    bottom: 20
-                }
-            },
-            elements: {
-                arc: {
-                    borderWidth: 1 // Ensures a clear separation between pie sections
-                }
-            }
-        }
-    });
-
-    // Set the background color of the canvas to white
-    document.getElementById('scoreChart').style.backgroundColor = 'white';
-</script>

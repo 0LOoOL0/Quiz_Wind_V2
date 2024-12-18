@@ -6,7 +6,7 @@ include 'Includes/User_handler.php';
 
 // Get the user's role ID from the session
 $roleId = $_SESSION['role_id'] ?? null;
-echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
+//echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +41,7 @@ echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
         <p class="userlog">Welcome! <?php echo htmlspecialchars($_SESSION['username']); ?></p>
 
         <form action="Includes/Logout_handler.php" method="post">
-            <button class="button1" name="logout" value="logout">Logout</button>
+            <button class="button3" name="logout" value="logout">Logout</button>
         </form>
     </header>
 <?php endif; ?>

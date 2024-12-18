@@ -7,7 +7,7 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 
 ?>
 
-<body class="page10">
+<body class="page">
     <div class="wrapper">
         <div class="container">
             <div class="spaceup">

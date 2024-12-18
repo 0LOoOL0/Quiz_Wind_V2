@@ -10,7 +10,7 @@ $attempt = new Answer($db);
 $score = $attempt->allAttemptList($userId, $quizId);
 ?>
 
-<body class="page11">
+<body class="page">
     <div class="wrapper">
         <div class="container">
             <div class="spaceup">
@@ -21,7 +21,7 @@ $score = $attempt->allAttemptList($userId, $quizId);
                         <h2>Congrats!</h2> -->
 
                         <?php
-                        
+
                         $attemptId = 1;
                         $test = new Answer($db);
                         $testScore = $test->convertScore($attemptId);
@@ -32,31 +32,31 @@ $score = $attempt->allAttemptList($userId, $quizId);
                         $percentage = 50;
 
                         echo "<p>" . number_format($percentage) . "%</p>";
-                            if ($percentage >= 80) {
-                                echo "<h2>Congrats!</h2>"; // High score
-                            } elseif ($percentage >= 50) {
-                                echo "<h2>Good Job!</h2>"; // Average score
-                            } else {
-                                echo "<h2>Keep Trying!</h2>"; // Low score
-                            }
+                        if ($percentage >= 80) {
+                            echo "<h2>Congrats!</h2>"; // High score
+                        } elseif ($percentage >= 50) {
+                            echo "<h2>Good Job!</h2>"; // Average score
+                        } else {
+                            echo "<h2>Keep Trying!</h2>"; // Low score
+                        }
 
-                            
-                        
-                        
+
+
+
                         // echo "User ID: " . htmlspecialchars($userId) . "<br>";
                         // echo "Quiz ID: " . htmlspecialchars($quizId) . "<br>";
-                        
+
                         // if (!empty($attemptList)) {
                         //     $latestAttempt = $attemptList[0]; // Get the latest attempt
                         //     $totalScore = $latestAttempt['total_score'];
-                            
+
                         //     $maxScore = 100; // Assuming the max score is 100
                         //     $percentage = ($totalScore / $maxScore) * 100;
-                        
+
                         //     echo "<p>" . number_format($percentage, 2) . "%</p>";
                         //     echo "<h2>" . htmlspecialchars($latestAttempt["total_score"]) . "</h2>"; // Corrected variable name
-                        
-                            
+
+
                         //     if ($percentage >= 80) {
                         //         echo "<h2>Congrats!</h2>"; // High score
                         //     } elseif ($percentage >= 50) {
@@ -70,30 +70,28 @@ $score = $attempt->allAttemptList($userId, $quizId);
                         ?>
 
                     </div>
+                    
                     <div class="attempt-table">
-                        <table>
-                            <tr>
-                                <th>ID</th>
-                                <th>Score</th>
-                                <th>Date attempt</th>
-                            </tr>
-
+                        <div class="attempt-count">
                             <?php
-                            //checpoint quiz -id
-                            
-                            //$attemptList = $attempt->getAttemptsByUser($userId);
+                            $attemptCount = new Attempt($db);
+                            $attemptCounts = $attemptCount->countAttempts($userId, $quizId);
+                            echo "<h2>Number of Attempts: " . htmlspecialchars($attemptCounts) . "</h2>"; // Use $attemptCounts to get the count
+                            ?>
+                        </div>
+                        <table>
+                            <?php
                             $attemptList = $attempt->attemptList($userId, $quizId);
 
                             if (!empty($attemptList)) {
-                                echo '<table>';
+                                echo '<table><tr>
+                                    <th>Score</th>
+                                    <th>Date attempt</th>
+                                </tr>';
                                 foreach ($attemptList as $attempt) {
                                     echo "<tr>
-                                    
-                                <!--<td>" . htmlspecialchars($attempt["user_id"]) . "</td>-->
-                                <td></td>
-                                <td>" . htmlspecialchars($attempt["attempt_number"]) . "</td>
-                                <td>" . htmlspecialchars($attempt["total_score"]) . "</td>
-                                <td>" . htmlspecialchars($attempt["created_at"]) . "</td>
+                                    <td>" . htmlspecialchars($attempt["total_score"]) . "</td>
+                                    <td>" . htmlspecialchars($attempt["created_at"]) . "</td>
                                 </tr>";
                                 }
                                 echo "</table>";

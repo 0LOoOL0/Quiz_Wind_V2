@@ -109,8 +109,9 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                     <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
                                     <div class='quiz-buttons'>
 
-                                        <button class='button1'><a href='rule_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a></button>";
-                            if (userHasPermission($roleName, 'delete')) {
+                                        <button class='button1'><a href='rule_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a></button>
+                            <div class ='crud-button'>";
+                                if (userHasPermission($roleName, 'delete')) {
                                 echo "<form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
                                         <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this quiz?\");'>Delete</button>
@@ -119,6 +120,8 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                             if (userHasPermission($roleName, 'edit')) {
                                 echo "<button class='button3'>Edit Quiz</button>";
                             }
+                                echo "</div>";
+                                        
 
                             // Form to delete the subject (only if user has permission)
 
