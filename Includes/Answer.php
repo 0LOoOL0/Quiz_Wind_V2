@@ -454,6 +454,46 @@ class Answer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function countQuestionsByQuizId($quizId) {
+        // SQL query to count the number of questions for a specific quiz_id
+        $sql = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
+    
+        // Use your queryStatement method to prepare and execute the query
+        $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+    
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Return the count of questions
+        return $result ? (int)$result['question_count'] : 0; // Return 0 if no result
+    }
+
+    public function countCorrectOptionsByQuizId($quizId) {
+        // SQL query to count correct options for questions in a specific quiz
+        $sql = "SELECT COUNT(*) AS correct_option_count
+            FROM questions q
+            JOIN (
+                SELECT question_id, MAX(created_at) AS latest_answer_time
+                FROM answers
+                GROUP BY question_id
+            ) AS latest_answers ON q.question_id = latest_answers.question_id
+            JOIN answers a ON latest_answers.question_id = a.question_id 
+                AND latest_answers.latest_answer_time = a.created_at
+            JOIN options o ON a.selected_option_id = o.option_id
+            WHERE q.quiz_id = :quiz_id AND o.is_correct = 1"; // Check for is_correct = 1
+    
+        // Use your existing queryStatement method to execute the query
+        $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
+    
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Return the count of correct options, returning 0 if no result is found
+        return $result ? (int)$result['correct_option_count'] : 0;
+    }
+
+
+
     // public function saveAnswer() {
     //     $stmt = $this->db->prepare("INSERT INTO answers (question_id, selected_option_id, score, user_id) VALUES (:question_id, :selected_option_id, :score, :user_id)");
     //     $stmt->execute([

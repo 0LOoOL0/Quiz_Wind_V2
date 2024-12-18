@@ -75,7 +75,8 @@ $score = $attempt->allAttemptList($userId, $quizId);
                     <div class="attempt-table">
                         <div class="cal">
                             <?php
-                            $questions = new Quiz($db);
+                            
+                            $questions = new Answer($db);
                             $totalQuestions = $questions->countQuestionsByQuizId($quizId);
                             $correctQuestions = $questions->countCorrectOptionsByQuizId($quizId);
                             $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;

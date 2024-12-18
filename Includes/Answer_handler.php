@@ -29,18 +29,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'score' => $score
         ];
     }
+
+    $answer = new Answer($db);
+
+    //$questions = new Answer($db);
+    $totalQuestions = $answer->countQuestionsByQuizId($quizId);
+    $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
+    $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
+
     
-    $totalScore = $quizAttemptManager->calculateTotalScore($answers);
+    //$totalScore = $quizAttemptManager->calculateTotalScore($answers);
 
     // // Determine the attempt number
     $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
 
     // Save the new attempt
-    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $totalScore, $totalQuestions);
+    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect);
 
 
     // Create an instance of QuizManager and pass the database connection
-    $answer = new Answer($db);
+    ;
 
     // Save the answers using the saveAnswers method
     if ($answer->saveAnswers($userId, $quizId, $answers)) {
