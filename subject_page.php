@@ -67,6 +67,29 @@ if ($roleName === 'Teacher') {
     </div>
 </div>
 
+<div class="popup-update">
+    <div class="popup-content">
+        <h1>Create new Subject</h1>
+        <form action="Includes/Subject_handler.php" method="POST">
+            <div class="form-content">
+                <p>Subject name</p>
+                <input type="text" name="subject_name" required>
+                <p>Description</p>
+                <input type="text" name="subject_text" required>
+                <label for="Teachers">Choose a Teacher:</label>
+
+                <label>Select Teacher(s):</label><br>
+                <?php foreach ($teacherList as $teacher): ?>
+                    <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
+                <?php endforeach; ?>
+
+            </div>
+            <button type="submit" class="button1" name='update'>update</button>
+            <button type="button" class="button4" onclick="closePopup()">cancel</button>
+        </form>
+    </div>
+</div>
+
 <section class="content-head">
     <h1>
         Select subject of your choosing
@@ -106,7 +129,7 @@ if ($roleName === 'Teacher') {
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
-                            echo "<button class='button3' style='margin-left: 10px;'><a href='edit_subject.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>Edit</a></button>";
+                            echo "<button id = 'update' class='button3' style='margin-left: 10px;'>Edit</button>";
                         }
 
                         // Form to delete the subject (only if user has permission)

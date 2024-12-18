@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("update").addEventListener("click", function () {
-        document.querySelector(".popup-create").style.display = "flex";
+        document.querySelector(".popup-update").style.display = "flex";
     });
 });
 
+
 //pop up update content
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".update").forEach(function(button) {
+    document.querySelectorAll("update").forEach(function(button) {
         button.addEventListener("click", function() {
             const username = this.closest('tr').querySelector('td:nth-child(2)').textContent;
 

@@ -1,5 +1,7 @@
 <?php
+
 include 'header.php';
+
 include 'Includes/User_handler.php';
 ?>
 

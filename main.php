@@ -8,6 +8,7 @@ if (isset($_SESSION['username'])) {
     exit();}
 ?>
 
+
 <body class="page11">
     <div class="wrapper">
         <div class="spaceup">
@@ -36,8 +37,12 @@ if (isset($_SESSION['username'])) {
                                 <tr>
                                     <td><input type="email" name="email" placeholder="Email" required></td>
                                 </tr>
+                                
                                 <tr>
                                     <td><button class="button2" type="submit" name="register">Sign Up</button></td>
+                                </tr>
+                                <tr>
+                                    <p>do you have an account? <a href="login.php">Login here!</a></p>
                                 </tr>
                             </table>
                         </form>
