@@ -18,7 +18,7 @@ $roleName = $_SESSION['role_name'] ?? null;
 
 
 <section class="content-head">
-    <h1>Quizzes</h1>
+    <h1>View Results</h1>
 </section>
 
 <?php
