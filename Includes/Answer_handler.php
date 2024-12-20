@@ -1,9 +1,7 @@
 <?php
 
-//include 'Database.php'; // Include your database connection
-require_once 'Answer.php'; // Include your QuizManager class
-require_once 'Attempt.php'; // Include your QuizManager class
-//require_once 'Attempt.php';
+require_once 'Answer.php'; // Include your Answer class
+require_once 'Attempt.php'; // Include your Attempt class
 
 $quizAttemptManager = new Answer($db);
 
@@ -20,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $selectedOptionId = htmlspecialchars($answerData['selected_option_id']);
         
         // Assuming a default score of 1.00
-        $score = 1.00; // Replace with actual score retrieval logic if needed
+        $score = 1.00; 
 
         // Add to answers array
         $answers[] = [
@@ -31,34 +29,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $answer = new Answer($db);
-
-    //$questions = new Answer($db);
     $totalQuestions = $answer->countQuestionsByQuizId($quizId);
-    $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
-    $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
 
-    
-    //$totalScore = $quizAttemptManager->calculateTotalScore($answers);
+    // If no questions are present, handle accordingly
+    if ($totalQuestions > 0) {
+        $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
+        $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
+    } else {
+        // If no questions exist, set percentage to 0 or handle as needed
+        $percentageCorrect = 0;
+    }
 
-    // // Determine the attempt number
+    // Determine the attempt number
     $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
 
     // Save the new attempt
     $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect);
 
-
-    // Create an instance of QuizManager and pass the database connection
-    ;
-
     // Save the answers using the saveAnswers method
     if ($answer->saveAnswers($userId, $quizId, $answers)) {
-        
         header("Location: ../result_page.php?quiz_id=" . urlencode($quizId));
         exit();
     } else {
         echo "Failed to save answers.";
     }
 } else {
-    //echo "Invalid request method.";
+    // Handle invalid request method
+    echo "Invalid request method.";
 }
 ?>

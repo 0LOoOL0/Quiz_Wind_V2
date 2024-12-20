@@ -35,9 +35,10 @@ header {
 .userlog {
     /* text-shadow: 1px 1px 1px rgba(0, 0, 0, 10); */
     font-size: 25px;
-    padding: 0 15px;
+    padding: 0 10px;
     font-weight: bold;
     color: #bae3ff;
+    margin: 0;
 }
 
 header.scrolled {
@@ -84,21 +85,22 @@ a {
 
 nav {
     flex-grow: 1;
-    padding: 10px;
+    padding: 0px;
     align-items: center;
     text-align: center;
 }
 
 nav ul {
+    margin: 0;
     list-style: none;
-    font-size: 25px;
+    font-size: 20px;
     display: flex;
     justify-content: flex-end;
 }
 
 nav ul li {
-    padding: 10px 12px;
-    margin: 10px 20px;
+    padding: 10px 10px;
+    margin: 10px 10px;
     transition: transform 0.2S ease;
     /* font-weight: bold; */
     /* text-shadow: 1px 1px 1px rgba(0, 0, 0, 10); */
@@ -218,7 +220,7 @@ nav li {
 }
 
 .logo {
-    padding: 10px;
+    padding: 0px;
     height: 80px;
 }
 
@@ -444,30 +446,35 @@ body {
     position: relative;
     background: rgb(255, 255, 255);
     border-radius: 10px;
-    padding: 20px;
-    /* text-align: center; */
+    padding: 0;
     margin: 30px;
     width: 280px;
     height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
     box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack children vertically */
 }
 
 .randomize {
     background-color: #4dbce7;
     height: 150px;
-    
     padding: 20px;
 }
 
 .card-content {
     padding: 20px;
+    flex: 1; /* Allow this section to grow and fill the remaining space */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between; /* Push button to the bottom */
 }
 
+.button-container {
+    margin-top: auto; /* Push the button to the bottom */
+    text-align: center; /* Center the button */
+}
 .subject-itmes {
     padding:20px ;
 }

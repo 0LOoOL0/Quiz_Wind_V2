@@ -168,6 +168,24 @@ class Answer
         }
     }
 
+    public function saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect)
+    {
+        // Prepare the SQL statement for insertion
+        $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
+                VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
+
+        try {
+            $this->db->queryStatement($sql, [
+                ':user_id' => $userId,
+                ':quiz_id' => $quizId,
+                ':attempt_number' => $attemptNumber,
+                ':total_score' => $percentageCorrect
+            ]);
+        } catch (Exception $ex) {
+            echo "Error saving attempt: " . $ex->getMessage();
+        }
+    }
+
     function listAttempts($userId)
     {
         $stmt = $this->db->prepare("SELECT attempt FROM answers WHERE option_id = :user_id");
@@ -280,24 +298,6 @@ class Answer
     //         echo "Error saving attempt: " . $ex->getMessage();
     //     }
     // }
-
-    public function saveAttempt($userId, $quizId, $attemptNumber, $totalScore)
-    {
-        // Prepare the SQL statement for insertion
-        $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
-                VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
-
-        try {
-            $this->db->queryStatement($sql, [
-                ':user_id' => $userId,
-                ':quiz_id' => $quizId,
-                ':attempt_number' => $attemptNumber,
-                ':total_score' => $totalScore
-            ]);
-        } catch (Exception $ex) {
-            echo "Error saving attempt: " . $ex->getMessage();
-        }
-    }
 
     // Function to calculate the total score based on provided answers
     public function calculateTotalScore($answers)

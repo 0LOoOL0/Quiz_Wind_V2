@@ -8,17 +8,12 @@ $userName = $_SESSION['username'] ?? null;
 $roleId = $_SESSION['role_id'] ?? null;
 $roleName = $_SESSION['role_name'] ?? null;
 
-// echo "User ID: " . htmlspecialchars($_SESSION['user_id']) . "<br>";
-// echo "Username: " . htmlspecialchars($_SESSION['username']) . "<br>";
-// echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
-// echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
-
 function userHasPermission($roleName, $action)
 {
     // Define permissions
     $permissions = [
-        'Admin' => ['view', 'edit', 'delete'],
-        'Teacher' => ['view', 'edit'],
+        'Admin' => ['create', 'view', 'edit', 'delete'],
+        'Teacher' => ['view'],
         'Student' => ['view'],
         // Add other roles as needed
     ];
@@ -98,24 +93,21 @@ if ($roleName === 'Teacher') {
 
 <div class="wrapper">
     <div class="container">
-
-        <!-- <div class="centering">
-            <div class="search-content">
-                <input type="search" id="search" placeholder="Search">
-                <button class="button3">Search</button>
-                <button class="button3">Rest All</button>
-                <div class="sorting">
-                    <button id='add' class="button2">Add Subejct</button>
+        <?php
+        if (userHasPermission($roleName, 'create')) {
+            echo "<div class='centering'>
+            <div class='search-content'>
+                <div class='sorting'>
+                    <button id='add' class='button2'>Add Subejct</button>
                 </div>
             </div>
-        </div> -->
+        </div>";
+        }
+        ?>
 
-        
+
 
         <section class="content-body">
-        <div class="sorting">
-                <button id='add' class="button1">Add Subejct</button>
-            </div>
 
             <div class="subjects">
 
@@ -124,9 +116,12 @@ if ($roleName === 'Teacher') {
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
+                        <div class='randomize'>
                                 <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>     
+                            </div>
+                            <div class='card-content'>
                                 <h3>" . htmlspecialchars($subject['subject_text']) . "</h3>
-                                <div class='card-subject'>";
+                                <div class='button-container'>";
 
                         // Button to view the subject
                         echo "<button class='button2'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
@@ -145,23 +140,25 @@ if ($roleName === 'Teacher') {
                         }
 
                         echo "</div>
+                            </div>
                         </div>";
                     }
                 } else {
                     echo "There are no subjects available, create a new one!";
                 }
                 ?>
+                
                 <div class="sub-subjects">
-                    <div class='randomize'>
-                        <h2>title</h2>
-                    </div>
-                    <div class="subject-items">
-                        <h3>description description description</h3>
-                        <div class="card-subject">
-                            <button class="button1">view</button>
-                        </div>
-                    </div>
-                </div>
+    <div class='randomize'>
+        <h2>Title</h2>
+    </div>
+    <div class="card-content">
+        <h3>Description description description</h3>
+        <div class="button-container">
+            <button class="button2">View</button>
+        </div>
+    </div>
+</div>
 
             </div>
         </section>

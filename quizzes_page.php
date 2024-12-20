@@ -18,8 +18,8 @@ function userHasPermission($roleName, $action)
 {
     // Define permissions
     $permissions = [
-        'Admin' => ['view', 'edit', 'delete'],
-        'Teacher' => ['view', 'edit', 'delete'],
+        'Admin' => ['edit', 'delete'],
+        'Teacher' => ['edit', 'delete'],
         'Student' => ['view'],
         // Add other roles as needed
     ];
@@ -107,10 +107,11 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                             echo "<div class='sub-quiz'>
                                     <h2>" . htmlspecialchars($quiz['quiz_title']) . "</h2>
                                     <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
-                                    <div class='quiz-buttons'>
-
-                                        <button class='button1'><a href='rule_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a></button>
-                            <div class ='crud-button'>";
+                                    <div class='quiz-buttons'>";
+if (userHasPermission($roleName, 'view')) {
+                                        echo "<button class='button1'><a href='rule_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a></button>";
+}
+                                    echo "<div class ='crud-button'>";
                                 if (userHasPermission($roleName, 'delete')) {
                                 echo "<form action='Includes/Quizzes_handler.php' method='post' style='display:inline;'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />

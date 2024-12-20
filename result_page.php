@@ -9,6 +9,10 @@ $quizId = $_GET['quiz_id'] ?? null;
 
 $attempt = new Answer($db);
 $score = $attempt->allAttemptList($userId, $quizId);
+
+$totalQuestions = $attempt->countQuestionsByQuizId($quizId);
+$correctQuestions = $attempt->countCorrectOptionsByQuizId($quizId);
+$percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
 ?>
 
 <body class="page">
@@ -30,12 +34,12 @@ $score = $attempt->allAttemptList($userId, $quizId);
 
                         echo "<h1>Final Result</h1>";
 
-                        $percentage = 50;
+                        
 
-                        echo "<p>" . number_format($percentage) . "%</p>";
-                        if ($percentage >= 80) {
+                        echo "<p>" . number_format($percentageCorrect) . "%</p>";
+                        if ($percentageCorrect >= 80) {
                             echo "<h2>Congrats!</h2>"; // High score
-                        } elseif ($percentage >= 50) {
+                        } elseif ($percentageCorrect >= 50) {
                             echo "<h2>Good Job!</h2>"; // Average score
                         } else {
                             echo "<h2>Keep Trying!</h2>"; // Low score
@@ -75,13 +79,6 @@ $score = $attempt->allAttemptList($userId, $quizId);
                     <div class="attempt-table">
                         <div class="cal">
                             <?php
-                            
-                            $questions = new Answer($db);
-                            $totalQuestions = $questions->countQuestionsByQuizId($quizId);
-                            $correctQuestions = $questions->countCorrectOptionsByQuizId($quizId);
-                            $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
-
-
                             echo "<h2>Number of total questions: " . htmlspecialchars($totalQuestions) . "</h2>";
                             echo "<h2>Number of correct questions: " . htmlspecialchars($correctQuestions) . "</h2>";
                             echo "<h2>precentage: " . round($percentageCorrect, 2) . " %</h2>";
