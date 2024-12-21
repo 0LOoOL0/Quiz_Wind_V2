@@ -55,7 +55,7 @@ $roleName = $_SESSION['role_name'] ?? null;
                     }
                     ?>
 
-                    <div class='sub-part'>
+                    <!-- <div class='sub-part'>
                         <div class='randomize'>
                             <h1>Quiz title</h1>
                         </div>
@@ -88,7 +88,7 @@ $roleName = $_SESSION['role_name'] ?? null;
                                 <button class='button2'><a href="participants_results.php" class='button2'>View Participants</a></button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

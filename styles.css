@@ -119,7 +119,7 @@ nav ul li:hover {
     font-weight: bold;
     border: 0px;
     margin: 5px 0;
-    padding: 10px 20px;
+    padding: 10px 10px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -558,6 +558,11 @@ body {
 
 .sub-chapter {
     width: 300px;
+    background: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 0;
+    box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
 }
 
 .sub-chapter ul {
@@ -585,7 +590,6 @@ body {
     background-color: #bae3ff;
     cursor: pointer;
 }
-
 
 .quizzes {
     flex: 2;
@@ -1065,6 +1069,7 @@ input[type="radio"]:checked+label {
     text-align: center;
     background-color: white;
     box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    
     border-radius: 20px;
     padding: 2em;
     height: auto;

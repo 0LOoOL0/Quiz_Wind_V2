@@ -72,8 +72,8 @@ if ($roleName === 'Teacher') {
                 <p>Description</p>
                 <input type="text" name="subject_text" required>
                 <label for="Teachers">Choose a Teacher:</label>
-
                 <label>Select Teacher(s):</label><br>
+
                 <?php foreach ($teacherList as $teacher): ?>
                     <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
                 <?php endforeach; ?>
@@ -87,12 +87,13 @@ if ($roleName === 'Teacher') {
 
 <section class="content-head">
     <h1>
-        Select subject of your choosing
+        Subjects
     </h1>
 </section>
 
 <div class="wrapper">
     <div class="container">
+        
         <?php
         if (userHasPermission($roleName, 'create')) {
             echo "<div class='centering'>
@@ -105,14 +106,10 @@ if ($roleName === 'Teacher') {
         }
         ?>
 
-
-
         <section class="content-body">
-
             <div class="subjects">
 
                 <?php
-
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
@@ -124,7 +121,7 @@ if ($roleName === 'Teacher') {
                                 <div class='button-container'>";
 
                         // Button to view the subject
-                        echo "<button class='button2'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
+                        echo "<button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
@@ -147,18 +144,18 @@ if ($roleName === 'Teacher') {
                     echo "There are no subjects available, create a new one!";
                 }
                 ?>
-                
-                <div class="sub-subjects">
-    <div class='randomize'>
-        <h2>Title</h2>
-    </div>
-    <div class="card-content">
-        <h3>Description description description</h3>
-        <div class="button-container">
-            <button class="button2">View</button>
-        </div>
-    </div>
-</div>
+
+                <!-- <div class="sub-subjects">
+                    <div class='randomize'>
+                        <h2>Title</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Description description description</h3>
+                        <div class="button-container">
+                            <button class="button2">View</button>
+                        </div>
+                    </div>
+                </div> -->
 
             </div>
         </section>

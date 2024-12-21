@@ -10,6 +10,8 @@ if (isset($_SESSION['message'])) {
     unset($_SESSION['message']); // Clear the message after displaying it
 }
 
+//$user = new User($db);
+
 $userId = $_SESSION['user_id'] ?? null;
 
 ?>
@@ -86,13 +88,13 @@ $userId = $_SESSION['user_id'] ?? null;
         <form action="Includes/User_handler.php" method="POST">
             <div class="form-content">
                 <p>Username</p>
-                <input type="text" name="username" value="<?php echo htmlspecialchars($userData['username']); ?>" required>
+                <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
                 
                 <p>Password</p>
                 <input type="password" name="password" placeholder="Leave blank to keep current password">
                 
                 <p>Email</p>
-                <input type="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
 
                 <label for="Roles">Choose a Role:</label>
                 <select name="role" id="Roles" required>
@@ -167,7 +169,7 @@ window.onclick = function(event) {
                                 <th>Email</th>
                                 <th>Joined Date</th>
                                 <th>User Type</th>
-                                <th>Action</th>
+                                <th style='width:200px'>Action</th>
                             </tr>";
 
                         // Iterate through the user list and display each user
@@ -177,9 +179,12 @@ window.onclick = function(event) {
                                     <td>" . htmlspecialchars($user["email"]) . "</td>
                                     <td>" . htmlspecialchars($user["created_at"]) . "</td>
                                     <td>" . htmlspecialchars($user["role_name"]) . "</td>
-                                    <td>
-                                    <button class='edit-button' onclick='showUpdatePopup(" . htmlspecialchars($user["user_id"]) . ")'>Edit</button>
-                                        <form action='Includes/User_handler.php' method='post' style='display:inline;'>
+                                    <td style='display: flex;gap:10px'>
+                                    <form action='Includes/User_handler.php' method='post'>
+                                    <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
+                                        <button id='edit-button' class='button3' onclick='showUpdatePopup(" . htmlspecialchars($user["user_id"]) . ")'>Edit</button>
+                                    </form>    
+                                    <form action='Includes/User_handler.php' method='post'>
                                             <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
                                             <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</button>
                                         </form>

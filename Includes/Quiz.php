@@ -171,6 +171,48 @@ class Quiz
         }
     }
 
+    // need work
+    public function loadQuiz($quizId) {
+        try {
+            $sql = "SELECT quiz_title, quiz_text, chapter_id FROM quizzes WHERE quiz_id = :quiz_id";
+            
+            $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]); // Prepare the statement
+            
+            $quizData = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the result
+    
+            if ($quizData) {
+                return $quizData; // Return the single quiz data
+            } else {
+                throw new Exception("Quiz not found."); // Handle case where no quiz is found
+            }
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . htmlspecialchars($ex->getMessage());
+            return null; // Return null in case of error
+        }
+    }
+
+    // need work
+    public function loadQuizQuestions($quizId) {
+        try {
+            $sql = "SELECT * FROM questions WHERE quiz_id = :quiz_id
+            ";
+    
+            $stmt = $this->db->queryStatement($sql,[':quiz_id' => $quizId]); // Prepare the statement
+            
+            $questionsData = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results
+    
+            if ($questionsData) {
+                return $questionsData; // Return all questions for the quiz
+            } else {
+                throw new Exception("No questions found for this quiz."); // Handle case where no questions are found
+            }
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . htmlspecialchars($ex->getMessage());
+            return null; // Return null in case of error
+        }
+    }
+
+
     //for quizzes_page
     function quizList($subjectId)
     {
@@ -252,15 +294,16 @@ class Quiz
     }
 
     // Function to delete a quiz
-    public function deleteQuiz()
-    {
-        $stmt = $this->db->prepare("DELETE FROM quizzes WHERE quiz_id = :quiz_id");
-        $stmt->bindParam(':quiz_id', $this->quizId);
-        return $stmt->execute();
-    }
+    // public function deleteQuiz()
+    // {
+    //     $stmt = $this->db->prepare("DELETE FROM quizzes WHERE quiz_id = :quiz_id");
+    //     $stmt->bindParam(':quiz_id', $this->quizId);
+    //     return $stmt->execute();
+    // }
 
     function getQuizzesByChapter($chapterId) {
         $quizzes = [];
+        
         try {
             $stmt = $this->db->prepare("SELECT quiz_id, quiz_title, quiz_text FROM quizzes WHERE chapter_id = :chapter_id");
             $stmt->bindParam(':chapter_id', $chapterId, PDO::PARAM_INT);
@@ -327,6 +370,19 @@ class Quiz
         } catch (Exception $ex) {
             echo "Something went wrong: " . $ex->getMessage();
         }
+    }
+
+    public function deleteQuiz($quizId)
+    {
+        // Prepare the SQL statement to delete the quiz
+        $sql = "DELETE FROM quizzes WHERE quiz_id = :quiz_id";
+        $stmt = $this->db->prepare($sql);
+        
+        // Bind the quiz ID parameter
+        $stmt->bindParam(':quiz_id', $quizId, PDO::PARAM_INT);
+        
+        // Execute the statement and return the result
+        return $stmt->execute();
     }
 
     

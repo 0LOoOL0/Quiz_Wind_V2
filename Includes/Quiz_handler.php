@@ -6,7 +6,10 @@ require_once 'Option.php';
 require_once 'Chapter.php'; 
 
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+
 $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
+$subjectId = $_POST['subject_id'] ?? null;
+
 $userId = $_SESSION['user_id'] ?? null;
 // if ($subjectId === null) {
 //     die("Invalid subject ID creating quiz handler." );
@@ -14,6 +17,9 @@ $userId = $_SESSION['user_id'] ?? null;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
+
+    
+    $subject_id = $_POST['subject_id'] ?? null;
     try {
         // Initialize quiz object
         $quiz = new Quiz($db);
@@ -66,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
             }
 
             // Redirect to quizzes page
-            header("Location: ../quizzes_page.php?quiz_id=" . urlencode($quizId));
+            header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subjectId));
             exit();
         } else {
             echo "<p style='color: red;'>Failed to create quiz.</p>";
@@ -75,35 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
         echo "<p style='color: red;'>Error: " . htmlspecialchars($ex->getMessage()) . "</p>";
     }
 }
-//list all chapters
 
 
 
-// deleting chapter
-
-// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chapter_id'])) {
-//     $chapterId = intval($_POST['chapter_id']);
-
-//     try {
-//         $chapter = new Chapter($db);
-//         $chapter->setChapterId($chapterId);
-//         $chapter = $chapter->deleteChapter();
-
-//         if ($result) {
-//             // $_SESSION['message'] = 'User deleted successfully';
-//             header("Location: ../quizzes_page.php?subject_id=" . htmlspecialchars($subject_id));
-//             exit();
-//         } else {
-//             echo "Failed to delete chapter.";
-//         }
-//     } catch (Exception $ex) {
-//         echo "Error: " . htmlspecialchars($ex->getMessage());
-//     }
-
-//     if (isset($_GET['message'])) {
-//         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
-//     }
-// }
 
 
 ?>

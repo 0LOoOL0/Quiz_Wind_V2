@@ -3,6 +3,14 @@
 
 require_once 'User.php';
 
+// Display message if it exists
+if (isset($_SESSION['message'])) {
+    $messageType = $_SESSION['message_type'];
+    echo "<div class='alert {$messageType}'>" . htmlspecialchars($_SESSION['message']) . "</div>";
+    unset($_SESSION['message']); // Clear the message after displaying
+}
+
+
 // Admin creating new user
 if (isset($_POST['submitted'])) {
     try {
@@ -34,7 +42,7 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-//user registering ... need fix
+//register user
 if (isset($_POST['register'])) {
     
     try {
@@ -51,7 +59,7 @@ if (isset($_POST['register'])) {
             $newUserId = $user->registerUser();
 
             if ($newUserId) {
-                header("Location: ../users_page.php");
+                header("Location: ../subject_page.php");
                 exit();
             } else {
                 header("Location: ../main.php");
@@ -65,7 +73,7 @@ if (isset($_POST['register'])) {
 }
 
 //user deleting
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
     $userId = intval($_POST['user_id']);
 
     try {
@@ -88,6 +96,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
     }
 }
+
+//update password
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['saved'])) {
+    // Get the email and new password from the form
+    $email = $_POST['email'];
+    $newPassword = $_POST['new_password'];
+
+    try {
+
+        $userManager = new User($db);  
+        $result = $userManager->resetPassword($email, $newPassword);
+        
+        if ($result) {
+
+            header("Location: ../login.php");
+            exit();
+        } else {
+            echo "Failed to update password.";
+        }
+
+        echo "Password updated successfully.";
+
+    } catch (Exception $e) {
+        // Handle any exceptions that occur
+        echo "Error: " . htmlspecialchars($e->getMessage());
+    }
+}
+
+
 
 // if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
 //     $userId = intval($_POST['user_id']);

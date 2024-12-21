@@ -10,6 +10,7 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 
 <body class="">
     <div class="content-timer">
+        
         <?php
         $timer = new Question($db);
         $getTimer = $timer->quizTimer($quizId); // Fetch the timer data

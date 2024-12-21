@@ -157,6 +157,49 @@ class User
         }
     }
 
+    function getUserByEmail($email)
+    {
+        try {
+            $sql = "SELECT * FROM users WHERE email = :email";
+            $stmt = $this->db->queryStatement($sql, [':email' => $email]);
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch a single user
+        } catch (Exception $ex) {
+            echo "Something went wrong: " . $ex->getMessage();
+        }
+    }
+
+    public function resetPassword($email, $newPassword)
+{
+    // Check if the user exists
+    $user = $this->getUserByEmail($email);
+
+    if ($user) {
+        // Hash the new password
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        // Update the password in the database
+        $sql = "UPDATE users SET password = :password WHERE email = :email";
+        $stmt = $this->db->queryStatement($sql, [
+            ':password' => $hashedPassword,
+            ':email' => $email
+        ]);
+
+        if ($stmt) {
+            $_SESSION['message'] = "Password updated successfully.";
+            $_SESSION['message_type'] = "success"; // For styling
+            return true;
+        } else {
+            $_SESSION['message'] = "Failed to update password.";
+            $_SESSION['message_type'] = "error"; // For styling
+            return false;
+        }
+    } else {
+        $_SESSION['message'] = "Email not found.";
+        $_SESSION['message_type'] = "error"; // For styling
+        return false;
+    }
+}
+
 
     function roleList()
     {
@@ -252,7 +295,8 @@ class User
         }
     }
 
-    function getUsersData($userId) {
+    function getUsersData($userId)
+    {
         $sql = "SELECT username, email FROM users WHERE user_id = :user_id";
         $stmt = $this->db->queryStatement($sql, [[':user_id' => $userId]]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

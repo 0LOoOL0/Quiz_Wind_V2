@@ -1,4 +1,5 @@
 <?php
+
 include 'header.php';
 include 'Includes/auth.php';
 include 'Includes/Answer_handler.php';
@@ -12,7 +13,8 @@ $score = $attempt->allAttemptList($userId, $quizId);
 
 $totalQuestions = $attempt->countQuestionsByQuizId($quizId);
 $correctQuestions = $attempt->countCorrectOptionsByQuizId($quizId);
-$percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
+$percentageCorrect = ((float)$correctQuestions / (float)$totalQuestions) * 100;
+
 ?>
 
 <body class="page">
@@ -21,77 +23,44 @@ $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100
             <div class="spaceup">
                 <form action="Includes/Answer_handler.php">
                     <div class="results">
-                        <!-- <h1>Final Result</h1>
-                        <p>100%</p>
-                        <h2>Congrats!</h2> -->
 
                         <?php
 
-                        $attemptId = 1;
-                        $test = new Answer($db);
-                        $testScore = $test->convertScore($attemptId);
-
-
                         echo "<h1>Final Result</h1>";
-
-                        
-
                         echo "<p>" . number_format($percentageCorrect) . "%</p>";
                         if ($percentageCorrect >= 80) {
-                            echo "<h2>Congrats!</h2>"; // High score
+                            echo "<h2>Congrats!</h2>";
                         } elseif ($percentageCorrect >= 50) {
-                            echo "<h2>Good Job!</h2>"; // Average score
+                            echo "<h2>Good Job!</h2>";
                         } else {
-                            echo "<h2>Keep Trying!</h2>"; // Low score
+                            echo "<h2>Keep Trying!</h2>";
                         }
 
-
-
-
-                        // echo "User ID: " . htmlspecialchars($userId) . "<br>";
-                        // echo "Quiz ID: " . htmlspecialchars($quizId) . "<br>";
-
-                        // if (!empty($attemptList)) {
-                        //     $latestAttempt = $attemptList[0]; // Get the latest attempt
-                        //     $totalScore = $latestAttempt['total_score'];
-
-                        //     $maxScore = 100; // Assuming the max score is 100
-                        //     $percentage = ($totalScore / $maxScore) * 100;
-
-                        //     echo "<p>" . number_format($percentage, 2) . "%</p>";
-                        //     echo "<h2>" . htmlspecialchars($latestAttempt["total_score"]) . "</h2>"; // Corrected variable name
-
-
-                        //     if ($percentage >= 80) {
-                        //         echo "<h2>Congrats!</h2>"; // High score
-                        //     } elseif ($percentage >= 50) {
-                        //         echo "<h2>Good Job!</h2>"; // Average score
-                        //     } else {
-                        //         echo "<h2>Keep Trying!</h2>"; // Low score
-                        //     }
-                        // } else {
-                        //     echo "No Attempts found for this User on this Quiz.";
-                        // }
                         ?>
 
                     </div>
-                    
+
                     <div class="attempt-table">
                         <div class="cal">
+
                             <?php
                             echo "<h2>Number of total questions: " . htmlspecialchars($totalQuestions) . "</h2>";
                             echo "<h2>Number of correct questions: " . htmlspecialchars($correctQuestions) . "</h2>";
                             echo "<h2>precentage: " . round($percentageCorrect, 2) . " %</h2>";
                             ?>
+
                         </div>
                         <div class="attempt-count">
+
                             <?php
                             $attemptCount = new Attempt($db);
                             $attemptCounts = $attemptCount->countAttempts($userId, $quizId);
                             echo "<h2>Number of Attempts: " . htmlspecialchars($attemptCounts) . "</h2>"; // Use $attemptCounts to get the count
                             ?>
+
                         </div>
                         <table>
+
                             <?php
                             $attemptList = $attempt->attemptList($userId, $quizId);
 
@@ -111,6 +80,7 @@ $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100
                                 echo "Theres are no subjects avilable, Create new one!";
                             }
                             ?>
+
                         </table>
                     </div>
                 </form>

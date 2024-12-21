@@ -10,6 +10,25 @@ unset($_SESSION['error']); // Clear the error message after display
 
 <script type="text/javascript" src="script.js"></script>
 
+<div class="popup-create">
+    <div class="popup-content">
+        <h1>Enter Details</h1>
+        <form action="Includes/User_handler.php" method="POST">
+            <div class="form-content">
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
+                
+                <label for="new_password">New Password:</label>
+                <input type="password" name="new_password" id="new_password" required>
+            </div>
+            <button type="submit" class="button1" name="saved">Save</button>
+            <button type="button" class="button4" onclick="closePopup()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="script.js"></script>
+
 <body class="page1">
 <div class="spaceup">
 
@@ -35,7 +54,7 @@ unset($_SESSION['error']); // Clear the error message after display
                         </tr>
                         <tr>
                             <td>
-                                <p>Forgot password? <a href="login.php">Click Here!</a></p>
+                                <p>Forgot password? <span id='add'>Click Here!</span></p>
                             </td>
                         </tr>
                         <tr>

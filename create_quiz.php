@@ -5,6 +5,7 @@ include 'Includes/Chapter_handler.php';
 include 'Includes/Quizzes_handler.php';
 
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+$subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : 0;
 $userId = $_SESSION['user_id'] ?? null;
 ?>
 
@@ -47,7 +48,7 @@ $userId = $_SESSION['user_id'] ?? null;
                                         <?php
                                         //$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                                         $chapter = new Quiz($db);  // Changed variable name to avoid confusion
-                                        
+
                                         $chapterList = [];
                                         if ($subjectId !== null) {
                                             $chapterList = $chapter->chapterList($subjectId);
@@ -75,12 +76,28 @@ $userId = $_SESSION['user_id'] ?? null;
                                 </td>
                             </tr>
                         </table>
+                        
                         <button id='add-quiz' class="button2" type="submit" name="add-quiz">Save Quiz</button>
                     </div>
 
                     <div id="questions_container"></div>
                 </form>
             </div>
+
+            <form id="yourFormId">
+                <label for="quiz_title">Quiz Title:</label>
+                <input type="text" id="quiz_title" name="quiz_title" value="<?php echo htmlspecialchars($quizData['quiz_title']); ?>" readonly>
+
+                <label for="quiz_text">Quiz Text:</label>
+                <input type="text" id="quiz_text" name="quiz_text" value="<?php echo htmlspecialchars($quizData['quiz_text']); ?>" readonly>
+
+                <label for="question_count">Number of Questions:</label>
+                <input type="number" id="question_count" name="question_count" min="1" required>
+
+                <div id="questions_container"></div>
+
+                <button type="submit">Submit Quiz</button>
+            </form>
 
             <script>
                 document.getElementById('question_count').addEventListener('change', function() {
@@ -103,14 +120,52 @@ $userId = $_SESSION['user_id'] ?? null;
                     <table>
                         ${[0, 1, 2, 3].map(optionIndex => `
                             <tr>
-                                <td><input type="text" name="questions[${i}][options][${optionIndex}][option_text]" placeholder="Option ${optionIndex + 1}" required></td>
-                                <td><input type="checkbox" name="questions[${i}][options][${optionIndex}][is_correct]" value="1"></td>
+                                <td>
+                                    <input type="text" name="questions[${i}][options][${optionIndex}][option_text]" placeholder="Option ${optionIndex + 1}" required>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="questions[${i}][options][${optionIndex}][is_correct]" value="1" onclick="handleCheckboxClick(this)">
+                                </td>
                                 <td>Correct</td>
                             </tr>
                         `).join('')}
                     </table>
                 </div>
             `;
+                    }
+                });
+
+                function handleCheckboxClick(checkbox) {
+                    const questionContainer = checkbox.closest('.popup-content3');
+                    const checkboxes = questionContainer.querySelectorAll('input[type="checkbox"]');
+
+                    checkboxes.forEach(cb => {
+                        if (cb !== checkbox) {
+                            cb.checked = false; // Uncheck other checkboxes
+                        }
+                    });
+                }
+
+                // Add validation on form submission
+                document.getElementById('yourFormId').addEventListener('submit', function(event) {
+                    const inputs = this.querySelectorAll('input[required]');
+                    let valid = true;
+
+                    inputs.forEach(input => {
+                        if (input.type === 'text' || input.type === 'number') {
+                            // Trim the input value to check for empty spaces
+                            if (input.value.trim() === '') {
+                                valid = false;
+                                input.classList.add('error'); // Optional: Add an error class for styling
+                            } else {
+                                input.classList.remove('error'); // Remove error class if valid
+                            }
+                        }
+                    });
+
+                    if (!valid) {
+                        event.preventDefault(); // Prevent form submission if invalid
+                        alert('Please fill out all required fields.'); // Optional alert
                     }
                 });
             </script>
