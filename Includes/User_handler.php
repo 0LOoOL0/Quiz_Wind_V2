@@ -44,30 +44,26 @@ if (isset($_POST['submitted'])) {
 
 //register user
 if (isset($_POST['register'])) {
-    
     try {
         $user = new User($db);
         $user->setUsername($_POST['username']);
         $user->setPassword($_POST['password']);
         $user->setEmail($_POST['email']);
 
+        // Attempt to register the user
+        $newUserId = $user->registerUser();
 
-        if ($user->isUsernameTaken($user->getUsername()) || $user->isEmailTaken($user->getEmail())) {
-            header("Location: ../main.php?error=" . urlencode("Username or email is already taken."));
+        // If registration is successful, redirect to the subject page
+        if ($newUserId) {
+            header("Location: ../subject_page.php");
+            exit();
         } else {
-            
-            $newUserId = $user->registerUser();
-
-            if ($newUserId) {
-                header("Location: ../subject_page.php");
-                exit();
-            } else {
-                header("Location: ../main.php");
-                exit();
-            }
+            header("Location: ../main.php");
+            exit();
         }
     } catch (Exception $ex) {
-        header("Location: main.php?error=" . urlencode($ex->getMessage()));
+        // Handle errors (e.g., username or email already exists)
+        header("Location: ../main.php?error=" . urlencode($ex->getMessage()));
         exit();
     }
 }

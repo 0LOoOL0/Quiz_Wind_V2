@@ -5,15 +5,17 @@ include 'Includes/User_handler.php';
 include 'Includes/Search.php';
 include 'Includes/auth.php';
 
-if (isset($_SESSION['message'])) {
-    echo "<p style='color: green;'>" . htmlspecialchars($_SESSION['message']) . "</p>";
-    unset($_SESSION['message']); // Clear the message after displaying it
-}
 
 //$user = new User($db);
 
 $userId = $_SESSION['user_id'] ?? null;
 
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+
+// Clear the error message after it's displayed
+if ($error) {
+    unset($_SESSION['error']);
+}
 ?>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -145,17 +147,27 @@ window.onclick = function(event) {
 </section>
 <div class="wrapper">
     <div class="container">
-        <div class="participants">
-            <div class="search-content">
-                <input type="text" id="search" placeholder="Search">
-                <!-- <div class="results"></div> -->
-                <button class="button3">Search</button>
-                <button class="button3">Rest All</button>
-                <div class="sorting">
+    <?php if ($error): ?>
+                <div class="error-message" style="color: red;">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="sorting">
                     <button id='add' class="button1">Add User</button>
                 </div>
-            </div>
+            
+        <div class="participants">
+            <!-- <div class="search-content">
+                <input type="text" id="search" placeholder="Search">
+
+                <button class="button3">Search</button>
+                <button class="button3">Rest All</button>
+               
+            </div> -->
+
             <div class="users-table">
+                
                 <table>
                     <?php
                     $user = new User($db);

@@ -2,16 +2,30 @@
 include 'header.php';
 include 'Includes/User_handler.php';
 
-//redirect user if signed in
+// Redirect user if signed in
 if (isset($_SESSION['username'])) {
     header("Location: user_logout.php");
-    exit();}
-?>
+    exit();
+}
 
+// Retrieve error message from session
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+
+// Clear the error message after it's displayed
+if ($error) {
+    unset($_SESSION['error']);
+}
+?>
 
 <body class="page">
     <div class="wrapper">
         <div class="spaceup">
+            <?php if ($error): ?>
+                <div class="error-message" style="color: red;">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
+
             <div class="main-sections">
                 <section>
                     <div class="hero">
@@ -29,7 +43,8 @@ if (isset($_SESSION['username'])) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" name="username" placeholder="Username" required></td>
+                                    <td><input type="text" name="username" placeholder="Username" required>
+                                </td>
                                 </tr>
                                 <tr>
                                     <td><input type="password" name="password" placeholder="Password" required></td>
@@ -38,22 +53,21 @@ if (isset($_SESSION['username'])) {
                                     <td><input type="email" name="email" placeholder="Email" required></td>
                                 </tr>
                                 <tr>
-                                    <td><p>&nbsp;Do you have an account? <a href="login.php">Login here!</a></p></td>
+                                    <td>
+                                        <p>&nbsp;Do you have an account? <a href="login.php">Login here!</a></p>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><br><br>
-                                </td>
+                                    <td><br><br></td>
                                 </tr>
                                 <tr>
                                     <td><button class="button2" type="submit" name="register">Sign Up</button></td>
                                 </tr>
-
                             </table>
                         </form>
                     </div>
                 </section>
             </div>
         </div>
-    </div>
     </div>
 </body>
