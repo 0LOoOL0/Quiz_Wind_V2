@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("update").addEventListener("click", function () {
-        document.querySelector(".popup-update").style.display = "flex";
-    });
-});
+// document.addEventListener("DOMContentLoaded", function () {
+//     document.getElementById("update").addEventListener("click", function () {
+//         document.querySelector(".popup-update").style.display = "flex";
+//     });
+// });
 
 
 //pop up update content
@@ -42,17 +42,17 @@ function closePopup() {
     }, 300); // Match the duration of the fade-out effect
 }
 //pop up delete content
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("delete").addEventListener("click", function () {
-        document.querySelector(".popup-delete").style.display = "flex";
-    });
-});
+// document.addEventListener("DOMContentLoaded", function () {
+//     document.getElementById("delete").addEventListener("click", function () {
+//         document.querySelector(".popup-delete").style.display = "flex";
+//     });
+// });
 
 // function to close the popup
 function closePopup() {
     document.querySelector(".popup-create").style.display = "none";
     document.querySelector(".popup-update").style.display = "none";
-    document.querySelector(".popup-delete").style.display = "none";
+    //document.querySelector(".popup-delete").style.display = "none";
 }
 
 //for 
@@ -71,3 +71,26 @@ function questionOption() {
         }
     });
 }
+
+
+
+
+function showUpdatePopup() {
+    // Show the update popup
+    document.querySelector('.popup-update').style.display = 'block';
+}
+
+function closePopup() {
+    // Hide the create popup
+    document.querySelector('.popup-create').style.display = 'none';
+    document.querySelector('.popup-update').style.display = 'none';
+
+}
+
+// Optional: Hide the popup when clicking outside of it
+window.onclick = function(event) {
+    const popup = document.querySelector('.popup-update');
+    if (event.target === popup) {
+        closePopup();
+    }
+};

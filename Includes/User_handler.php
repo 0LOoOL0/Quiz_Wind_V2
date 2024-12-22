@@ -120,30 +120,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['saved'])) {
     }
 }
 
+//edit users
+if (isset($_POST['updateUser'])) {
 
+    $userId = $_GET['user_id'];
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $role = $_POST['role'];
+    $password = trim($_POST['password']);
 
-// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
-//     $userId = intval($_POST['user_id']);
-//     $username = $_POST['edit_username'] ?? ''; // Ensure to retrieve the username
-//     $password = $_POST['password'] ?? null; // Password can be null if not provided
-    
-//     try {
-//         $user = new User($db);
-//         $user->setUserId($userId);
-//         $result = $user->editUser($useId, $username, $password);
+    if (empty($username) || empty($email) || empty($role)) {
+        $_SESSION['error'] = "Please fill in all required fields.";
+        header("Location: edit_user.php?user_id=" . urlencode($userId));
+        exit();
+    }
 
-//         if ($result) {
-//             // $_SESSION['message'] = 'User deleted successfully';
-//             header("Location: ../users_page.php");
-//             exit();
-//         } else {
-//             echo "Failed to delete user.";
-//         }
-//     } catch (Exception $ex) {
-//         echo "Error: " . htmlspecialchars($ex->getMessage());
-//     }
+    // Call the updateUser method
+    if ($user->updateUser($userId, $username, $email, $role, $password)) {
+        $_SESSION['success'] = "User updated successfully.";
+    } else {
+        $_SESSION['error'] = "Unable to update user. Please try again.";
+    }
 
-//     if (isset($_GET['message'])) {
-//         echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
-//     }
-// }
+    header("Location: users_page.php");
+    exit();
+}

@@ -234,6 +234,42 @@ private function isUserExists($value, $type)
         }
     }
 
+    public function resetUser($email, $newPassword)
+    {
+        // Check if the user exists
+        $user = $this->getUserByEmail($email);
+
+        if ($user) {
+            // Hash the new password
+             
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            // Update the password in the database
+            $sql = "UPDATE users SET password = :password WHERE email = :email";
+            $stmt = $this->db->queryStatement($sql, [
+                ':password' => $hashedPassword,
+                ':email' => $email
+            ]);
+
+            if ($stmt) {
+             session_start();
+                $_SESSION['message'] = "Password updated successfully.";
+                $_SESSION['message_type'] = "success"; // For styling
+                header("Location: ../login.php");
+                exit();
+                return true;
+            } else {
+                $_SESSION['message'] = "Failed to update password.";
+                $_SESSION['message_type'] = "error"; // For styling
+                return false;
+            }
+        } else {
+            $_SESSION['message'] = "Email not found.";
+            $_SESSION['message_type'] = "error"; // For styling
+            return false;
+        }
+    }
+
 
     function roleList()
     {
@@ -281,20 +317,56 @@ private function isUserExists($value, $type)
     //     return $this->db->queryStatement($sql, $params);
     // }
 
-    public function getUserById($userId)
-    {
-        // Prepare the SQL statement
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :user_id");
+    // public function getUserById($userId)
+    // {
+    //     // Prepare the SQL statement
+    //     $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :user_id");
 
-        // Bind the user ID parameter
-        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    //     // Bind the user ID parameter
+    //     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
 
-        // Execute the statement
-        $stmt->execute();
+    //     // Execute the statement
+    //     $stmt->execute();
 
-        // Fetch the user data as an associative array
+    //     // Fetch the user data as an associative array
+    //     return $stmt->fetch(PDO::FETCH_ASSOC);
+    // }
+
+    public function getUserById($userId) {
+        $sql = "SELECT users.*, roles.role_name FROM users JOIN roles ON users.role_id = roles.role_id WHERE users.user_id = :user_id";
+        $stmt = $this->db->queryStatement($sql,[':user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function updateUser($userId, $username, $email, $role, $password = null) {
+        // Prepare the update query
+        $sql = "UPDATE users SET username = :username, email = :email, role_id = :role_id";
+
+        // If password is provided, hash it and include it in the update
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $sql .= ", password = :password";
+        }
+
+        $sql .= " WHERE user_id = :user_id";
+
+        $stmt = $this->db->prepare($sql);
+
+        // Bind parameters
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':role_id', $role);
+        $stmt->bindParam(':user_id', $userId);
+
+        // Bind password if provided
+        if (!empty($password)) {
+            $stmt->bindParam(':password', $hashedPassword);
+        }
+
+        // Execute the update
+        return $stmt->execute();
+    }
+
 
     public function login($username, $password)
     {

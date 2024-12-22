@@ -145,18 +145,6 @@ if ($roleName === 'Teacher') {
                 }
                 ?>
 
-                <!-- <div class="sub-subjects">
-                    <div class='randomize'>
-                        <h2>Title</h2>
-                    </div>
-                    <div class="card-content">
-                        <h3>Description description description</h3>
-                        <div class="button-container">
-                            <button class="button2">View</button>
-                        </div>
-                    </div>
-                </div> -->
-
             </div>
         </section>
     </div>

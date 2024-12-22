@@ -1,15 +1,17 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'header.php';
 include 'Includes/User_handler.php';
 include 'Includes/Search.php';
 include 'Includes/auth.php';
 
 
-//$user = new User($db);
+$user = new User($db);
 
 $userId = $_SESSION['user_id'] ?? null;
-
 $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 
 // Clear the error message after it's displayed
@@ -69,8 +71,8 @@ if ($error) {
 
                     <!--This code will list all the roles from the database into options-->
                     <?php
-                    $role = new User($db);
-                    $roleList = $role->roleList();
+        
+                    $roleList = $user->roleList();
                     foreach ($roleList as $role) {
                         echo "<option value='" . $role['role_id'] . "'>" . $role['role_name'] . "</option>";
                     }
@@ -84,64 +86,13 @@ if ($error) {
     </div>
 </div>
 
-<div class="popup-update" style="display: none;">
-    <div class="popup-content">
-        <h3>Update User</h3>
-        <form action="Includes/User_handler.php" method="POST">
-            <div class="form-content">
-                <p>Username</p>
-                <input type="text" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
-                
-                <p>Password</p>
-                <input type="password" name="password" placeholder="Leave blank to keep current password">
-                
-                <p>Email</p>
-                <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-
-                <label for="Roles">Choose a Role:</label>
-                <select name="role" id="Roles" required>
-                    <option value="">Select Role....</option>
-                    <?php
-                    $role = new User($db);
-                    $roleList = $role->roleList();
-                    foreach ($roleList as $role) {
-                        $selected = ($role['role_id'] == $userData['role_id']) ? 'selected' : '';
-                        echo "<option value='" . htmlspecialchars($role['role_id']) . "' $selected>" . htmlspecialchars($role['role_name']) . "</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($userData['user_id']); ?>">
-            <button type="submit" class="button1" name='submitted'>Update</button>
-            <button type="button" class="button4" onclick="closePopup()">Cancel</button>
-        </form>
-    </div>
+<div class="popup-update">
+    
 </div>
-
-<script>
-function showUpdatePopup() {
-    // Show the update popup
-    document.querySelector('.popup-update').style.display = 'block';
-}
-
-function closePopup() {
-    // Hide the update popup
-    document.querySelector('.popup-update').style.display = 'none';
-}
-
-// Optional: Hide the popup when clicking outside of it
-window.onclick = function(event) {
-    const popup = document.querySelector('.popup-update');
-    if (event.target === popup) {
-        closePopup();
-    }
-};
-</script>
-
 
 <section class="content-head">
     <h1>
-        Select subject of your choosing
+        Users
     </h1>
 
 </section>
@@ -170,7 +121,7 @@ window.onclick = function(event) {
                 
                 <table>
                     <?php
-                    $user = new User($db);
+
                     $userList = $user->getUserList(); // Retrieve all users from the database
 
                     // Check if the user list is not empty
@@ -192,11 +143,14 @@ window.onclick = function(event) {
                                     <td>" . htmlspecialchars($user["created_at"]) . "</td>
                                     <td>" . htmlspecialchars($user["role_name"]) . "</td>
                                     <td style='display: flex;gap:10px'>
-                                    <form action='Includes/User_handler.php' method='post'>
+                                   
+                                <form action='Includes/edit_user.php' method='post'>
                                     <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
-                                        <button id='edit-button' class='button3' onclick='showUpdatePopup(" . htmlspecialchars($user["user_id"]) . ")'>Edit</button>
-                                    </form>    
-                                    <form action='Includes/User_handler.php' method='post'>
+                                    <button id='edit' class='button3'><a href='Includes/edit_user.php?user_id=" . htmlspecialchars($user["user_id"]) . "'>Edit</a></button>
+                                   
+                                    </form>
+                                    
+                                   <form action='Includes/User_handler.php' method='post'>
                                             <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
                                             <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</button>
                                         </form>
