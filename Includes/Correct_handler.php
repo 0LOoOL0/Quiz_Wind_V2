@@ -12,34 +12,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Prepare an array to store answers
     $answers = [];
-    $anySelected = false; // Flag to check if any radio button is selected
 
     // Loop through each question's answers
     foreach ($_POST['answers'] as $questionId => $answerData) {
-        if (!empty($answerData['selected_option_id'])) {
-            $selectedOptionId = htmlspecialchars($answerData['selected_option_id']);
-            $answers[] = [
-                'question_id' => $questionId,
-                'selected_option_id' => $selectedOptionId,
-            ];
-            $anySelected = true; // Mark that an option was selected
-        }
+        $selectedOptionId = htmlspecialchars($answerData['selected_option_id']);
+        
+        // Add to answers array
+        $answers[] = [
+            'question_id' => $questionId,
+            'selected_option_id' => $selectedOptionId,
+        ];
     }
 
     $answer = new Answer($db);
     $totalQuestions = $answer->countQuestionsByQuizId($quizId);
 
-    // Initialize percentageCorrect
-    $percentageCorrect = 0;
-
-    // Calculate the percentage only if questions exist
+    // If no questions are present, handle accordingly
     if ($totalQuestions > 0) {
-        if ($anySelected) {
-            // Calculate correct answers only if at least one option is selected
-            $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
-            $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
-        }
-        // If no options were selected, percentageCorrect remains 0
+        $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
+        $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
+    } else {
+        // If no questions exist, set percentage to 0 or handle as needed
+        $percentageCorrect = 0;
     }
 
     // Determine the attempt number

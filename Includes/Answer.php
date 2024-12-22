@@ -113,48 +113,78 @@ class Answer
         return $this;
     }
 
+    // public function saveAnswers($userId, $quizId, $answers)
+    // {
+    //     $sqlInsert = "INSERT INTO answers (question_id, selected_option_id, score, user_id, quiz_id) 
+    //                   VALUES (:question_id, :selected_option_id, :score, :user_id, :quiz_id)";
+
+    //     // Start a transaction
+    //     $this->db->beginTransaction();
+
+    //     try {
+    //         foreach ($answers as $answer) {
+    //             // Get the selected option ID
+    //             $selectedOptionId = $answer['selected_option_id'];
+    //             $questionId = $answer['question_id'];
+
+    //             // Retrieve if the selected option is correct and get the corresponding score
+    //             $sqlCheck = "SELECT is_correct, score FROM options 
+    //                          JOIN questions ON options.question_id = questions.question_id 
+    //                          WHERE options.option_id = :option_id AND questions.question_id = :question_id";
+
+    //             $stmt = $this->db->queryStatement($sqlCheck, [
+    //                 ':option_id' => $selectedOptionId,
+    //                 ':question_id' => $questionId
+    //             ]);
+
+    //             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    //             $score = 0.00;
+
+    //             if ($result) {
+    //                 // If the selected option is correct, use the defined score or the default score
+    //                 if ($result['is_correct']) {
+    //                     $score = $result['score'];
+    //                 }
+    //             }
+
+    //             // Add to answers array with the calculated score
+    //             try {
+    //                 $stmtInsert = $this->db->queryStatement($sqlInsert, [
+    //                     ':question_id' => $questionId,
+    //                     ':selected_option_id' => $selectedOptionId,
+    //                     ':score' => $score,
+    //                     ':user_id' => $userId,
+    //                     ':quiz_id' => $quizId
+    //                 ]);
+    //             } catch (Exception $e) {
+    //                 echo "Insert error: " . htmlspecialchars($e->getMessage());
+    //             }
+    //         }
+
+    //         // Commit the transaction
+    //         $this->db->commit();
+    //         return true;
+    //     } catch (Exception $e) {
+    //         // Rollback the transaction on error
+    //         $this->db->rollBack();
+    //         echo "Error: " . htmlspecialchars($e->getMessage());
+    //         return false;
+    //     }
+    // }
+
     public function saveAnswers($userId, $quizId, $answers)
     {
+        // Prepare the SQL for inserting answers
         $sqlInsert = "INSERT INTO answers (question_id, selected_option_id, score, user_id, quiz_id) 
-                      VALUES (:question_id, :selected_option_id, :score, :user_id, :quiz_id)";
+                  VALUES (:question_id, :selected_option_id, :score, :user_id, :quiz_id)";
 
         // Start a transaction
         $this->db->beginTransaction();
 
         try {
             foreach ($answers as $answer) {
-                // Get the selected option ID
-                $selectedOptionId = $answer['selected_option_id'];
-                $questionId = $answer['question_id'];
-
-                // Retrieve if the selected option is correct and get the corresponding score
-                $sqlCheck = "SELECT is_correct, score FROM options 
-                             JOIN questions ON options.question_id = questions.question_id 
-                             WHERE options.option_id = :option_id AND questions.question_id = :question_id";
-
-                $stmt = $this->db->queryStatement($sqlCheck, [
-                    ':option_id' => $selectedOptionId,
-                    ':question_id' => $questionId
-                ]);
-
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                $score = 0.00;
-
-                if ($result) {
-                    // If the selected option is correct, use the defined score or the default score
-                    if ($result['is_correct']) {
-                        $score = $result['score'];
-                    }
-                }
-
-                // Add to answers array with the calculated score
-                $stmtInsert = $this->db->queryStatement($sqlInsert, [
-                    ':question_id' => $questionId,
-                    ':selected_option_id' => $selectedOptionId,
-                    ':score' => $score,
-                    ':user_id' => $userId,
-                    ':quiz_id' => $quizId
-                ]);
+                // Process each answer
+                $this->processAnswer($userId, $quizId, $answer, $sqlInsert);
             }
 
             // Commit the transaction
@@ -163,10 +193,60 @@ class Answer
         } catch (Exception $e) {
             // Rollback the transaction on error
             $this->db->rollBack();
-            echo "Error: " . htmlspecialchars($e->getMessage());
+            echo "Transaction Error: " . htmlspecialchars($e->getMessage());
             return false;
         }
     }
+
+    private function processAnswer($userId, $quizId, $answer, $sqlInsert)
+    {
+        // Extract question ID and selected option ID
+        $selectedOptionId = $answer['selected_option_id'];
+        $questionId = $answer['question_id'];
+
+        // Get the score for the selected option
+        $score = $this->getScoreForAnswer($questionId, $selectedOptionId);
+
+        // Insert the answer into the database
+        $this->insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert);
+    }
+
+    private function getScoreForAnswer($questionId, $selectedOptionId)
+    {
+        $sqlCheck = "SELECT is_correct, score FROM options 
+                 JOIN questions ON options.question_id = questions.question_id 
+                 WHERE options.option_id = :option_id AND questions.question_id = :question_id";
+
+        $stmt = $this->db->queryStatement($sqlCheck, [
+            ':option_id' => $selectedOptionId,
+            ':question_id' => $questionId
+        ]);
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return ($result && $result['is_correct']) ? $result['score'] : 0.00;
+    }
+
+    private function insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert)
+    {
+        try {
+            $stmt = $this->db->queryStatement($sqlInsert, [
+                ':question_id' => $questionId,
+                ':selected_option_id' => $selectedOptionId,
+                ':score' => $score,
+                ':user_id' => $userId,
+                ':quiz_id' => $quizId
+            ]);
+
+            if ($stmt) {
+                echo "Inserted successfully for Question ID: $questionId<br>";
+            } else {
+                echo "Insert failed for Question ID: $questionId<br>";
+            }
+        } catch (Exception $e) {
+            echo "Insert Error: " . htmlspecialchars($e->getMessage());
+        }
+    }
+
 
     public function saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect)
     {
@@ -251,32 +331,32 @@ class Answer
     }
 
     // Function to calculate the total score based on provided answers
-    public function calculateTotalScore($answers)
-    {
-        $totalScore = 0.00;
+    // public function calculateTotalScore($answers)
+    // {
+    //     $totalScore = 0.00;
 
-        foreach ($answers as $answer) {
-            $selectedOptionId = $answer['selected_option_id'];
-            $questionId = $answer['question_id'];
+    //     foreach ($answers as $answer) {
+    //         $selectedOptionId = $answer['selected_option_id'];
+    //         $questionId = $answer['question_id'];
 
-            // Check if the selected option is correct
-            $sqlCheck = "SELECT is_correct, score FROM options 
-                         JOIN questions ON options.question_id = questions.question_id 
-                         WHERE options.option_id = :option_id AND questions.question_id = :question_id";
+    //         // Check if the selected option is correct
+    //         $sqlCheck = "SELECT is_correct, score FROM options 
+    //                      JOIN questions ON options.question_id = questions.question_id 
+    //                      WHERE options.option_id = :option_id AND questions.question_id = :question_id";
 
-            $stmt = $this->db->queryStatement($sqlCheck, [
-                ':option_id' => $selectedOptionId,
-                ':question_id' => $questionId
-            ]);
+    //         $stmt = $this->db->queryStatement($sqlCheck, [
+    //             ':option_id' => $selectedOptionId,
+    //             ':question_id' => $questionId
+    //         ]);
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result && $result['is_correct']) {
-                $totalScore += $result['score']; // Add score if the answer is correct
-            }
-        }
+    //         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    //         if ($result && $result['is_correct']) {
+    //             $totalScore += $result['score']; // Add score if the answer is correct
+    //         }
+    //     }
 
-        return $totalScore;
-    }
+    //     return $totalScore;
+    // }
 
     function allAttemptList($userId)
     {
@@ -312,38 +392,38 @@ class Answer
         }
     }
 
-    public function getAttemptDetails()
-    {
-        // Set the specific attempt ID
-        $attemptId = 25;
+    // public function getAttemptDetails()
+    // {
+    //     // Set the specific attempt ID
+    //     $attemptId = 25;
 
-        // Get total score for the specific attempt
-        $sqlScore = "SELECT total_score FROM attempts WHERE attempt_id = :attempt_id";
-        $stmtScore = $this->db->queryStatement($sqlScore, [':attempt_id' => $attemptId]);
+    //     // Get total score for the specific attempt
+    //     $sqlScore = "SELECT total_score FROM attempts WHERE attempt_id = :attempt_id";
+    //     $stmtScore = $this->db->queryStatement($sqlScore, [':attempt_id' => $attemptId]);
 
-        // Fetch the score
-        $score = $stmtScore->fetch(PDO::FETCH_ASSOC);
+    //     // Fetch the score
+    //     $score = $stmtScore->fetch(PDO::FETCH_ASSOC);
 
-        if ($score) {
-            echo "Total Score: " . $score['total_score'] . "\n";
-        } else {
-            echo "No score found for attempt ID: $attemptId.\n";
-        }
+    //     if ($score) {
+    //         echo "Total Score: " . $score['total_score'] . "\n";
+    //     } else {
+    //         echo "No score found for attempt ID: $attemptId.\n";
+    //     }
 
-        // Get the number of questions for the quiz
-        $quizId = 47; // Replace with the actual quiz ID you want to check
-        $sqlQuestions = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
-        $stmtQuestions = $this->db->queryStatement($sqlQuestions, [':quiz_id' => $quizId]);
+    //     // Get the number of questions for the quiz
+    //     $quizId = 47; // Replace with the actual quiz ID you want to check
+    //     $sqlQuestions = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
+    //     $stmtQuestions = $this->db->queryStatement($sqlQuestions, [':quiz_id' => $quizId]);
 
-        // Fetch the number of questions
-        $questionCount = $stmtQuestions->fetch(PDO::FETCH_ASSOC);
+    //     // Fetch the number of questions
+    //     $questionCount = $stmtQuestions->fetch(PDO::FETCH_ASSOC);
 
-        if ($questionCount) {
-            echo "Number of Questions in Quiz ID $quizId: " . $questionCount['question_count'] . "\n";
-        } else {
-            echo "No questions found for Quiz ID: $quizId.\n";
-        }
-    }
+    //     if ($questionCount) {
+    //         echo "Number of Questions in Quiz ID $quizId: " . $questionCount['question_count'] . "\n";
+    //     } else {
+    //         echo "No questions found for Quiz ID: $quizId.\n";
+    //     }
+    // }
 
     function getParticipant()
     {
@@ -365,6 +445,7 @@ class Answer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Teacher get participants by id
     function getParticipantById($quizId)
     {
         $sql = "SELECT q.*, a.total_score, u.username 
@@ -380,22 +461,20 @@ class Answer
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function countQuestionsByQuizId($quizId) {
-        // SQL query to count the number of questions for a specific quiz_id
+    //counting questions
+    public function countQuestionsByQuizId($quizId)
+    {
+
         $sql = "SELECT COUNT(*) AS question_count FROM questions WHERE quiz_id = :quiz_id";
-    
-        // Use your queryStatement method to prepare and execute the query
         $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
-    
-        // Fetch the result
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        // Return the count of questions
         return $result ? (int)$result['question_count'] : 0; // Return 0 if no result
     }
 
-    public function countCorrectOptionsByQuizId($quizId) {
-        // SQL query to count correct options for questions in a specific quiz
+    //counting only correct questions
+    public function countCorrectOptionsByQuizId($quizId)
+    {
+
         $sql = "SELECT COUNT(*) AS correct_option_count
             FROM questions q
             JOIN (
@@ -406,28 +485,11 @@ class Answer
             JOIN answers a ON latest_answers.question_id = a.question_id 
                 AND latest_answers.latest_answer_time = a.created_at
             JOIN options o ON a.selected_option_id = o.option_id
-            WHERE q.quiz_id = :quiz_id AND o.is_correct = 1"; // Check for is_correct = 1
-    
-        // Use your existing queryStatement method to execute the query
+            WHERE q.quiz_id = :quiz_id AND o.is_correct = 1";
+
         $stmt = $this->db->queryStatement($sql, [':quiz_id' => $quizId]);
-    
-        // Fetch the result
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        // Return the count of correct options, returning 0 if no result is found
+
         return $result ? (int)$result['correct_option_count'] : 0;
     }
-
-
-
-    // public function saveAnswer() {
-    //     $stmt = $this->db->prepare("INSERT INTO answers (question_id, selected_option_id, score, user_id) VALUES (:question_id, :selected_option_id, :score, :user_id)");
-    //     $stmt->execute([
-    //         'question_id' => $this->questionId,
-    //         'selected_option_id' => $this->selectedOptionId,
-    //         'score' => $this->score,
-    //         'user_id' => $this->userId
-    //     ]);
-    // }
-
 }
