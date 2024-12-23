@@ -2,7 +2,7 @@
 include 'header.php';
 ?>
 
-<body class="page10">
+<body>
     <div class="wrapper">
         <div class="container">
             <div class="spaceup">

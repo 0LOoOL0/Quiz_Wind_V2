@@ -85,11 +85,14 @@ if ($roleName === 'Teacher') {
     </div>
 </div>
 
+<div class="overlay">
 <section class="content-head">
     <h1>
         Subjects
     </h1>
 </section>
+</div>
+
 
 <div class="wrapper">
     <div class="container">

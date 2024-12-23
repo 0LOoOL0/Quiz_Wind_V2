@@ -238,23 +238,46 @@ body {
 .spaceup {
     padding-top: 200px;
 }
+.spaceup2 {
+    background-color: #2564ac;
+    padding-top: 200px;
+}
 
 .main-sections {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    display: grid; /* Use grid layout */
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    height:1000px;; 
 }
 
 .hero {
-    padding: 10px;
+    padding: 50px;
     width: 750px;
     font-size: 20px;
     margin-right: 200px;
+    color: white;
+}
+
+.back1 {
+    background-color: #2564ac85;
+    width: 100%;
+}
+.overlay {
+    display: flex;
+    justify-content: center;
+    background-image: url(Images/student2.jpg);
+    background-size: cover;
+    height: 100%;
+    background-color: #2564ac73;
+   
+}
+
+.back2 {
+    height: 100%;
+    background-color: #2564ac;
 }
 
 .hero h1 {
-    color: rgb(12, 126, 179);
+    /* color: rgb(12, 126, 179); */
     font-size: 3em;
     font-weight: bolder;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
@@ -263,6 +286,7 @@ body {
 }
 
 .hero h4 {
+    font-weight: lighter;
     transform: scale(0);
     animation: scaleUp 0.2s 2s forwards;
 }
@@ -374,12 +398,14 @@ body {
 }
 
 .content-head {
+    background-color: #2564ac;
     padding-top: 250px;
-    height: 300px;
+    height: 100%;
+    width: 100%;
     text-align: center;
     color: white;
-    background-image: url(Images/Page6.png);
-    background-size: 100%;
+    background-image: url(Images/student3.jpg);
+    background-size: cover;
     /* Stretch to cover entire area */
     background-repeat: no-repeat;
     /* Prevent repeating */
@@ -669,7 +695,7 @@ body {
     right: 150px;
     top: 150px;
     padding: 50px;
-    background-color: #00d9ff;
+    background-color: #2564ac;
     text-align: center;
     color: white;
     border-radius: 50%;
@@ -717,8 +743,9 @@ body {
 
 .question-card-options label {
     padding: 20px;
-    background-color: black;
-    color: white;
+    background-color: white;
+    border: 2px solid #2564ac; /* Change border width and color */
+    color: black;
     text-align: center;
     border-radius: 8px;
     cursor: pointer;
@@ -750,12 +777,12 @@ body {
 }
 
 input[type="radio"]:checked+label {
-    background-color: #00d9ff;
-    color: black;
+    background-color: #2564ac;
+    color: #e6f5ff;
 }
 
 .question-card-options label:hover {
-    background-color: gray;
+    background-color: #d3e3e9;
 }
 
 .question-card input[type="radio"] {

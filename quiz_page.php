@@ -82,7 +82,6 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 
                         <?php
 
-
                         $question = new Question($db);
                         $questionList = $question->listQuestion($quizId);
                         ?>

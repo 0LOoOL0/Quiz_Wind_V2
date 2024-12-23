@@ -4,6 +4,12 @@ include 'header.php';
 
 include 'Includes/User_handler.php';
 
+if (isset($_SESSION['username'])) {
+    header("Location: user_logout.php");
+    exit();
+}
+
+
 $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']); // Clear the error message after display
 ?>

@@ -13,7 +13,9 @@ $roleName = $_SESSION['role_name'] ?? null;
 // echo "Role ID: " . htmlspecialchars($_SESSION['role_id']) . "<br>";
 // echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
 
-
+if ($_SESSION['role_name'] !== 'Teacher') {
+    die("Access denied."); // Or redirect to a different page
+}
 ?>
 
 

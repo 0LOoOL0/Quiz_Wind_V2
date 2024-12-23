@@ -7,6 +7,10 @@ include 'Includes/Quiz_handler.php';
 $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 $userId = $_SESSION['user_id'] ?? null;
 
+if ($_SESSION['role_name'] !== 'Teacher') {
+    die("Access denied."); // Or redirect to a different page
+}
+
 $result = new Quiz($db);
 $highestScore = $result->highScore($quizId);
 $lowestScore = $result->lowScore($quizId);
