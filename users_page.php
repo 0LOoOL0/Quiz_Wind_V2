@@ -54,7 +54,11 @@ if ($error) {
 
 <!--admin create user-->
 <div class="popup-create">
+
+
     <div class="popup-content">
+
+    
         <h3>Create new User</h3>
         <form action="Includes/User_handler.php" method="POST">
             <div class="form-content">
@@ -86,9 +90,6 @@ if ($error) {
     </div>
 </div>
 
-<div class="popup-update">
-    
-</div>
 
 <section class="content-head">
     <h1>

@@ -38,10 +38,10 @@ function userHasPermission($roleName, $action)
 <div class="popup-create">
     <div class="popup-content">
         <h3>Create new Chapter</h3>
-        <form action="Includes/Chapter_handler.php?subject_id=<?= htmlspecialchars($subject_id) ?>" method="post">
+        <form action="Includes/Chapter_handler.php?subject_id=<?= htmlspecialchars($subjectId) ?>" method="post">
             <div class="form-content">
                 <p>Chapter Name</p>
-                <input type="hidden" name="subject_id" value="<?= htmlspecialchars($subject_id) ?>">
+                <input type="hidden" name="subject_id" value="<?= htmlspecialchars($subjectId) ?>">
                 <input type="text" id="chapter_title" name="chapter_title" required>
             </div>
             <button type="submit" class="button1" name='submitted'>Add</button>
@@ -124,6 +124,7 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                             if (userHasPermission($roleName, 'delete')) {
                                 echo "<form action='Includes/delete_quiz.php' method='post'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
+                                        <input type='text' name='chapter_id' value='" . htmlspecialchars($quiz["chapter_id"]) . "' />
                                         
                                         <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
                                         
