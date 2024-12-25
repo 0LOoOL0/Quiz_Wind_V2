@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
     
     $subject_id = $_POST['subject_id'] ?? null;
     try {
-        // Initialize quiz object
+        
         $quiz = new Quiz($db);
         $quiz->setQuizTitle($_POST['quiz_title']);
         $quiz->setQuizText($_POST['quiz_text']); 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
         $newQuizId = $quiz->createQuiz($_POST['subject_id']);
 
         if ($newQuizId) {
-            // Initialize obtained score
+            
             $totalObtainedScore = 0; 
             
             // Check if questions are provided
@@ -47,22 +47,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add-quiz'])) {
                         $question->setQuizId($newQuizId);
                         $questionId = $question->createQuestion();
 
-                        // Check if question was created successfully
+                       
                         if ($questionId) {
                             $totalObtainedScore += $questionData['score'];
                             
-                            // Handle options if provided
+                            // Handle options
                             if (isset($questionData['options']) && is_array($questionData['options'])) {
                                 foreach ($questionData['options'] as $optionData) {
                                     if (!empty($optionData['option_text'])) {
                                         $option = new Option($db);
                                         $option->setOptionText($optionData['option_text']);
-                                        $option->setQuestionId($questionId); // Link option to question
+                                        $option->setQuestionId($questionId);
 
                                         // Check if the option is correct
                                         $option->setIsCorrect(isset($optionData['is_correct']) ? (bool)$optionData['is_correct'] : false);
                                         
-                                        $option->createOption(); // Save the option
+                                        $option->createOption(); 
                                     }
                                 }
                             }

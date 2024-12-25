@@ -51,9 +51,11 @@ if ($roleName === 'Teacher') {
                 <label for="Teachers">Choose a Teacher:</label>
 
                 <label>Select Teacher(s):</label><br>
+                <div class= "scroll">
                 <?php foreach ($teacherList as $teacher): ?>
                     <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
                 <?php endforeach; ?>
+                </div>
 
             </div>
             <button type="submit" class="button1" name='submitted'>Add</button>
@@ -62,41 +64,58 @@ if ($roleName === 'Teacher') {
     </div>
 </div>
 
+
 <div class="popup-update">
     <div class="popup-content">
-        <h1>Create new Subject</h1>
+        <h1>Create New Subject</h1>
         <form action="Includes/Subject_handler.php" method="POST">
             <div class="form-content">
-                <p>Subject name</p>
-                <input type="text" name="subject_name" required>
-                <p>Description</p>
-                <input type="text" name="subject_text" required>
-                <label for="Teachers">Choose a Teacher:</label>
-                <label>Select Teacher(s):</label><br>
 
-                <?php foreach ($teacherList as $teacher): ?>
-                    <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
-                <?php endforeach; ?>
+                <?php
+                $assignmentId = 2;
+
+                $assignment = new Subject($db);
+                $assignmentDetails = $assignment->getSubjectsDetails($assignmentId);
+
+                // Check if details were retrieved successfully
+                if ($assignmentDetails) {
+                    echo '<p>Subject Name:</p>
+                          <input type="hidden" name="subject_id" value="' . htmlspecialchars($assignmentDetails["subject_id"]) . '" />
+                          <input type="text" name="subject_name" value="' . htmlspecialchars($assignmentDetails['subject_name']) . '" required>
+                          <p>Description:</p>
+                          <input type="text" name="subject_text" value="' . htmlspecialchars($assignmentDetails['subject_text']) . '" required>';
+                } else {
+                    echo '<p>No details found for this assignment.</p>';
+                }
+                ?>
+
+                <label for="teachers">Choose a Teacher:</label><br>
+                <div class= "scroll">
+                    <?php foreach ($teacherList as $teacher): ?>
+                        <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>" id="teacher_<?= $teacher['user_id'] ?>">
+                        <label for="teacher_<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?></label><br>
+                    <?php endforeach; ?>
+                </div>
 
             </div>
-            <button type="submit" class="button1" name='update'>update</button>
-            <button type="button" class="button4" onclick="closePopup()">cancel</button>
+            <button type="submit" class="button1" name='update'>Update</button>
+            <button type="button" class="button4" onclick="closePopup()">Cancel</button>
         </form>
     </div>
 </div>
 
-<div class="overlay">
-<section class="content-head">
-    <h1>
-        Subjects
-    </h1>
-</section>
+<div class="overlay2">
+    <section class="content-head3">
+        <h1>
+            Subjects
+        </h1>
+    </section>
 </div>
 
 
 <div class="wrapper">
     <div class="container">
-        
+
         <?php
         if (userHasPermission($roleName, 'create')) {
             echo "<div class='centering'>
@@ -113,6 +132,7 @@ if ($roleName === 'Teacher') {
             <div class="subjects">
 
                 <?php
+
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
@@ -128,8 +148,9 @@ if ($roleName === 'Teacher') {
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
-                            echo "<button id = 'update' class='button3' style='margin-left: 10px;'>Edit</button>";
+                            echo "<button id = 'update' class='button3' value='" .  htmlspecialchars($subject["subject_id"]) . "' style='margin-left: 10px;'>Edit</button>";
                         }
+
 
                         // Form to delete the subject (only if user has permission)
                         if (userHasPermission($roleName, 'delete')) {

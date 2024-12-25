@@ -55,7 +55,7 @@ $percentageCorrect = ((float)$correctQuestions / (float)$totalQuestions) * 100;
                             <?php
                             $attemptCount = new Attempt($db);
                             $attemptCounts = $attemptCount->countAttempts($userId, $quizId);
-                            echo "<h2>Number of Attempts: " . htmlspecialchars($attemptCounts) . "</h2>"; // Use $attemptCounts to get the count
+                            echo "<h2>Number of Attempts: " . htmlspecialchars($attemptCounts) . "</h2>";
                             ?>
 
                         </div>

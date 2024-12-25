@@ -43,6 +43,7 @@ if ($error) {
 
         <section class='back2'>
             <div class="content-register">
+            <img src="Images/LogoQuiz.png" class='herologo' alt="quiz wind">
                 <form action="Includes/User_handler.php" method="post">
                     <table>
                         <tr>

@@ -165,6 +165,19 @@ function getAssignedSubjects($userId)
         return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the subject details
     }
 
+    // for editing get details first
+    function getSubjectsDetails($assignmentId) {
+        $sql = "SELECT a.*, u.username, s.subject_name , s.subject_text
+        FROM subject_assignments a
+        JOIN users u ON a.user_id = u.user_id 
+        JOIN subjects s ON a.subject_id = s.subject_id 
+        WHERE a.assignment_id = :assignment_id";
+                $stmt = $this->db->queryStatement($sql, [':assignment_id' => $assignmentId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
     // display all users with teacher role on table
     public function teacherList()
     {

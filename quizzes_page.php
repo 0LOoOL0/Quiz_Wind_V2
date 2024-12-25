@@ -13,6 +13,7 @@ $quiz = new Quiz($db);
 $quizByChapters = $quiz->getQuizzesByChapter($chapterId);
 
 $subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : 0;
+$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 
 if ($subjectId <= 0) {
     echo "Invalid subject ID.";
@@ -50,12 +51,14 @@ function userHasPermission($roleName, $action)
     </div>
 </div>
 
-<section class="content-head">
+<div class="overlay2">
+<section class="content-head3">
     <h1><?= $subjectName ?></h1>
 </section>
+</div>
 
 <?php
-$subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
+
 ?>
 
 <div class="wrapper">
@@ -124,7 +127,6 @@ $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
                             if (userHasPermission($roleName, 'delete')) {
                                 echo "<form action='Includes/delete_quiz.php' method='post'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
-                                        <input type='text' name='chapter_id' value='" . htmlspecialchars($quiz["chapter_id"]) . "' />
                                         
                                         <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
                                         

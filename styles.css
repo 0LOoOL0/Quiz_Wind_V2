@@ -224,6 +224,14 @@ nav li {
     height: 80px;
 }
 
+.herologo {
+    margin: 0px;
+    text-shadow: #000000;
+    border-radius: 20px;
+    padding: 0px;
+    height: 100px;
+}
+
 /*Main page*/
 .wrapper {
     width: 1800px;
@@ -270,6 +278,17 @@ body {
     background-color: #2564ac73;
    
 }
+
+.overlay2 {
+    display: flex;
+    justify-content: center;
+    background-image: url(Images/student3.jpg);
+    background-size: cover;
+    height: 100%;
+    background-color: #2564ac73;
+   
+}
+
 
 .back2 {
     height: 100%;
@@ -411,6 +430,19 @@ body {
     /* Prevent repeating */
 }
 
+.content-head3 {
+    background-color: #2564ac88;
+    padding-top: 250px;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background-size: cover;
+    /* Stretch to cover entire area */
+    background-repeat: no-repeat;
+    /* Prevent repeating */
+}
+
 .content-head2 {
     padding-top: 250px;
     height: 300px;
@@ -423,12 +455,10 @@ body {
     /* Prevent repeating */
 }
 
-.content-head h1 {
-    color: #2564ac;
-    padding-top: 130px;
+.content-head3 h1 {
+    color: white;
     font-size: 50px;
     font-weight: bolder;
-    text-shadow: 3px 3px 3px rgb(255, 255, 255);
     opacity: 0;
     transform: translateY(-20px);
     animation: fadeSlideDown 0.5s 1s forwards;
@@ -1288,7 +1318,6 @@ input[type="radio"]:checked+label {
     height: 50px;
     font-size: 18px;
     padding: 10px;
-    width: 600px;
     box-sizing: border-box;
 }
 
@@ -1367,4 +1396,12 @@ input[type="radio"]:checked+label {
     padding: 40px;
     margin: 20px 0;
     border-radius: 20px;
+}
+
+.scroll {
+    max-height: 150px;
+    width: 600px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
 }

@@ -142,22 +142,20 @@ class Question
     //     ];
     // }
     public function listQuestion($quizId) {
-        // SQL query to fetch questions and their associated options
+        
         $sql = "SELECT q.question_id AS question_id, q.question_text, o.option_id AS option_id, o.option_text
                 FROM questions q
                 LEFT JOIN options o ON q.question_id = o.question_id WHERE q.quiz_id = :quiz_id";
     
-        // Prepare the statement
+  
         $stmt = $this->db->prepare($sql);
-        
-        // Bind the quiz_id parameter
+       
         $stmt->bindParam(':quiz_id', $quizId, PDO::PARAM_INT);
         
-        // Execute the query
+     
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-        // Organize the results into a structured array
         $questionList = [];
         foreach ($results as $row) {
             // Initialize question if it doesn't exist
@@ -169,7 +167,6 @@ class Question
                 ];
             }
             
-            // Add option only if it exists
             if ($row['option_id'] !== null) {
                 $questionList[$row['question_id']]['optionList'][] = [
                     'id' => $row['option_id'],

@@ -5,11 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// document.addEventListener("DOMContentLoaded", function () {
-//     document.getElementById("update").addEventListener("click", function () {
-//         document.querySelector(".popup-update").style.display = "flex";
-//     });
-// });
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("update").addEventListener("click", function () {
+        document.querySelector(".popup-update").style.display = "flex";
+    });
+});
+
+
 
 
 //pop up update content

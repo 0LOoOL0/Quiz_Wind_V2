@@ -141,8 +141,9 @@ class Quiz
         }
     }
 
+    //teacher creating quiz
     public function createQuiz($subjectId) {
-        // Ensure required properties are set
+     
         if (empty($this->quizTitle) || empty($this->chapterId) || empty($subjectId)) {
             throw new Exception("Quiz title, chapter ID, and subject ID must be set.");
         }
@@ -150,9 +151,8 @@ class Quiz
         try {
             $sql = "INSERT INTO quizzes (quiz_title, quiz_text, chapter_id, created_by, timer, subject_id, user_id) 
                     VALUES (:quiz_title, :quiz_text, :chapter_id, :created_by, :timer, :subject_id, :user_id)";
-            $createdByValue = $this->createdBy ?: null; // Null if not set
+            $createdByValue = $this->createdBy ?: null; 
     
-            // Prepare and execute the statement
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
                 ':quiz_title' => $this->quizTitle,
@@ -160,11 +160,11 @@ class Quiz
                 ':chapter_id' => $this->chapterId,
                 ':created_by' => $createdByValue,
                 ':timer' => $this->timer,
-                ':subject_id' => $subjectId, // Use the passed subjectId
-                ':user_id' => $this->userId // Use the passed subjectId
+                ':subject_id' => $subjectId, 
+                ':user_id' => $this->userId
             ]);
     
-            // Return the ID of the newly created quiz
+           
             return $this->db->getConnection()->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Database error: " . $e->getMessage());
