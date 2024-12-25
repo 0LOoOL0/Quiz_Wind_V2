@@ -140,7 +140,7 @@ if ($roleName === 'Teacher') {
                                 <h1>" . htmlspecialchars($subject['subject_name']) . "</h1>     
                             </div>
                             <div class='card-content'>
-                                <h3>" . htmlspecialchars($subject['subject_text']) . "</h3>
+                                <h4>" . htmlspecialchars($subject['subject_text']) . "</h4>
                                 <div class='button-container'>";
 
                         // Button to view the subject

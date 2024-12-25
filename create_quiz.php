@@ -11,11 +11,14 @@ $userId = $_SESSION['user_id'] ?? null;
 
 <script type="text/javascript" src="script.js"></script>
 
-<section>
-    <div class="content-head">
-        <h1>Create New Quiz</h1>
-    </div>
-</section>
+
+<div class="overlay2">
+    <section class="content-head3">
+        <h1>
+            Create new Quiz for <?= $subjectName ?>
+        </h1>
+    </section>
+</div>
 
 <div class="wrapper">
     <div class="container">
@@ -84,7 +87,7 @@ $userId = $_SESSION['user_id'] ?? null;
                 </form>
             </div>
 
-            <form id="yourFormId">
+            <!-- <form id="yourFormId">
                 <label for="quiz_title">Quiz Title:</label>
                 <input type="text" id="quiz_title" name="quiz_title" value="<?php echo htmlspecialchars($quizData['quiz_title']); ?>" readonly>
 
@@ -97,7 +100,7 @@ $userId = $_SESSION['user_id'] ?? null;
                 <div id="questions_container"></div>
 
                 <button type="submit">Submit Quiz</button>
-            </form>
+            </form> -->
 
             <script>
                 document.getElementById('question_count').addEventListener('change', function() {
@@ -169,17 +172,6 @@ $userId = $_SESSION['user_id'] ?? null;
                     }
                 });
             </script>
-
-            <!-- <div class="question-card" style="width:60%">
-                <h1>question</h1>
-                <div class="question-card-created">
-                    <label for="option1">Short</label>
-                    <label for="option2">Medium Length</label>
-                    <label for="option3">This is a Considerably Longer Option This is a Considerably Longer Option</label>
-                    <label for="option4">Another Option</label>
-                </div>
-                <button class="button4" style="width: 70%; margin-top:20px;">Remove</button>
-            </div> -->
 
         </div>
 

@@ -90,7 +90,7 @@ function userHasPermission($roleName, $action)
                                         echo "<form action='Includes/delete_chapter.php' method='post'>
                                         <input type='hidden' name='chapter_id' value='" . htmlspecialchars($chapter["chapter_id"]) . "' />
                                         <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
-                                        <button type='submit' class='button3' onclick='return confirm(\"Are you sure you want to delete this chapter?\");'>X</button>
+                                        <button type='submit' class='button6' onclick='return confirm(\"Are you sure you want to delete this chapter?\");'>X</button>
                                   </form>";
                                         }
                                         echo "</li>
@@ -107,6 +107,7 @@ function userHasPermission($roleName, $action)
 
                 <div class="quizzes">
                     <?php
+                    
                     $quizList = $quiz->quizList($subjectId);
 
                     if (!empty($quizList)) {
@@ -127,7 +128,6 @@ function userHasPermission($roleName, $action)
                             if (userHasPermission($roleName, 'delete')) {
                                 echo "<form action='Includes/delete_quiz.php' method='post'>
                                         <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
-                                        
                                         <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
                                         
                                         <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this quiz?\");'>Delete</button>
@@ -139,7 +139,7 @@ function userHasPermission($roleName, $action)
                             echo "</div>"; // Close sub-quiz div
                         }
                     } else {
-                        echo "0 Results";
+                        echo "this subject has no quiz, create one!";
                     }
 
                     ?>

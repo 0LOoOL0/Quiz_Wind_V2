@@ -161,10 +161,12 @@ nav ul li:hover {
 }
 
 .button3:hover {
-    background: #e6f7ff; /* Optional: change background on hover for effect */
+    background-color: #d3e3e9;
+    cursor: pointer;
 }
 
-.button3:hover {
+
+.button4:hover {
     background-color: #d3e3e9;
     cursor: pointer;
 }
@@ -205,6 +207,24 @@ nav ul li:hover {
     align-items: center;
     font-size: 20px;
     transition: background-color 0.3s;
+}
+
+.button6 {
+    width: auto;
+    font-size: 15px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 2px solid #2564ac; /* Change border width and color */
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    margin: 5px 0;
+    padding: 10px 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer; /* Optional: change cursor to pointer on hover */
+}
+
+.button6:hover {
+    background: #e6f7ff; /* Optional: change background on hover for effect */
 }
 
 .crud-button {
@@ -580,6 +600,7 @@ body {
 }
 
 .crud-quiz {
+    margin-top: 30px;;
     display: flex;
     justify-content: end;
     gap: 10px;
@@ -613,9 +634,9 @@ body {
 
 
 .sub-chapter {
-    width: 300px;
+    width: 350px;
     background: rgb(255, 255, 255);
-    padding: 20px;
+    padding: 10px;
     border-radius: 20px;
     margin-top: 0;
     box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
@@ -632,14 +653,18 @@ body {
     list-style: none;
     height: auto;
     width: auto;
-    padding: 30px;
+    padding: 15px;
     background-color: #e6f5ff;
-    box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2); */
     margin: 15px;
     font-weight: bold;
     font-size: 20px;
     border-radius: 10px;
     text-align: center;
+    border: 1px solid #2564ac;
+    /* display: flex;
+    justify-content: space-evenly;
+    align-items: center; */
 }
 
 .sub-chapter li:hover {
