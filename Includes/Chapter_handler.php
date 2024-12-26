@@ -67,10 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chapter_id'])) {
     }
 }
 
-// Display any messages passed via the URL
-if (isset($_GET['message'])) {
-    echo "<p style='color: green;'>" . htmlspecialchars($_GET['message']) . "</p>";
-}
 
 
 ?>

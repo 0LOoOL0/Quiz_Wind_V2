@@ -34,6 +34,32 @@ function userHasPermission($roleName, $action)
 }
 ?>
 
+<script>
+function displayChapterDetails(chapterId) {
+    var xhr = new XMLHttpRequest();
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Display the response in the designated div
+            document.getElementById('chapter-details').innerHTML = xhr.responseText;
+
+            // Hide the quiz list when chapter details are displayed
+            document.getElementById('quiz-list').style.display = 'none'; // Assuming the quiz list has this ID
+        } else {
+            console.error("Error fetching chapter details:", xhr.status, xhr.statusText);
+            document.getElementById('chapter-details').innerHTML = "Error fetching chapter details: " + xhr.status + " " + xhr.statusText;
+        }
+    };
+
+    // Open a POST request to fetch chapter details
+    xhr.open('POST', 'Includes/get_chapter.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    // Send the chapter_id in the request body
+    xhr.send('chapter_id=' + encodeURIComponent(chapterId));
+}
+</script>
+
 <script type="text/javascript" src="script.js"></script>
 
 <div class="popup-create">
@@ -52,9 +78,9 @@ function userHasPermission($roleName, $action)
 </div>
 
 <div class="overlay2">
-<section class="content-head3">
-    <h1><?= $subjectName ?></h1>
-</section>
+    <section class="content-head3">
+        <h1><?= $subjectName ?></h1>
+    </section>
 </div>
 
 <?php
@@ -64,7 +90,7 @@ function userHasPermission($roleName, $action)
 <div class="wrapper">
     <div class="container">
         <section class="content-body">
-            
+
             <div class="crud-quiz">
                 <button class="button3" id="add">Add Chapter</button>
                 <button class="button3">
@@ -76,38 +102,51 @@ function userHasPermission($roleName, $action)
                 <div class="chapters">
                     <div class="sub-chapter">
                         <ul>
-                            <?php
+                        <?php
 
-                            $chapter = new Chapter($db);
-                            $chapterList = $chapter->getChaptersBySubject($subjectId);
+                                $chapter = new Chapter($db);
+                                $chapterList = $chapter->getChaptersBySubject($subjectId);
 
-                            if (!empty($chapterList)) {
-                                foreach ($chapterList as $chapter) {
-                                    // Display chapter title
-                                    echo "<div id='chapterList'>
-                                        <li class='buttonQuiz'>" . htmlspecialchars($chapter['chapter_title']) . "";
+                                // Display the list of chapters
+                                if (!empty($chapterList)) {
+                                    foreach ($chapterList as $chapterItem) {
+                                        $chapterId = htmlspecialchars($chapterItem['chapter_id']);
+                                        $chapterTitle = htmlspecialchars($chapterItem['chapter_title']);
+                                        
+                                        // Button for displaying chapter details
+                                        echo "<div id='chapterList'>
+                                            <li class='buttonQuiz' onclick='displayChapterDetails($chapterId)'>$chapterTitle"; // Use onclick to call JavaScript
+                                        
                                         if (userHasPermission($roleName, 'delete')) {
-                                        echo "<form action='Includes/delete_chapter.php' method='post'>
-                                        <input type='hidden' name='chapter_id' value='" . htmlspecialchars($chapter["chapter_id"]) . "' />
-                                        <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
-                                        <button type='submit' class='button6' onclick='return confirm(\"Are you sure you want to delete this chapter?\");'>X</button>
-                                  </form>";
+                                            echo "<form action='Includes/delete_chapter.php' method='post' style='display:inline;'>
+                                                <input type='hidden' name='chapter_id' value='" . htmlspecialchars($chapterId) . "' />
+                                                <input type='hidden' name='subject_id' value='" . htmlspecialchars($subjectId) . "' />
+                                                <button type='submit' class='button6' onclick='return confirm(\"Are you sure you want to delete this chapter?\");'>X</button>
+                                            </form>";
                                         }
-                                        echo "</li>
-                                    </div>";
+                                        
+                                        echo "</li></div>";
+                                    }
+                                } else {
+                                    echo "No chapters found for this subject.";
                                 }
-                            } else {
-                                echo "No chapters found for this subject.";
-                            }
 
-                            ?>
+                                // Place to display chapter details
+                                
+
+                                ?>
                         </ul>
                     </div>
                 </div>
 
                 <div class="quizzes">
+
                     <?php
+
+                    echo "<div id='chapter-details' class='chapter-details'></div>";
+
                     
+
                     $quizList = $quiz->quizList($subjectId);
 
                     if (!empty($quizList)) {

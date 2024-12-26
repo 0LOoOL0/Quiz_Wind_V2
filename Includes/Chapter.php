@@ -116,5 +116,15 @@ class Chapter
         return $stmt->rowCount() > 0; 
     }
 
+    public function getChapterDetail($chapterId) {
+        $sql = "SELECT c.chapter_title, c.chapter_id, q.quiz_title, q.quiz_text, q.quiz_id 
+            FROM chapters c
+            JOIN quizzes q ON c.chapter_id = q.chapter_id
+            WHERE c.chapter_id = :chapter_id";
+        $stmt = $this->db->queryStatement($sql, [':chapter_id' => $chapterId]);
+        
+        // Fetch a single record instead of all
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
