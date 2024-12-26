@@ -96,3 +96,52 @@ window.onclick = function(event) {
         closePopup();
     }
 };
+
+
+//for edit user new
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all edit buttons
+    const editButtons = document.querySelectorAll(".edit-button");
+
+    // Attach click event handler to each button
+    editButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const userId = this.getAttribute("data-user-id");
+            // Show the popup for editing
+            document.querySelector(".popup-update").style.display = "flex";
+
+            // Optionally, load user data into the popup here
+            loadUserData(userId);
+        });
+    });
+});
+
+//edit subject
+function loadSubjectData(userId) {
+    // Implement logic to fetch user data by userId
+    // For example, you might want to send an AJAX request to get user details
+    alert("Load data for user ID: " + userId);
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all edit buttons
+    const editButtons = document.querySelectorAll('.edit-button');
+
+    // Attach click event handler to each button
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            //const userId = this.getAttribute('data-subject-id');
+            // Open your edit popup/modal here
+            // For example:
+            openEditPopup(subjectId);
+        });
+    });
+});
+
+// Example function to open the edit popup
+function openEditPopup(subjectId) {
+    // Logic to open the popup and load user data
+    alert('Edit user with ID: ' + subjectId);
+    // You can implement a modal or populate a form with user data here
+}

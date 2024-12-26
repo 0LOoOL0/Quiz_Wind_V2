@@ -1278,6 +1278,7 @@ input[type="radio"]:checked+label {
     padding: 20px;
     border-radius: 10px;
     z-index: 1001;
+    width:50%;
 }
 
 .popup-content table {
@@ -1289,17 +1290,18 @@ input[type="radio"]:checked+label {
     height: 40px;
     margin: 10px;
     border-radius: 5px;
-    width: 95%;
+    width: 100%;
     font-size: 20px;
 }
 
 
 .popup-content select {
-    height: 45px;
-    width: auto;
-    margin: 5px 0px;
+    height: 50px;
+    margin: 10px;
     border-radius: 10px;
     font-size: 20px;
+    width:100%;
+    border: 1px solid black;
 }
 
 /*for creating quiz*/
@@ -1431,7 +1433,7 @@ input[type="radio"]:checked+label {
 
 .scroll {
     max-height: 150px;
-    width: 600px;
+
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;

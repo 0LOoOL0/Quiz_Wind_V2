@@ -148,7 +148,8 @@ if ($roleName === 'Teacher') {
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {
-                            echo "<button id = 'update' class='button3' value='" .  htmlspecialchars($subject["subject_id"]) . "' style='margin-left: 10px;'>Edit</button>";
+                            echo "<input type='hidden' name='subject_id' value='" . htmlspecialchars($subject["subject_id"]) . "' />
+                            <button class ='edit-button button3' data-subject-id='" .  htmlspecialchars($subject["subject_id"]) . "' style='margin-left: 10px;'>Edit</button>";
                         }
 
 
