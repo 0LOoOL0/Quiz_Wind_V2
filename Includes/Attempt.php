@@ -92,7 +92,7 @@ class Attempt {
         ]);
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['attempt_count'];
+        return $result['attempt_number'];
     }
 
     // Function to save a new attempt
@@ -109,31 +109,31 @@ class Attempt {
     }
 
     // Function to calculate the total score based on provided answers
-    public function calculateTotalScore($answers) {
-        $totalScore = 0.00;
+    // public function calculateTotalScore($answers) {
+    //     $totalScore = 0.00;
 
-        foreach ($answers as $answer) {
-            $selectedOptionId = $answer['selected_option_id'];
-            $questionId = $answer['question_id'];
+    //     foreach ($answers as $answer) {
+    //         $selectedOptionId = $answer['selected_option_id'];
+    //         $questionId = $answer['question_id'];
 
-            // Check if the selected option is correct
-            $sqlCheck = "SELECT is_correct, score FROM options 
-                         JOIN questions ON options.question_id = questions.question_id 
-                         WHERE options.option_id = :option_id AND questions.question_id = :question_id";
+    //         // Check if the selected option is correct
+    //         $sqlCheck = "SELECT is_correct, score FROM options 
+    //                      JOIN questions ON options.question_id = questions.question_id 
+    //                      WHERE options.option_id = :option_id AND questions.question_id = :question_id";
             
-            $stmt = $this->db->queryStatement($sqlCheck, [
-                ':option_id' => $selectedOptionId,
-                ':question_id' => $questionId
-            ]);
+    //         $stmt = $this->db->queryStatement($sqlCheck, [
+    //             ':option_id' => $selectedOptionId,
+    //             ':question_id' => $questionId
+    //         ]);
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result && $result['is_correct']) {
-                $totalScore += $result['score']; // Add score if the answer is correct
-            }
-        }
+    //         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    //         if ($result && $result['is_correct']) {
+    //             $totalScore += $result['score']; // Add score if the answer is correct
+    //         }
+    //     }
 
-        return $totalScore;
-    }
+    //     return $totalScore;
+    // }
 
     public function countAttempts($userId, $quizId) {
         $sql = "SELECT COUNT(*) AS attempt_count 
@@ -146,6 +146,12 @@ class Attempt {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
         return $result['attempt_count'];
+    }
+
+    public function hasUserAlreadySubmitted($userId, $quizId) {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM attempts WHERE user_id = :user_id AND quiz_id = :quiz_id");
+        $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
+        return $stmt->fetchColumn() > 0; // Returns true if there are any submissions
     }
 
 }

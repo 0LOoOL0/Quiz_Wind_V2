@@ -87,47 +87,28 @@ if ($error) {
     </div>
 </div>
 
-<div class="popup-update">
+<!-- Popup Structure -->
+<div class="popup-update"  style="display: none;">
     <div class="popup-content">
-        <h3>Create new User</h3>
-        <form action="Includes/edit_user.php" method="POST">
+        <h3>Edit User</h3>
+        <form action="Includes/edit_user.php" method="POST" id="edit-user-form">
             <div class="form-content">
+                <p>Username</p>
+                <input type="text" name="username" id="username" required>
+                
+                <p>Password</p>
+                <input type="password" name="password" placeholder="">
+                
+                <p>Email</p>
+                <input type="email" name="email" id="email" disabled>
 
-                <?php
-                $userDetail = new User($db);
-
-                $userId = 2;
-                $detail = $userDetail->getUserById($userId);
-
-                if (!empty($detail)) {
-                    echo '<p>Username</p>
-                    <input type="text" name="username" value="' . htmlspecialchars($detail['username']) . '" required>
-                    <p>Password</p>
-                    <input type="password" name="password" placeholder="">
-                    
-                    <p>Email</p>
-                    <input type="email" name="email" value="' . htmlspecialchars($detail['email']) . '" disabled>
-
-                    <label for="Roles">Choose a Role:</label>
-                    <select name="role" id="Roles" disabled>
-                    <option value="">Select Role....</option>';
-
-                    // Fetching role list and populating the dropdown
-                    $roleList = $user->roleList();
-                    foreach ($roleList as $roleItem) {
-                        $selected = ($roleItem['role_id'] == $detail['role_id']) ? 'selected' : '';
-                        echo "<option value='" . htmlspecialchars($roleItem['role_id']) . "' $selected>" . htmlspecialchars($roleItem['role_name']) . "</option>";
-                    }
-
-                    echo '</select>';
-                } else {
-                    echo '<p>no user</p>';
-                }
-                ?>
+                <p>Role</p>
+                <input type="text" name="role_name" id="role_name" disabled>
                 
             </div>
+            <input type="hidden" name="user_id" id="user_id">
             <button type="submit" class="button1" name='submitted'>Update</button>
-            <button type="button" class="button4" onclick="closePopup()">cancel</button>
+            <button type="button" class="button4" onclick="closePopup()">Cancel</button>
         </form>
     </div>
 </div>
@@ -167,12 +148,11 @@ if ($error) {
             <div class="users-table">
 
                 <table>
-                    <?php
-
+                <?php
                     $userList = $user->getUserList(); // Retrieve all users from the database
 
                     if (!empty($userList)) {
-                        echo "<table>";
+                        echo "<table id='user-table'>";
                         echo "<tr>
                                     <th>Username</th>
                                     <th>Email</th>
@@ -182,14 +162,12 @@ if ($error) {
                                 </tr>";
 
                         foreach ($userList as $user) {
-                            echo "<tr>
-                                        <td>" . htmlspecialchars($user["username"]) . "</td>
-                                        <td>" . htmlspecialchars($user["email"]) . "</td>
-                                        <td>" . htmlspecialchars($user["created_at"]) . "</td>
-                                        <td>" . htmlspecialchars($user["role_name"]) . "</td>
+                            echo "<tr data-user-id='" . htmlspecialchars($user["user_id"]) . "'>
+                                        <td class='username'>" . htmlspecialchars($user["username"]) . "</td>
+                                        <td class='email'>" . htmlspecialchars($user["email"]) . "</td>
+                                        <td class='created_at'>" . htmlspecialchars($user["created_at"]) . "</td>
+                                        <td class='role_name'>" . htmlspecialchars($user["role_name"]) . "</td>
                                         <td style='display: flex; gap: 10px'>
-                                            
-                                            <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
                                             <button class='edit-button button3' data-user-id='" . htmlspecialchars($user["user_id"]) . "'>Edit</button>
                                             
                                             <form action='Includes/User_handler.php' method='post'>
@@ -203,13 +181,40 @@ if ($error) {
                     } else {
                         echo "<p>No results found.</p>";
                     }
-
-                    // <form action='Includes/edit_user.php' method='post'>
-                    //     <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
-                    //     <button id='edit' class='button3'><a href='Includes/edit_user.php?user_id=" . htmlspecialchars($user["user_id"]) . "'>Edit</a></button>
-
-                    //     </form>
                     ?>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const editButtons = document.querySelectorAll('.edit-button');
+
+                            editButtons.forEach(button => {
+                                button.addEventListener('click', function() {
+                                    const userId = this.getAttribute('data-user-id');
+                                    fetch(`Includes/get_user.php?user_id=${userId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data) {
+                                                // Populate form fields
+                                                document.getElementById('username').value = data.username;
+                                                document.getElementById('email').value = data.email;
+                                                document.getElementById('user_id').value = data.user_id;
+
+                                                // Set the role in the disabled text input
+                                                document.getElementById('role_name').value = data.role_name; // Assuming role_name is returned
+
+                                                // Also set the role ID in the hidden input
+                                                document.getElementById('role').value = data.role_id;
+
+                                                // Show popup
+                                                document.getElementById('popup-update').style.display = 'flex';
+                                            }
+                                        })
+                                        .catch(error => console.error('Error fetching user details:', error));
+                                });
+                            });
+                        });
+
+                    </script>
+
                 </table>
             </div>
         </div>

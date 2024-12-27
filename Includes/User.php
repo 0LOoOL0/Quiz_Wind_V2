@@ -290,82 +290,42 @@ private function isUserExists($value, $type)
         return $stmt->execute();
     }
 
-    // public function editUser($userId, $username, $password = null)
-    // {
-    //     // Start building the SQL query
-    //     $sql = "UPDATE users SET username = :username";
 
-    //     // Add password conditionally if provided
-    //     if (!empty($password)) {
-    //         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    //         $sql .= ", password = :password"; // Include password in the update
-    //     }
-
-    //     $sql .= " WHERE user_id = :user_id"; // Add the WHERE clause
-
-    //     // Prepare and execute the statement using queryStatement
-    //     $params = [
-    //         ':username' => $username,
-    //         ':user_id' => $userId
-    //     ];
-
-    //     if (!empty($password)) {
-    //         $params[':password'] = $hashedPassword;
-    //     }
-
-    //     // Execute the query
-    //     return $this->db->queryStatement($sql, $params);
-    // }
-
-    // public function getUserById($userId)
-    // {
-    //     // Prepare the SQL statement
-    //     $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :user_id");
-
-    //     // Bind the user ID parameter
-    //     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-
-    //     // Execute the statement
-    //     $stmt->execute();
-
-    //     // Fetch the user data as an associative array
-    //     return $stmt->fetch(PDO::FETCH_ASSOC);
-    // }
-
+    //populate users detail in edit form
     public function getUserById($userId) {
-        $sql = "SELECT users.*, roles.role_name FROM users JOIN roles ON users.role_id = roles.role_id WHERE users.user_id = :user_id";
+        $sql = "SELECT users.*, roles.* FROM users JOIN roles ON users.role_id = roles.role_id WHERE users.user_id = :user_id";
         $stmt = $this->db->queryStatement($sql,[':user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($userId, $username, $email, $role, $password = null) {
-        // Prepare the update query
-        $sql = "UPDATE users SET username = :username, email = :email, role_id = :role_id";
+    // public function updateUser($userId, $username, $email, $role, $password = null) {
+    //     // Prepare the update query
+    //     $sql = "UPDATE users SET username = :username, email = :email, role_id = :role_id";
 
-        // If password is provided, hash it and include it in the update
-        if (!empty($password)) {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $sql .= ", password = :password";
-        }
+    //     // If password is provided, hash it and include it in the update
+    //     if (!empty($password)) {
+    //         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    //         $sql .= ", password = :password";
+    //     }
 
-        $sql .= " WHERE user_id = :user_id";
+    //     $sql .= " WHERE user_id = :user_id";
 
-        $stmt = $this->db->prepare($sql);
+    //     $stmt = $this->db->prepare($sql);
 
-        // Bind parameters
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':role_id', $role);
-        $stmt->bindParam(':user_id', $userId);
+    //     // Bind parameters
+    //     $stmt->bindParam(':username', $username);
+    //     $stmt->bindParam(':email', $email);
+    //     $stmt->bindParam(':role_id', $role);
+    //     $stmt->bindParam(':user_id', $userId);
 
-        // Bind password if provided
-        if (!empty($password)) {
-            $stmt->bindParam(':password', $hashedPassword);
-        }
+    //     // Bind password if provided
+    //     if (!empty($password)) {
+    //         $stmt->bindParam(':password', $hashedPassword);
+    //     }
 
-        // Execute the update
-        return $stmt->execute();
-    }
+    //     // Execute the update
+    //     return $stmt->execute();
+    // }
 
 
     public function login($username, $password)
@@ -406,5 +366,24 @@ private function isUserExists($value, $type)
         $sql = "SELECT username, email FROM users WHERE user_id = :user_id";
         $stmt = $this->db->queryStatement($sql, [[':user_id' => $userId]]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUser($userId, $username, $password) {
+        try {
+            // Hash the password before storing it
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+            $sql = "UPDATE users SET username = :username, password = :password WHERE user_id = :user_id";
+            $stmt = $this->db->queryStatement($sql, [
+                ':username' => $username,
+                ':password' => $hashedPassword,
+                ':user_id' => $userId
+            ]);
+    
+            return $stmt ? $stmt->rowCount() : false; // Check if the statement was successful
+        } catch (Exception $e) {
+            // Handle any additional exceptions
+            return false;
+        }
     }
 }

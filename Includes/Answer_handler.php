@@ -3,7 +3,7 @@
 require_once 'Answer.php'; // Include your Answer class
 require_once 'Attempt.php'; // Include your Attempt class
 
-$quizAttemptManager = new Answer($db);
+$quizAttemptManager = new Attempt($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve user ID and quiz ID from the POST data
@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Calculate the percentage only if questions exist
     if ($totalQuestions > 0) {
         if ($anySelected) {
-            // Calculate correct answers only if at least one option is selected
+            // Calculate correct ansers only if at lest one option is selcted
             $correctQuestions = $answer->countCorrectOptionsByQuizId($quizId);
             $percentageCorrect = ((double)$correctQuestions / (double)$totalQuestions) * 100;
         }
         // If no options were selected, percentageCorrect remains 0
     }
 
-    // Determine the attempt number
+    //attempts
     $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
 
     // Save the new attempt
