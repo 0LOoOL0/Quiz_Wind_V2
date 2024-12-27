@@ -97,7 +97,7 @@ if ($error) {
                 <input type="text" name="username" id="username" required>
                 
                 <p>Password</p>
-                <input type="password" name="password" placeholder="">
+                <input type="password" name="new_password" placeholder="">
                 
                 <p>Email</p>
                 <input type="email" name="email" id="email" disabled>
@@ -107,7 +107,7 @@ if ($error) {
                 
             </div>
             <input type="hidden" name="user_id" id="user_id">
-            <button type="submit" class="button1" name='submitted'>Update</button>
+            <button type="submit" class="button1" name='updated'>Update</button>
             <button type="button" class="button4" onclick="closePopup()">Cancel</button>
         </form>
     </div>

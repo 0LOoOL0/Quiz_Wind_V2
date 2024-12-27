@@ -17,4 +17,6 @@ if (isset($_GET['user_id'])) {
 } else {
     echo json_encode(null);
 }
+
+
 ?>

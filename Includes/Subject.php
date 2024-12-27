@@ -83,69 +83,49 @@ class Subject
         return $this;
     }
 
-    //outdated:
-    // function createSubject()
-    // {
-    //     if ($this->subjectName && $this->subjectText) {
+    function createSubject()
+    {
+        if ($this->subjectName && $this->subjectText) {
+            // Step 1: Insert the new subject
+            $sql = "INSERT INTO subjects (subject_name, subject_text, created_by) VALUES (:subject_name, :subject_text, :created_by)";
 
-    //         $sql = "INSERT INTO subjects (subject_name, subject_text, assigned_to) VALUES (:subject_name, :subject_text, :assigned_to)";
-    //         $assignedToValue = $this->assignTo ? $this->assignTo : null;
+            $this->db->queryStatement($sql, [
+                ':subject_name' => $this->subjectName,
+                ':subject_text' => $this->subjectText,
+                ':created_by' => $this->createdBy // Assuming you have a createdBy property
+            ]);
 
-    //         $this->db->queryStatement($sql, [
-    //             ':subject_name' => $this->subjectName,
-    //             ':subject_text' => $this->subjectText,
-    //             ':assigned_to' => $assignedToValue
-    //         ]);
+            $subjectId = $this->db->getConnection()->lastInsertId(); // Get the newly created subject ID
 
-    //         return $this->db->getConnection()->lastInsertId(); // Correct method call
-    //     } else {
-    //         throw new Exception("Must set values for subject name and description.");
-    //     }
-    // }
-
-    function createSubject() 
-{
-    if ($this->subjectName && $this->subjectText) {
-        // Step 1: Insert the new subject
-        $sql = "INSERT INTO subjects (subject_name, subject_text, created_by) VALUES (:subject_name, :subject_text, :created_by)";
-        
-        $this->db->queryStatement($sql, [
-            ':subject_name' => $this->subjectName,
-            ':subject_text' => $this->subjectText,
-            ':created_by' => $this->createdBy // Assuming you have a createdBy property
-        ]);
-
-        $subjectId = $this->db->getConnection()->lastInsertId(); // Get the newly created subject ID
-
-        // Step 2: Assign teachers if any are provided
-        if (!empty($this->assignTo) && is_array($this->assignTo)) {
-            $stmt = $this->db->getConnection()->prepare("INSERT INTO subject_assignments (subject_id, user_id) VALUES (:subject_id, :user_id)");
-            foreach ($this->assignTo as $userId) {
-                $stmt->execute([
-                    ':subject_id' => $subjectId,
-                    ':user_id' => $userId
-                ]);
+            // Step 2: Assign teachers if any are provided
+            if (!empty($this->assignTo) && is_array($this->assignTo)) {
+                $stmt = $this->db->getConnection()->prepare("INSERT INTO subject_assignments (subject_id, user_id) VALUES (:subject_id, :user_id)");
+                foreach ($this->assignTo as $userId) {
+                    $stmt->execute([
+                        ':subject_id' => $subjectId,
+                        ':user_id' => $userId
+                    ]);
+                }
             }
+
+            return $subjectId; // Return the new subject ID
+        } else {
+            throw new Exception("Must set values for subject name and description.");
         }
-
-        return $subjectId; // Return the new subject ID
-    } else {
-        throw new Exception("Must set values for subject name and description.");
     }
-}
 
-function getAssignedSubjects($userId)
-{
-    $sql = "SELECT s.subject_id, s.subject_name, s.subject_text
+    function getAssignedSubjects($userId)
+    {
+        $sql = "SELECT s.subject_id, s.subject_name, s.subject_text
             FROM subjects s
             JOIN subject_assignments sa ON s.subject_id = sa.subject_id
             WHERE sa.user_id = :user_id";
-    
-    $stmt = $this->db->getConnection()->prepare($sql);
-    $stmt->execute([':user_id' => $userId]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an associative array
-}
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute([':user_id' => $userId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all results as an associative array
+    }
 
     function getSubjectList()
     {
@@ -158,21 +138,32 @@ function getAssignedSubjects($userId)
         }
     }
 
-    public function getSubjectById($subject_id) {
+    public function getSubjectById($subjectId)
+    {
         $sql = "SELECT * FROM subjects WHERE subject_id = :subject_id LIMIT 1"; // Adjust table name as necessary
         $stmt = $this->db->getConnection()->prepare($sql);
-        $stmt->execute([':subject_id' => $subject_id]);
+        $stmt->execute([':subject_id' => $subjectId]);
         return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch the subject details
     }
 
+    
+    //populate users detail in edit form
+    public function getSubjectsDetailById($subjectId) {
+        $sql = "SELECT * FROM subjects WHERE subject_id = :subject_id";
+        $stmt = $this->db->queryStatement($sql,[':subject_id' => $subjectId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
     // for editing get details first
-    function getSubjectsDetails($assignmentId) {
+    function getSubjectsDetails($assignmentId)
+    {
         $sql = "SELECT a.*, u.username, s.subject_name , s.subject_text
         FROM subject_assignments a
         JOIN users u ON a.user_id = u.user_id 
         JOIN subjects s ON a.subject_id = s.subject_id 
         WHERE a.assignment_id = :assignment_id";
-                $stmt = $this->db->queryStatement($sql, [':assignment_id' => $assignmentId]);
+        $stmt = $this->db->queryStatement($sql, [':assignment_id' => $assignmentId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -206,5 +197,46 @@ function getAssignedSubjects($userId)
         $stmt = $this->db->prepare("DELETE FROM subjects WHERE subject_id = :subject_id");
         $stmt->bindParam(':subject_id', $this->subjectId);
         return $stmt->execute();
+    }
+
+    //update infromation
+    public function updateSubject($subjectId, $subjectName, $subjectDescription) {
+        // SQL update query
+        $sql = "UPDATE subjects 
+                SET subject_name = :subject_name, subject_text = :subject_text 
+                WHERE subject_id = :subject_id";
+    
+        // Prepare the statement
+        $stmt = $this->db->prepare($sql);
+    
+        // Bind parameters
+        $stmt->bindParam(':subject_name', $subjectName);
+        $stmt->bindParam(':subject_text', $subjectDescription);
+        $stmt->bindParam(':subject_id', $subjectId, PDO::PARAM_INT);
+    
+        // Execute the statement and check success
+        if ($stmt->execute()) {
+            return ['success' => true, 'message' => 'Subject updated successfully.'];
+        } else {
+            return ['success' => false, 'message' => 'Failed to update subject.'];
+        }
+    }
+
+    public function updateAssignedTeachers($subjectId, $assignedTeachers) {
+        
+        $sql = "DELETE FROM subject_assignments WHERE subject_id = :subject_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':subject_id', $subjectId, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        // Now insert the new assignments
+        $sql = "INSERT INTO subject_assignments (subject_id, user_id) VALUES (:subject_id, :user_id)";
+        $stmt = $this->db->prepare($sql);
+        
+        foreach ($assignedTeachers as $teacherId) {
+            $stmt->bindParam(':subject_id', $subjectId, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $teacherId, PDO::PARAM_INT);
+            $stmt->execute();
+        }
     }
 }

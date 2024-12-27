@@ -83,96 +83,96 @@ class User
     }
 
     public function registerUser()
-{
-    // Check if all required fields are set
-    if (!$this->username || !$this->password || !$this->email) {
-        throw new Exception("Username, password, and email must be set.");
+    {
+        // Check if all required fields are set
+        if (!$this->username || !$this->password || !$this->email) {
+            throw new Exception("Username, password, and email must be set.");
+        }
+
+        // Check if the username already exists
+        if ($this->isUserExists($this->username, 'username')) {
+            session_start();
+            $_SESSION['error'] = "Username already exists.";
+            header("Location: ../main.php");
+            exit();
+        }
+
+        // Check if the email already exists
+        if ($this->isUserExists($this->email, 'email')) {
+            session_start();
+            $_SESSION['error'] = "Email already exists.";
+            header("Location: ../main.php");
+            exit();
+        }
+
+        // Hash the password
+        $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
+        $roleId = 3; // Default role ID
+
+        // Prepare SQL statement to prevent SQL injection
+        $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
+
+        // Execute the prepared statement
+        $this->db->queryStatement($sql, [
+            ':username' => $this->username,
+            ':email' => $this->email,
+            ':password' => $hashPass,
+            ':role_id' => $roleId
+        ]);
+
+        // Return the last inserted ID
+        return $this->db->getConnection()->lastInsertId();
     }
 
-    // Check if the username already exists
-    if ($this->isUserExists($this->username, 'username')) {
-        session_start();
-        $_SESSION['error'] = "Username already exists.";
-        header("Location: ../main.php");
-        exit();
+    private function isUserExists($value, $type)
+    {
+        // Prepare SQL to check for existing username or email
+        $column = ($type === 'username') ? 'username' : 'email';
+        $sql = "SELECT COUNT(*) FROM users WHERE $column = :value";
+
+        // Execute the prepared statement
+        $stmt = $this->db->queryStatement($sql, [':value' => $value]);
+
+        // Fetch the count
+        $count = $stmt->fetchColumn();
+
+        // Return true if user exists, false otherwise
+        return $count > 0;
     }
-
-    // Check if the email already exists
-    if ($this->isUserExists($this->email, 'email')) {
-        session_start();
-        $_SESSION['error'] = "Email already exists.";
-        header("Location: ../main.php");
-        exit();
-    }
-
-    // Hash the password
-    $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
-    $roleId = 3; // Default role ID
-
-    // Prepare SQL statement to prevent SQL injection
-    $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
-
-    // Execute the prepared statement
-    $this->db->queryStatement($sql, [
-        ':username' => $this->username,
-        ':email' => $this->email,
-        ':password' => $hashPass,
-        ':role_id' => $roleId
-    ]);
-
-    // Return the last inserted ID
-    return $this->db->getConnection()->lastInsertId();
-}
-
-private function isUserExists($value, $type)
-{
-    // Prepare SQL to check for existing username or email
-    $column = ($type === 'username') ? 'username' : 'email';
-    $sql = "SELECT COUNT(*) FROM users WHERE $column = :value";
-
-    // Execute the prepared statement
-    $stmt = $this->db->queryStatement($sql, [':value' => $value]);
-
-    // Fetch the count
-    $count = $stmt->fetchColumn();
-
-    // Return true if user exists, false otherwise
-    return $count > 0;
-}
 
     // this one is for admin creating account for users and assigning roles to them
     public function createUser()
-{
-    // Ensure required fields are set
-    if (!$this->username || !$this->password || !$this->email || !$this->roleId) {
-        throw new Exception("Username, password, email, and role ID must be set.");
+    {
+        // Ensure required fields are set
+        if (!$this->username || !$this->password || !$this->email || !$this->roleId) {
+            throw new Exception("Username, password, email, and role ID must be set.");
+        }
+
+        // Check if the username or email already exists
+        if ($this->isUserExists($this->username, $this->email)) {
+            session_start();
+            $_SESSION['error'] = "Username or email already exists.";
+            header("Location: ../Users_page.php");
+            exit();
+        }
+
+        // Hash the password
+        $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
+
+        // Prepare SQL statement to prevent SQL injection
+        $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
+
+        // Execute the prepared statement
+        $this->db->queryStatement($sql, [
+            ':username' => $this->username,
+            ':email' => $this->email,
+            ':password' => $hashPass,
+            ':role_id' => $this->roleId
+        ]);
+
+        // Return the last inserted ID
+        return $this->db->getConnection()->lastInsertId();
     }
-
-    // Check if the username or email already exists
-    if ($this->isUserExists($this->username, $this->email)) {
-        session_start();
-        $_SESSION['error'] = "Username or email already exists.";
-        header("Location: ../Users_page.php");
-        exit();
-    }
-
-    // Hash the password
-    $hashPass = password_hash($this->password, PASSWORD_DEFAULT);
-    
-    // Prepare SQL statement to prevent SQL injection
-    $sql = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
-
-    // Execute the prepared statement
-    $this->db->queryStatement($sql, [
-        ':username' => $this->username,
-        ':email' => $this->email,
-        ':password' => $hashPass,
-        ':role_id' => $this->roleId
-    ]);
-
-    // Return the last inserted ID
-    return $this->db->getConnection()->lastInsertId();
-}
 
     function getUserList()
     {
@@ -216,7 +216,7 @@ private function isUserExists($value, $type)
             ]);
 
             if ($stmt) {
-             session_start();
+                session_start();
                 $_SESSION['message'] = "Password updated successfully.";
                 $_SESSION['message_type'] = "success"; // For styling
                 header("Location: ../login.php");
@@ -241,7 +241,7 @@ private function isUserExists($value, $type)
 
         if ($user) {
             // Hash the new password
-             
+
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
             // Update the password in the database
@@ -252,7 +252,7 @@ private function isUserExists($value, $type)
             ]);
 
             if ($stmt) {
-             session_start();
+                session_start();
                 $_SESSION['message'] = "Password updated successfully.";
                 $_SESSION['message_type'] = "success"; // For styling
                 header("Location: ../login.php");
@@ -270,6 +270,35 @@ private function isUserExists($value, $type)
         }
     }
 
+    //edit users in user form
+    public function changeUserDetail($userId, $newUsername, $newPassword = null)
+    {
+        $sql = "UPDATE users SET username = :username";
+
+        if (!empty($newPassword)) {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $sql .= ", password = :password";
+        }
+
+        $sql .= " WHERE user_id = :user_id";
+
+        // Prepare parameters
+        $params = [':username' => $newUsername, ':user_id' => $userId];
+
+        if (!empty($newPassword)) {
+            $params[':password'] = $hashedPassword;
+        }
+
+        // Execute the query using the queryStatement method
+        $stmt = $this->db->queryStatement($sql, $params);
+
+        // Check if the update was successful
+        if ($stmt->rowCount() > 0) {
+            return ['success' => true];
+        } else {
+            return ['success' => false, 'message' => 'Failed to update user.'];
+        }
+    }
 
     function roleList()
     {
@@ -291,10 +320,12 @@ private function isUserExists($value, $type)
     }
 
 
+
     //populate users detail in edit form
-    public function getUserById($userId) {
+    public function getUserById($userId)
+    {
         $sql = "SELECT users.*, roles.* FROM users JOIN roles ON users.role_id = roles.role_id WHERE users.user_id = :user_id";
-        $stmt = $this->db->queryStatement($sql,[':user_id' => $userId]);
+        $stmt = $this->db->queryStatement($sql, [':user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -368,18 +399,19 @@ private function isUserExists($value, $type)
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($userId, $username, $password) {
+    public function updateUser($userId, $username, $password)
+    {
         try {
             // Hash the password before storing it
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
+
             $sql = "UPDATE users SET username = :username, password = :password WHERE user_id = :user_id";
             $stmt = $this->db->queryStatement($sql, [
                 ':username' => $username,
                 ':password' => $hashedPassword,
                 ':user_id' => $userId
             ]);
-    
+
             return $stmt ? $stmt->rowCount() : false; // Check if the statement was successful
         } catch (Exception $e) {
             // Handle any additional exceptions

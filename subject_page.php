@@ -44,17 +44,17 @@ if ($roleName === 'Teacher') {
         <h1>Create new Subject</h1>
         <form action="Includes/Subject_handler.php" method="POST">
             <div class="form-content">
+
                 <p>Subject name</p>
                 <input type="text" name="subject_name" required>
                 <p>Description</p>
                 <input type="text" name="subject_text" required>
-                <label for="Teachers">Choose a Teacher:</label>
 
                 <label>Select Teacher(s):</label><br>
-                <div class= "scroll">
-                <?php foreach ($teacherList as $teacher): ?>
-                    <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
-                <?php endforeach; ?>
+                <div class="scroll">
+                    <?php foreach ($teacherList as $teacher): ?>
+                        <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
+                    <?php endforeach; ?>
                 </div>
 
             </div>
@@ -64,45 +64,30 @@ if ($roleName === 'Teacher') {
     </div>
 </div>
 
-
-<div class="popup-update">
+<div class="popup-update" style="display:none;">
     <div class="popup-content">
-        <h1>Create New Subject</h1>
-        <form action="Includes/Subject_handler.php" method="POST">
+        <h1>Update Subject</h1>
+        <form action="Includes/get_subject.php" method="POST" id="edit_subject_form">
             <div class="form-content">
-
-                <?php
-                $assignmentId = 2;
-
-                $assignment = new Subject($db);
-                $assignmentDetails = $assignment->getSubjectsDetails($assignmentId);
-
-                // Check if details were retrieved successfully
-                if ($assignmentDetails) {
-                    echo '<p>Subject Name:</p>
-                          <input type="hidden" name="subject_id" value="' . htmlspecialchars($assignmentDetails["subject_id"]) . '" />
-                          <input type="text" name="subject_name" value="' . htmlspecialchars($assignmentDetails['subject_name']) . '" required>
-                          <p>Description:</p>
-                          <input type="text" name="subject_text" value="' . htmlspecialchars($assignmentDetails['subject_text']) . '" required>';
-                } else {
-                    echo '<p>No details found for this assignment.</p>';
-                }
-                ?>
-
-                <label for="teachers">Choose a Teacher:</label><br>
-                <div class= "scroll">
+                <p>Subject name</p>
+                <input type="text" name="subject_name" id="subject_name" required>
+                <p>Description</p>
+                <input type="text" name="subject_text" id="subject_text" required>
+                <label>Select Teacher(s):</label><br>
+                <div class="scroll">
                     <?php foreach ($teacherList as $teacher): ?>
-                        <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>" id="teacher_<?= $teacher['user_id'] ?>">
-                        <label for="teacher_<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?></label><br>
+                        <input type="checkbox" name="assigned_to[]" value="<?= $teacher['user_id'] ?>"><?= htmlspecialchars($teacher['username']) ?><br>
                     <?php endforeach; ?>
                 </div>
-
             </div>
-            <button type="submit" class="button1" name='update'>Update</button>
+            <input type="hidden" name="subject_id" id="subject_id"> <!-- Ensure ID is correct -->
+            <button type="submit" class="button1" name='updated'>Update</button>
             <button type="button" class="button4" onclick="closePopup()">Cancel</button>
         </form>
     </div>
 </div>
+
+
 
 <div class="overlay2">
     <section class="content-head3">
@@ -132,7 +117,6 @@ if ($roleName === 'Teacher') {
             <div class="subjects">
 
                 <?php
-
                 if (!empty($subjectList)) {
                     foreach ($subjectList as $subject) {
                         echo "<div class='sub-subjects'>
@@ -174,3 +158,36 @@ if ($roleName === 'Teacher') {
         </section>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editButtons = document.querySelectorAll('.edit-button');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const subjectId = this.getAttribute('data-subject-id');
+                fetch(`Includes/get_subject.php?subject_id=${subjectId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data) {
+                            // Populate form fields
+                            document.getElementById('subject_name').value = data.subject_name;
+                            document.getElementById('subject_text').value = data.subject_text;
+                            document.getElementById('subject_id').value = data.subject_id;
+
+                            // Populate assigned teachers
+                            const assignedTeachers = data.assigned_to || []; // Array of assigned teacher IDs
+                            const checkboxes = document.querySelectorAll('input[name="assigned_to[]"]');
+
+                            checkboxes.forEach(checkbox => {
+                                checkbox.checked = assignedTeachers.includes(checkbox.value);
+                            });
+
+                            // Show popup
+                            document.querySelector('.popup-update').style.display = 'flex';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching subject details:', error));
+            });
+        });
+    });
+</script>
