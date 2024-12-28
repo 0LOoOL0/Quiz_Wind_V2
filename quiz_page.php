@@ -5,12 +5,10 @@ include 'Includes/Quiz_handler.php';
 include 'Includes/Answer_handler.php';
 
 $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
-
 ?>
 
 <body class="">
     <div class="content-timer">
-
         <?php
         $timer = new Question($db);
         $getTimer = $timer->quizTimer($quizId); // Fetch the timer data
@@ -19,69 +17,111 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
             foreach ($getTimer as $row) { // Iterate over the results
                 // Assume the timer is in 'HH:MM:SS' format
                 $timerValue = $row['timer'];
-                echo "<h1 id='quiz-timer' data-timer='$timerValue'>" . $timerValue . "</h1>";
+                echo "<h1 id='quiz-timer' data-timer='$timerValue'>" . htmlspecialchars($timerValue) . "</h1>";
             }
         } else {
             echo "No Timer";
         }
         ?>
-
     </div>
 
     <script>
-        // Function to start countdown
-        function startCountdown(duration) {
-            var timerDisplay = document.getElementById('quiz-timer');
-            var timerParts = duration.split(':');
-            var totalSeconds = (+timerParts[0]) * 60 * 60 + (+timerParts[1]) * 60 + (+timerParts[2]);
+    // Function to start countdown
+    function startCountdown(duration) {
+        var timerDisplay = document.getElementById('quiz-timer');
+        var timerParts = duration.split(':');
+        var totalSeconds = (+timerParts[0]) * 3600 + (+timerParts[1]) * 60 + (+timerParts[2]);
 
-            var countdown = setInterval(function() {
-                var hours = Math.floor(totalSeconds / 3600);
-                var minutes = Math.floor((totalSeconds % 3600) / 60);
-                var seconds = totalSeconds % 60;
-
-                // Format the time
-                timerDisplay.textContent = (hours < 10 ? '0' : '') + hours + ':' +
-                    (minutes < 10 ? '0' : '') + minutes + ':' +
-                    (seconds < 10 ? '0' : '') + seconds;
-
-                // Decrease totalSeconds by 1
-                totalSeconds--;
-
-                // Stop the countdown when it reaches zero
-                if (totalSeconds < 0) {
-                    clearInterval(countdown);
-                    timerDisplay.textContent = "Time's up!";
-                    document.getElementById('quiz-form').submit(); // Automatically submit the form
-                }
-            }, 1000);
+        // Check localStorage for remaining time
+        var remainingTime = localStorage.getItem('remainingTime');
+        if (remainingTime) {
+            totalSeconds = parseInt(remainingTime, 10);
         }
 
-        // Get the timer value from the data attribute
-        var timerValue = document.getElementById('quiz-timer').getAttribute('data-timer');
-        startCountdown(timerValue);
+        var countdown = setInterval(function() {
+            var hours = Math.floor(totalSeconds / 3600);
+            var minutes = Math.floor((totalSeconds % 3600) / 60);
+            var seconds = totalSeconds % 60;
 
-        const quizId = <?php echo json_encode($quizId); ?>;
+            // Format the time
+            timerDisplay.textContent = 
+                (hours < 10 ? '0' : '') + hours + ':' +
+                (minutes < 10 ? '0' : '') + minutes + ':' +
+                (seconds < 10 ? '0' : '') + seconds;
 
-        // Redirect to rule_page with quiz_id when the back button is pressed
-        window.onpopstate = function() {
-            window.location.href = 'rule_page.php?quiz_id=' + encodeURIComponent(quizId);
-        };
+            // Decrease totalSeconds by 1
+            totalSeconds--;
 
-        // Push the current state to prevent going back immediately
-        window.history.pushState(null, '', window.location.href);
+            // Store remaining time in localStorage
+            localStorage.setItem('remainingTime', totalSeconds);
 
-        document.getElementById('submit-button').onclick = function(event) {
-            // Disable button immediately to prevent multiple submissions
-            this.disabled = true;
+            // Stop the countdown when it reaches zero
+            if (totalSeconds < 0) {
+                clearInterval(countdown);
+                timerDisplay.textContent = "Time's up!";
+                localStorage.removeItem('remainingTime'); // Clear the stored time
+                disableSubmitButton(); // Disable the submit button
+                clearRadioButtons(); // Clear radio button selections
+                document.getElementById('quiz-form').submit(); // Automatically submit the form
+            }
+        }, 1000);
+    }
 
-            // Optional: Show a loading message or spinner
-            // document.getElementById('loading').style.display = 'block';
+    // Function to disable the submit button
+    function disableSubmitButton() {
+        document.getElementById('submit-button').disabled = true; // Disable the button
+    }
 
-            // Allow the form to submit
-            document.getElementById('quiz-form').submit();
-        };
-    </script>
+    // Function to clear all radio button selections
+    function clearRadioButtons() {
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            radio.checked = false; // Uncheck each radio button
+        });
+    }
+
+    // Get the timer value from the database
+    var timerValue = document.getElementById('quiz-timer').getAttribute('data-timer');
+    startCountdown(timerValue);
+
+    const quizId = <?php echo json_encode($quizId); ?>;
+
+    // Redirect to rule_page with quiz_id when the back button is pressed
+    window.onpopstate = function(event) {
+        window.location.href = 'rule_page.php?quiz_id=' + encodeURIComponent(quizId);
+    };
+
+    // Push the current state to prevent going back immediately
+    window.history.pushState(null, '', window.location.href);
+
+    document.getElementById('submit-button').onclick = function(event) {
+        // Prepare to submit the form
+        const questions = document.querySelectorAll('.question-card');
+
+        // Loop through questions to check radio button status
+        questions.forEach(question => {
+            const radios = question.querySelectorAll('input[type="radio"]');
+            const isChecked = Array.from(radios).some(radio => radio.checked);
+            const questionId = question.dataset.questionId; // Assuming each question card has a data-question-id attribute
+
+            if (!isChecked) {
+                // If no radio button is checked, add a hidden input to set isCorrect to 0
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `answers[${questionId}][isCorrect]`;
+                hiddenInput.value = '0';
+                document.getElementById('quiz-form').appendChild(hiddenInput);
+            }
+        });
+
+        // Disable button immediately to prevent multiple submissions
+        this.disabled = true;
+
+        // Allow the form to submit
+        document.getElementById('quiz-form').submit();
+        localStorage.removeItem('remainingTime'); // Clear the stored time on submission
+    };
+</script>
 
     <div class="wrapper">
         <div class="container">
@@ -91,7 +131,6 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
                         <h1>Answer Questions</h1>
 
                         <?php
-
                         $question = new Question($db);
                         $questionList = $question->listQuestion($quizId);
                         ?>
@@ -122,4 +161,5 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
                 </div>
             </div>
         </div>
+    </div>
 </body>

@@ -26,7 +26,7 @@ $roleId = $_SESSION['role_id'] ?? null;
         <img class="logo" src="Images/logoQuiz.png" alt="quizwind">
         <nav>
             <ul>
-                <li><a href="main.php">Home</a></li>
+                <!-- <li><a href="main.php">Home</a></li> -->
                 <li><a href="subject_page.php">Subjects</a></li>
                 <?php if ($roleId == '1'): // Admin role ?>
                     <li><a href="users_page.php">Users</a></li>

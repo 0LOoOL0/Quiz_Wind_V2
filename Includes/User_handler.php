@@ -1,8 +1,7 @@
+
+<link rel="stylesheet" href="/styles.css">
 <?php
-
-
 require_once 'User.php';
-
 // Display message if it exists
 if (isset($_SESSION['message'])) {
     $messageType = $_SESSION['message_type'];
@@ -55,10 +54,10 @@ if (isset($_POST['register'])) {
 
         // If registration is successful, redirect to the subject page
         if ($newUserId) {
-            header("Location: ../subject_page.php");
+            header("Location: ../login.php");
             exit();
         } else {
-            header("Location: ../main.php");
+            header("Location: ./main.php");
             exit();
         }
     } catch (Exception $ex) {
@@ -105,19 +104,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['saved'])) {
         $result = $userManager->resetPassword($email, $newPassword);
         
         if ($result) {
-
+            echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Password updated Successfully</h2>
+            </div>
+        </div>';
             header("Location: ../login.php");
             exit();
         } else {
             echo "Failed to update password.";
         }
 
-        echo "Password updated successfully.";
+       
 
     } catch (Exception $e) {
         // Handle any exceptions that occur
         echo "Error: " . htmlspecialchars($e->getMessage());
     }
+   
 }
 
 //edit users
@@ -130,18 +134,19 @@ if (isset($_POST['updateUser'])) {
     $password = trim($_POST['password']);
 
     if (empty($username) || empty($email) || empty($role)) {
-        $_SESSION['error'] = "Please fill in all required fields.";
-        header("Location: edit_user.php?user_id=" . urlencode($userId));
-        exit();
-    }
-
-    // Call the updateUser method
-    if ($user->updateUser($userId, $username, $email, $role, $password)) {
-        $_SESSION['success'] = "User updated successfully.";
+        echo "<div class='alert error'>Please fill in all required fields.</div>";
+        // Optionally, you can redirect back to the edit page
+        // header("Location: edit_user.php?user_id=" . urlencode($userId));
+        // exit();
     } else {
-        $_SESSION['error'] = "Unable to update user. Please try again.";
-    }
+        // Call the updateUser method
+        $updateResult = $user->updateUser($userId, $username, $email, $role, $password);
 
-    header("Location: users_page.php");
-    exit();
+        if ($updateResult === true) {
+            echo "<div class='alert success'>User updated successfully.</div>";
+            // Redirect or further actions can be added here
+        } else {
+            echo "<div class='alert error'>Unable to update user: {$updateResult}</div>";
+        }
+    }
 }

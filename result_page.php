@@ -2,13 +2,13 @@
 
 include 'header.php';
 include 'Includes/auth.php';
-include 'Includes/AnswerNew_handler.php';
+include 'Includes/Answer_handler.php';
 include 'Includes/Quiz_handler.php';
 
 $userId = $_SESSION['user_id'] ?? null;
 $quizId = $_GET['quiz_id'] ?? null;
 
-$attempt = new AnswerNew($db);
+$attempt = new Answer($db);
 $score = $attempt->allAttemptList($userId, $quizId);
 
 $totalQuestions = $attempt->countQuestionsByQuizId($quizId);
@@ -16,6 +16,25 @@ $correctQuestions = $attempt->countCorrectOptionsByQuizId($quizId,$userId);
 $percentageCorrect = ((float)$correctQuestions / (float)$totalQuestions) * 100;
 
 ?>
+
+<script>
+    const quizId = <?php echo json_encode($quizId); ?>;
+
+// Redirect to rule_page with quiz_id when the back button is pressed
+window.onpopstate = function() {
+    window.location.href = 'rule_page.php?quiz_id=' + encodeURIComponent(quizId);
+};
+
+// Push the current state to prevent going back immediately
+window.history.pushState(null, '', window.location.href);
+
+document.getElementById('submit-button').onclick = function(event) {
+    // Disable button immediately to prevent multiple submissions
+    this.disabled = true;
+
+
+};
+</script>
 
 <body class="page">
     <div class="wrapper">

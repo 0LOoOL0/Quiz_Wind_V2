@@ -20,7 +20,12 @@ if ($error) {
 }
 
 if ($_SESSION['role_name'] !== 'Admin') {
-    die("Access denied."); // Or redirect to a different page
+    echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Access Denied</h2>
+            </div>
+        </div>';
+    die(); // Or redirect to a different page
 }
 ?>
 

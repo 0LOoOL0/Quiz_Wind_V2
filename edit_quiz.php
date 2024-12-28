@@ -9,7 +9,18 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 $userId = $_SESSION['user_id'] ?? null;
 
 $detail = new Quiz($db);
-$quizData = $detail->loadQuiz($quizId)
+$quizData = $detail->loadQuiz($quizId);
+
+if ($_SESSION['role_name'] !== 'Teacher') {
+    echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Access Denied</h2>
+            </div>
+        </div>';
+    die();
+}
+
+
 
 ?>
 

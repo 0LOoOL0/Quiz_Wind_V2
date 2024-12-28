@@ -303,7 +303,7 @@ class Quiz
 
     public function getQuizzesByChapter($chapterId) {
         try {
-            $stmt = $this->db->prepare("SELECT quiz_id, quiz_title, quiz_text FROM quizzes WHERE chapter_id = :chapter_id");
+            $stmt = $this->db->prepare("SELECT quiz_id, quiz_title, quiz_text,subject_id FROM quizzes WHERE chapter_id = :chapter_id");
             $stmt->bindParam(':chapter_id', $chapterId, PDO::PARAM_INT);
             $stmt->execute();
             

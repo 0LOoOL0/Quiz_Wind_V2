@@ -329,35 +329,6 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // public function updateUser($userId, $username, $email, $role, $password = null) {
-    //     // Prepare the update query
-    //     $sql = "UPDATE users SET username = :username, email = :email, role_id = :role_id";
-
-    //     // If password is provided, hash it and include it in the update
-    //     if (!empty($password)) {
-    //         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    //         $sql .= ", password = :password";
-    //     }
-
-    //     $sql .= " WHERE user_id = :user_id";
-
-    //     $stmt = $this->db->prepare($sql);
-
-    //     // Bind parameters
-    //     $stmt->bindParam(':username', $username);
-    //     $stmt->bindParam(':email', $email);
-    //     $stmt->bindParam(':role_id', $role);
-    //     $stmt->bindParam(':user_id', $userId);
-
-    //     // Bind password if provided
-    //     if (!empty($password)) {
-    //         $stmt->bindParam(':password', $hashedPassword);
-    //     }
-
-    //     // Execute the update
-    //     return $stmt->execute();
-    // }
-
 
     public function login($username, $password)
     {
@@ -399,16 +370,36 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($userId, $username, $password)
+    public function usernameExists($username)
     {
         try {
-            // Hash the password before storing it
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            // Check if the username already exists
+            $sql = "SELECT COUNT(*) FROM users WHERE username = :username";
+            $stmt = $this->db->queryStatement($sql, [
+                ':username' => $username
+            ]);
 
-            $sql = "UPDATE users SET username = :username, password = :password WHERE user_id = :user_id";
+            $count = $stmt->fetchColumn();
+
+            return $count > 0; // Return true if username exists, false otherwise
+        } catch (Exception $e) {
+            // Handle any additional exceptions (logging, etc.)
+            return false; // Optionally, handle the exception as needed
+        }
+    }
+
+    public function updateUser($userId, $username)
+    {
+        if ($this->usernameExists($username)) {
+            $_SESSION['error'] = "Username already exists.";
+            return false; // Username already exists
+        }
+
+        // Proceed with updating the user...
+        try {
+            $sql = "UPDATE users SET username = :username WHERE user_id = :user_id";
             $stmt = $this->db->queryStatement($sql, [
                 ':username' => $username,
-                ':password' => $hashedPassword,
                 ':user_id' => $userId
             ]);
 

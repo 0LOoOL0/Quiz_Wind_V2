@@ -289,6 +289,7 @@ body {
     background-color: #2564ac85;
     width: 100%;
 }
+
 .overlay {
     display: flex;
     justify-content: center;
@@ -304,7 +305,6 @@ body {
     justify-content: center;
     background-image: url(Images/student3.jpg);
     background-size: cover;
-    height: 100%;
     background-color: #2564ac73;
    
 }
@@ -373,6 +373,7 @@ body {
 .content-register h1 {
     font-size: 30px;
     color: #2564ac;
+    text-align: center;
     /* text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7); */
 
 }
@@ -503,8 +504,8 @@ body {
 .subjects {
     display: flex;
     flex-wrap: wrap;
-    width: 75%;
-    /* justify-content: center; */
+    width: 90%;
+    justify-content: center;
     opacity: 0;
     transform: translateY(-20px);
     animation: fadeSlideDown 0.5s 1.5s forwards;
@@ -725,7 +726,11 @@ body {
 }
 
 .quiz-buttons {
+    margin: 20px;
+    margin-left: 0;
     padding-top: 20px;
+    display: flex; /* Enable flexbox layout */
+    justify-content:space-between;
 }
 
 
@@ -1448,6 +1453,14 @@ input[type="radio"]:checked+label {
     padding: 10px;
 }
 
-.chapter-details {
+.denied {
+    text-align: center;
+    padding: 20px;
+    background-color: rgb(255, 142, 142);
+    font-size: 20px;
+    color: red;
+}
 
+.spaceMessage {
+    padding-top: 200px;
 }

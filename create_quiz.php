@@ -7,7 +7,17 @@ include 'Includes/Quizzes_handler.php';
 $subjectId = isset($_GET['subject_id']) ? intval($_GET['subject_id']) : null;
 $subjectId = isset($_GET['subject_id']) ? (int)$_GET['subject_id'] : 0;
 $userId = $_SESSION['user_id'] ?? null;
+
+if ($_SESSION['role_name'] !== 'Teacher') {
+    echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Access Denied</h2>
+            </div>
+        </div>';
+    die();
+}
 ?>
+
 
 <script type="text/javascript" src="script.js"></script>
 
@@ -116,7 +126,7 @@ $userId = $_SESSION['user_id'] ?? null;
                     <table>
                         <tr>
                             <td><input type="text" name="questions[${i}][question_text]" placeholder="Question Text" required></td>
-                            <td><input type="number" name="questions[${i}][score]" placeholder="Score" value="1.00" step="0.01" required></td>
+                            <td><input type="number" name="questions[${i}][score]" placeholder="Score" value="1.00" step="0.01" disabled></td>
                         </tr>
                     </table>
                     <h4>Options:</h4>

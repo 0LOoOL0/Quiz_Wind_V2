@@ -128,7 +128,7 @@ if ($roleName === 'Teacher') {
                                 <div class='button-container'>";
 
                         // Button to view the subject
-                        echo "<button class='button2'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
+                        echo "<button class='button1'><a href='quizzes_page.php?subject_id=" . htmlspecialchars($subject['subject_id']) . "'>View Subject</a></button>";
 
                         // Button to edit the subject (only if user has permission)
                         if (userHasPermission($roleName, 'edit')) {

@@ -29,17 +29,28 @@ if (isset($_POST['chapter_id'])) {
             echo "<div class='sub-quiz'>
                     <h2>" . htmlspecialchars($quiz['quiz_title']) . "</h2> 
                     <h4>" . htmlspecialchars($quiz['quiz_text']) . "</h4>
-                    <div class='quiz-buttons'>";
+                    <div class='quiz-buttons'>"; // Start the quiz-buttons div
+    
+            // Start button for the quiz
+            if (userHasPermission($roleName, 'view')) {
             echo "<button class='button1'>
                     <a href='rule_page.php?quiz_id=" . htmlspecialchars($quiz['quiz_id']) . "' class='button1'>Start</a>
                 </button>";
-            echo "</div></div>"; // Close sub-quiz div
+            }
+            // Delete button, if the user has permission
+            if (userHasPermission($roleName, 'delete')) {
+                echo "<form action='Includes/delete_quiz.php' method='post' style='display: inline;'> <!-- Added style for inline form -->
+                        <input type='hidden' name='quiz_id' value='" . htmlspecialchars($quiz["quiz_id"]) . "' />
+                        <input type='hidden' name='subject_id' value='" . htmlspecialchars($quiz['subject_id']) . "' />      
+                        <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this quiz?\");'>Delete</button>
+                    </form>";
+            }
+            
+            echo "</div></div>"; // Close quiz-buttons div and sub-quiz div
         }
     } else {
         echo "No quizzes found for this chapter.";
     }
-} else {
-    echo "Chapter ID not set.";
 }
 function userHasPermission($roleName, $action)
 {

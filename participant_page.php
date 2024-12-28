@@ -14,7 +14,12 @@ $roleName = $_SESSION['role_name'] ?? null;
 // echo "Role: " . htmlspecialchars($_SESSION['role_name']) . "<br>";
 
 if ($_SESSION['role_name'] !== 'Teacher') {
-    die("Access denied."); // Or redirect to a different page
+    echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Access Denied</h2>
+            </div>
+        </div>';
+    die(); 
 }
 ?>
 

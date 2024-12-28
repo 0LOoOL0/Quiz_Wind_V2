@@ -5,6 +5,14 @@ include 'Includes/Answer_handler.php';
 
 $userId = $_SESSION['user_id'] ?? null;
 
+if ($_SESSION['role_name'] !== 'Student') {
+    echo '<div class="spaceMessage">
+            <div class = "denied">
+             <h2>Access Denied</h2>
+            </div>
+        </div>';
+    die();
+}
 ?>
 
 <div class="overlay2">
@@ -42,7 +50,7 @@ $userId = $_SESSION['user_id'] ?? null;
                     }
                     echo "</table>";
                 } else {
-                    echo "Theres are no subjects avilable, Create new one!";
+                    echo "no Attempts are available!";
                 }
 
                 ?>
