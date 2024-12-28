@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     //attempts
-    $attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
+    //$attemptNumber = $quizAttemptManager->calculateAttempts($userId, $quizId) + 1;
 
     // Save the new attempt
-    $quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect);
+    //$quizAttemptManager->saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect);
 
     // Save the answers using the saveAnswers method
     if ($answer->saveAnswers($userId, $quizId, $answers)) {

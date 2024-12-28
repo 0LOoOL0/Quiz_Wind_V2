@@ -2,17 +2,17 @@
 
 include 'header.php';
 include 'Includes/auth.php';
-include 'Includes/Answer_handler.php';
+include 'Includes/AnswerNew_handler.php';
 include 'Includes/Quiz_handler.php';
 
 $userId = $_SESSION['user_id'] ?? null;
 $quizId = $_GET['quiz_id'] ?? null;
 
-$attempt = new Answer($db);
+$attempt = new AnswerNew($db);
 $score = $attempt->allAttemptList($userId, $quizId);
 
 $totalQuestions = $attempt->countQuestionsByQuizId($quizId);
-$correctQuestions = $attempt->countCorrectOptionsByQuizId($quizId);
+$correctQuestions = $attempt->countCorrectOptionsByQuizId($quizId,$userId);
 $percentageCorrect = ((float)$correctQuestions / (float)$totalQuestions) * 100;
 
 ?>

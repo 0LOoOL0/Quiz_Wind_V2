@@ -82,21 +82,85 @@ class Attempt {
     }
 
     // Function to calculate the number of attempts for a user on a specific quiz
-    public function calculateAttempts($userId, $quizId) {
-        $sql = "SELECT COUNT(*) as attempt_number FROM attempts 
-                WHERE user_id = :user_id AND quiz_id = :quiz_id";
+    // public function calculateAttempts($userId, $quizId) {
+    //     $sql = "SELECT COUNT(*) as attempt_number FROM attempts 
+    //             WHERE user_id = :user_id AND quiz_id = :quiz_id";
         
-        $stmt = $this->db->queryStatement($sql, [
-            ':user_id' => $userId,
-            ':quiz_id' => $quizId
-        ]);
+    //     $stmt = $this->db->queryStatement($sql, [
+    //         ':user_id' => $userId,
+    //         ':quiz_id' => $quizId
+    //     ]);
 
+    //     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    //     return $result['attempt_number'];
+    // }
+
+    // // Function to save a new attempt
+    // public function saveAttempt($userId, $quizId, $attemptNumber, $totalScore) {
+    //     $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
+    //             VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
+        
+    //     $this->db->queryStatement($sql, [
+    //         ':user_id' => $userId,
+    //         ':quiz_id' => $quizId,
+    //         ':attempt_number' => $attemptNumber,
+    //         ':total_score' => $totalScore
+    //     ]);
+    // }
+
+    // // Function to calculate the total score based on provided answers
+    // // public function calculateTotalScore($answers) {
+    // //     $totalScore = 0.00;
+
+    // //     foreach ($answers as $answer) {
+    // //         $selectedOptionId = $answer['selected_option_id'];
+    // //         $questionId = $answer['question_id'];
+
+    // //         // Check if the selected option is correct
+    // //         $sqlCheck = "SELECT is_correct, score FROM options 
+    // //                      JOIN questions ON options.question_id = questions.question_id 
+    // //                      WHERE options.option_id = :option_id AND questions.question_id = :question_id";
+            
+    // //         $stmt = $this->db->queryStatement($sqlCheck, [
+    // //             ':option_id' => $selectedOptionId,
+    // //             ':question_id' => $questionId
+    // //         ]);
+
+    // //         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // //         if ($result && $result['is_correct']) {
+    // //             $totalScore += $result['score']; // Add score if the answer is correct
+    // //         }
+    // //     }
+
+    // //     return $totalScore;
+    // // }
+
+    // public function countAttempts($userId, $quizId) {
+    //     $sql = "SELECT COUNT(*) AS attempt_count 
+    //             FROM attempts 
+    //             WHERE user_id = :user_id AND quiz_id = :quiz_id";
+        
+    //     $stmt = $this->db->prepare($sql);
+    //     $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
+        
+    //     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+    //     return $result['attempt_count'];
+    // }
+
+    // public function hasUserAlreadySubmitted($userId, $quizId) {
+    //     $stmt = $this->db->prepare("SELECT COUNT(*) FROM attempts WHERE user_id = :user_id AND quiz_id = :quiz_id");
+    //     $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
+    //     return $stmt->fetchColumn() > 0; // Returns true if there are any submissions
+    // }
+    public function countAttempts($userId, $quizId) {
+        $sql = "SELECT COUNT(*) AS attempt_count FROM attempts WHERE user_id = :user_id AND quiz_id = :quiz_id";
+        $stmt = $this->db->queryStatement($sql, [':user_id' => $userId, ':quiz_id' => $quizId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['attempt_number'];
+        return $result ? (int)$result['attempt_count'] : 0; // Return 0 if no result
     }
 
-    // Function to save a new attempt
-    public function saveAttempt($userId, $quizId, $attemptNumber, $totalScore) {
+    public function recordAttempt($userId, $quizId, $attemptNumber, $totalScore) {
         $sql = "INSERT INTO attempts (user_id, quiz_id, attempt_number, total_score) 
                 VALUES (:user_id, :quiz_id, :attempt_number, :total_score)";
         
@@ -107,52 +171,7 @@ class Attempt {
             ':total_score' => $totalScore
         ]);
     }
-
-    // Function to calculate the total score based on provided answers
-    // public function calculateTotalScore($answers) {
-    //     $totalScore = 0.00;
-
-    //     foreach ($answers as $answer) {
-    //         $selectedOptionId = $answer['selected_option_id'];
-    //         $questionId = $answer['question_id'];
-
-    //         // Check if the selected option is correct
-    //         $sqlCheck = "SELECT is_correct, score FROM options 
-    //                      JOIN questions ON options.question_id = questions.question_id 
-    //                      WHERE options.option_id = :option_id AND questions.question_id = :question_id";
-            
-    //         $stmt = $this->db->queryStatement($sqlCheck, [
-    //             ':option_id' => $selectedOptionId,
-    //             ':question_id' => $questionId
-    //         ]);
-
-    //         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    //         if ($result && $result['is_correct']) {
-    //             $totalScore += $result['score']; // Add score if the answer is correct
-    //         }
-    //     }
-
-    //     return $totalScore;
-    // }
-
-    public function countAttempts($userId, $quizId) {
-        $sql = "SELECT COUNT(*) AS attempt_count 
-                FROM attempts 
-                WHERE user_id = :user_id AND quiz_id = :quiz_id";
-        
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
-        
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        return $result['attempt_count'];
-    }
-
-    public function hasUserAlreadySubmitted($userId, $quizId) {
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM attempts WHERE user_id = :user_id AND quiz_id = :quiz_id");
-        $stmt->execute([':user_id' => $userId, ':quiz_id' => $quizId]);
-        return $stmt->fetchColumn() > 0; // Returns true if there are any submissions
-    }
+    
 
 }
 ?>

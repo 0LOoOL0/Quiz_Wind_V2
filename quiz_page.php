@@ -72,15 +72,15 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
         window.history.pushState(null, '', window.location.href);
 
         document.getElementById('submit-button').onclick = function(event) {
-    // Disable button immediately to prevent multiple submissions
-    this.disabled = true;
+            // Disable button immediately to prevent multiple submissions
+            this.disabled = true;
 
-    // Optional: Show a loading message or spinner
-    // document.getElementById('loading').style.display = 'block';
+            // Optional: Show a loading message or spinner
+            // document.getElementById('loading').style.display = 'block';
 
-    // Allow the form to submit
-    document.getElementById('quiz-form').submit();
-};
+            // Allow the form to submit
+            document.getElementById('quiz-form').submit();
+        };
     </script>
 
     <div class="wrapper">
@@ -96,28 +96,28 @@ $quizId = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
                         $questionList = $question->listQuestion($quizId);
                         ?>
 
-<form id="quiz-form" method="POST" action="Includes/Answer_handler.php">
-    <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
-    <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quizId); ?>">
-    
-    <?php foreach ($questionList as $question): ?>
-        <div class="question-card">
-            <h2><?php echo htmlspecialchars($question['question_text']); ?></h2>
-            <div class="question-card-options">
-                <?php foreach ($question['optionList'] as $index => $option): ?>
-                    <input type="radio" id="option_<?php echo $question['id'] . '_' . $index; ?>"
-                        name="answers[<?php echo $question['id']; ?>][selected_option_id]"
-                        value="<?php echo htmlspecialchars($option['id']); ?>" required>
-                    <label for="option_<?php echo $question['id'] . '_' . $index; ?>">
-                        <?php echo htmlspecialchars($option['option_text']); ?>
-                    </label>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    <?php endforeach; ?>
+                        <form id="quiz-form" method="POST" action="Includes/AnswerNew_handler.php">
+                            <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
+                            <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($quizId); ?>">
 
-    <button type="submit" id='submit-button' class="button2">Submit Answers</button>
-</form>
+                            <?php foreach ($questionList as $question): ?>
+                                <div class="question-card">
+                                    <h2><?php echo htmlspecialchars($question['question_text']); ?></h2>
+                                    <div class="question-card-options">
+                                        <?php foreach ($question['optionList'] as $index => $option): ?>
+                                            <input type="radio" id="option_<?php echo $question['id'] . '_' . $index; ?>"
+                                                name="answers[<?php echo $question['id']; ?>][selected_option_id]"
+                                                value="<?php echo htmlspecialchars($option['id']); ?>" required>
+                                            <label for="option_<?php echo $question['id'] . '_' . $index; ?>">
+                                                <?php echo htmlspecialchars($option['option_text']); ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+
+                            <button type="submit" id='submit-button' class="button2">Submit Answers</button>
+                        </form>
                     </div>
                 </div>
             </div>
