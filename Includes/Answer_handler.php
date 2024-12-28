@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answers = $_POST['answers'];
 
     // Instantiate the AnswerHandler class
-    $answerHandler = new AnswerNew($db);
+    $answerHandler = new Answer($db);
     $attemptHandler = new Attempt($db);
 
     // Check if answers are provided
