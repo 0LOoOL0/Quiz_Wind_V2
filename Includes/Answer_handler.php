@@ -13,8 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answerHandler = new AnswerNew($db);
     $attemptHandler = new Attempt($db);
 
-    // Save answers first
-    $answerHandler->saveAnswers($userId, $quizId, $answers);
+    // Check if answers are provided
+    if (!empty($answers)) {
+        // Save answers first
+        $answerHandler->saveAnswers($userId, $quizId, $answers);
+    } else {
+        // Optionally handle case where no answers were provided
+    }
 
     // Calculate the percentage of correct answers
     $percentageCorrect = $answerHandler->calculatePercentageCorrectByQuizId($quizId, $userId);
@@ -24,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $attemptNumber = $attemptCount + 1;
 
     // Record the attempt in the database
-    $attemptHandler->recordAttempt($userId, $quizId, $attemptNumber, $percentageCorrect); // Optionally record percentage
+    $attemptHandler->recordAttempt($userId, $quizId, $attemptNumber, $percentageCorrect);
 
     // Redirect or provide feedback to the user
     header("Location: ../result_page.php?quiz_id=" . urlencode($quizId) . "&percentage=" . urlencode($percentageCorrect));

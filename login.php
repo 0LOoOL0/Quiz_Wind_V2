@@ -60,7 +60,7 @@ unset($_SESSION['error']); // Clear the error message after display
                         </tr>
                         <tr>
                             <td>
-                                <p>Forgot password? <span id='add'>Click Here!</span></p>
+                                <p style='text-align:center;'>Forgot password? <span id='add' style="color:blue;">Click Here!</span></p>
                             </td>
                         </tr>
                         <tr>

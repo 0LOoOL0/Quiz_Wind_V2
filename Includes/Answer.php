@@ -18,12 +18,12 @@ class Answer
     public function __construct($db)
     {
         $this->db = $db;
-
+    
         $this->questionId = null;
         $this->selectedOptionId = null;
         $this->userId = null;
         $this->score = null;
-
+    
         $this->attemptNumber = null;
         $this->attemptId = null;
         $this->totalScore = null;
@@ -117,25 +117,36 @@ class Answer
         // Prepare the SQL statement with named parameters
         $sqlInsert = "INSERT INTO answers (question_id, selected_option_id, score, user_id, quiz_id) 
                       VALUES (:question_id, :selected_option_id, :score, :user_id, :quiz_id)";
-
+        
         // Loop through the answers and execute the prepared statement for each
         foreach ($answers as $questionId => $answer) {
-            if (isset($answer['selected_option_id'])) {
+            // Default selected_option_id to null
+            $selectedOptionId = null; 
+            $score = 0; // Default score to 0
+    
+            // Check if an option is selected
+            if (isset($answer['selected_option_id']) && $answer['selected_option_id'] !== null) {
+                // Set the selected option ID if an option is selected
                 $selectedOptionId = $answer['selected_option_id'];
-                $score = $answer['score'] ?? 0; // Default score to 0 if not provided
-
-                // Execute the statement using the queryStatement method
-                $this->db->queryStatement($sqlInsert, [
-                    ':question_id' => $questionId,
-                    ':selected_option_id' => $selectedOptionId,
-                    ':score' => $score,
-                    ':user_id' => $userId,
-                    ':quiz_id' => $quizId
-                ]);
+                // If an option is selected, set the score accordingly
+                $score = isset($answer['score']) ? $answer['score'] : 0; // Use the provided score or default to 0
             }
+    
+            // If no option was selected, you may decide to skip the insertion.
+            // Uncomment the next line if you do not want to save anything if no option is selected.
+            // if ($selectedOptionId === null) continue;
+    
+            // Execute the statement using the queryStatement method
+            $this->db->queryStatement($sqlInsert, [
+                ':question_id' => $questionId,
+                ':selected_option_id' => $selectedOptionId, // This can be null
+                ':score' => $score,
+                ':user_id' => $userId,
+                ':quiz_id' => $quizId
+            ]);
         }
     }
-
+    
     function attemptList($userId, $quizId)
     {
         try {

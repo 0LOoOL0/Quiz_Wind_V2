@@ -63,7 +63,7 @@ if ($error) {
                         </tr>
                         <tr>
                             <td>
-                                <p>&nbsp;Do you have an account? <a href="login.php">Login here!</a></p>
+                                <p style='text-align:center;'>&nbsp;Do you have an account? <a href="login.php">Login here!</a></p>
                             </td>
                         </tr>
                         <tr>
