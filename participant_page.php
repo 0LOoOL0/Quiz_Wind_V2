@@ -19,9 +19,13 @@ if ($_SESSION['role_name'] !== 'Teacher') {
 ?>
 
 
-<section class="content-head">
-    <h1>View Results</h1>
-</section>
+<div class="overlay2">
+    <section class="content-head3">
+        <h1>
+            View Quizzes
+        </h1>
+    </section>
+</div>
 
 <?php
 ?>

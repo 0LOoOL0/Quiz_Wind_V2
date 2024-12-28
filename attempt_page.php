@@ -7,9 +7,13 @@ $userId = $_SESSION['user_id'] ?? null;
 
 ?>
 
-<section class="content-head">
-    <h1>Attempts</h1>
-</section>
+<div class="overlay2">
+    <section class="content-head3">
+        <h1>
+            Attempts
+        </h1>
+    </section>
+</div>
 
 <div class="wrapper">
     <div class="container">

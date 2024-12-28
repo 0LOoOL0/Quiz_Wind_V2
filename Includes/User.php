@@ -395,7 +395,7 @@ class User
     function getUsersData($userId)
     {
         $sql = "SELECT username, email FROM users WHERE user_id = :user_id";
-        $stmt = $this->db->queryStatement($sql, [[':user_id' => $userId]]);
+        $stmt = $this->db->queryStatement($sql, [':user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

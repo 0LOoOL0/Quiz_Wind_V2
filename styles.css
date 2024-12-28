@@ -433,7 +433,7 @@ body {
 
 .centering {
     place-items: center;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .content-head {
@@ -503,8 +503,8 @@ body {
 .subjects {
     display: flex;
     flex-wrap: wrap;
-    width: 80%;
-    justify-content: center;
+    width: 75%;
+    /* justify-content: center; */
     opacity: 0;
     transform: translateY(-20px);
     animation: fadeSlideDown 0.5s 1.5s forwards;
@@ -524,7 +524,7 @@ body {
     border-radius: 10px;
     padding: 0;
     margin: 30px;
-    width: 280px;
+    width: 300px;
     height: 400px;
     text-align: center;
     box-shadow: 1px 3px 1px rgba(0, 0, 0, 0.2);
@@ -699,6 +699,15 @@ body {
     height: 250px;
     width: 850px;
     overflow: hidden;
+}
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
 }
 
 .add-quiz {

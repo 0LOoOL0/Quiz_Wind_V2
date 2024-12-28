@@ -18,6 +18,10 @@ $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 if ($error) {
     unset($_SESSION['error']);
 }
+
+if ($_SESSION['role_name'] !== 'Admin') {
+    die("Access denied."); // Or redirect to a different page
+}
 ?>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -170,7 +174,7 @@ if ($error) {
                                         <td style='display: flex; gap: 10px'>
                                             <button class='edit-button button3' data-user-id='" . htmlspecialchars($user["user_id"]) . "'>Edit</button>
                                             
-                                            <form action='Includes/User_handler.php' method='post'>
+                                            <form action='Includes/delete_user.php' method='post'>
                                                 <input type='hidden' name='user_id' value='" . htmlspecialchars($user["user_id"]) . "' />
                                                 <button type='submit' class='button4' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</button>
                                             </form>

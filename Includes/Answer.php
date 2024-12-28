@@ -198,18 +198,18 @@ class Answer
         }
     }
 
-    private function processAnswer($userId, $quizId, $answer, $sqlInsert)
-    {
-        // Extract question ID and selected option ID
-        $selectedOptionId = $answer['selected_option_id'];
-        $questionId = $answer['question_id'];
+    // private function processAnswer($userId, $quizId, $answer, $sqlInsert)
+    // {
+    //     // Extract question ID and selected option ID
+    //     $selectedOptionId = $answer['selected_option_id'];
+    //     $questionId = $answer['question_id'];
 
-        // Get the score for the selected option
-        $score = $this->getScoreForAnswer($questionId, $selectedOptionId);
+    //     // Get the score for the selected option
+    //     $score = $this->getScoreForAnswer($questionId, $selectedOptionId);
 
-        // Insert the answer into the database
-        $this->insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert);
-    }
+    //     // Insert the answer into the database
+    //     $this->insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert);
+    // }
 
     private function getScoreForAnswer($questionId, $selectedOptionId)
     {
@@ -226,26 +226,26 @@ class Answer
         return ($result && $result['is_correct']) ? $result['score'] : 0.00;
     }
 
-    private function insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert)
-    {
-        try {
-            $stmt = $this->db->queryStatement($sqlInsert, [
-                ':question_id' => $questionId,
-                ':selected_option_id' => $selectedOptionId,
-                ':score' => $score,
-                ':user_id' => $userId,
-                ':quiz_id' => $quizId
-            ]);
+    // private function insertAnswer($userId, $quizId, $questionId, $selectedOptionId, $score, $sqlInsert)
+    // {
+    //     try {
+    //         $stmt = $this->db->queryStatement($sqlInsert, [
+    //             ':question_id' => $questionId,
+    //             ':selected_option_id' => $selectedOptionId,
+    //             ':score' => $score,
+    //             ':user_id' => $userId,
+    //             ':quiz_id' => $quizId
+    //         ]);
 
-            if ($stmt) {
-                echo "Inserted successfully for Question ID: $questionId<br>";
-            } else {
-                echo "Insert failed for Question ID: $questionId<br>";
-            }
-        } catch (Exception $e) {
-            echo "Insert Error: " . htmlspecialchars($e->getMessage());
-        }
-    }
+    //         if ($stmt) {
+    //             echo "Inserted successfully for Question ID: $questionId<br>";
+    //         } else {
+    //             echo "Insert failed for Question ID: $questionId<br>";
+    //         }
+    //     } catch (Exception $e) {
+    //         echo "Insert Error: " . htmlspecialchars($e->getMessage());
+    //     }
+    // }
 
 
     public function saveAttempt($userId, $quizId, $attemptNumber, $percentageCorrect)

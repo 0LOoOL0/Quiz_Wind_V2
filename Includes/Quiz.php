@@ -301,22 +301,18 @@ class Quiz
     //     return $stmt->execute();
     // }
 
-    function getQuizzesByChapter($chapterId) {
-        $quizzes = [];
-        
+    public function getQuizzesByChapter($chapterId) {
         try {
             $stmt = $this->db->prepare("SELECT quiz_id, quiz_title, quiz_text FROM quizzes WHERE chapter_id = :chapter_id");
             $stmt->bindParam(':chapter_id', $chapterId, PDO::PARAM_INT);
             $stmt->execute();
-    
+            
             // Fetch all quizzes for the specified chapter
-            $quizzes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Handle any errors
-            error_log("Database error: " . $e->getMessage());
+            echo "Error: " . $e->getMessage();
+            return []; // Return an empty array on error
         }
-    
-        return $quizzes;
     }
     
     function getQuizById($userId) 

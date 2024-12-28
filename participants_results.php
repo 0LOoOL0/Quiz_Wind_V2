@@ -38,9 +38,13 @@ $averageScore = $result->averageScore($quizId);
 </head>
 <body>
 
-<section class="content-head">
-    <h1>Participants</h1>
-</section>
+<div class="overlay2">
+    <section class="content-head3">
+        <h1>
+            Results
+        </h1>
+    </section>
+</div>
 
 <div class="wrapper">
     <div class="container">
